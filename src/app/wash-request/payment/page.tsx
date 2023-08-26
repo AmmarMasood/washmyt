@@ -139,7 +139,8 @@ function Payment() {
               </div>
               <p className="text-primary-gray text-sm">
                 WashMyT is designed with the Tesla owner in mind. We understand
-                your vehicle's specific needs and cater our services to match.
+                your vehicle&aposs specific needs and cater our services to
+                match.
               </p>
             </div>
             <div className="mb-4">
@@ -158,8 +159,8 @@ function Payment() {
               <Image src={InfoAlert} alt="info-alert" className="mr-2 h-12" />
               <span className="text-sm">
                 We are committed to delivering a high-quality service every
-                time. If you're not happy with the results, we'll make it right,
-                guaranteed.
+                time. If you&aposre not happy with the results, we&aposll make
+                it right, guaranteed.
               </span>
             </div>
           </div>

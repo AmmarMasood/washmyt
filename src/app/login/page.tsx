@@ -85,7 +85,7 @@ export default function Login() {
             </SocialButton>
           </div>
           <p className="paragraph-1 ">
-            Don't Have a Wash Pro Account?{" "}
+            Don&apost Have a Wash Pro Account?{" "}
             <Link href={"/onboard-user"}>
               <span className="cursor-pointer text-primary-color">Sign Up</span>
             </Link>
