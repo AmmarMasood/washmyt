@@ -48,7 +48,7 @@ function Page() {
               />
               <InfoCard img={RatingIcon} title="5663" description="Ratings" />
             </div>
-            <div className="h-[400px] overflow-hidden w-[600px] rounded-3xl -mt-6">
+            <div className="h-[400px] overflow-hidden w-[600px] rounded-3xl">
               <Map />
             </div>
           </div>

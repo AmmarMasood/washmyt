@@ -98,7 +98,10 @@ function Payment() {
                   </span>
                 }
               />
-              <Button onClick={() => console.log("ammar")} className="mt-8">
+              <Button
+                onClick={() => console.log("ammar")}
+                className="mt-8 !text-white"
+              >
                 Pay Now
               </Button>
             </div>
@@ -157,7 +160,7 @@ function Payment() {
             </div>
             <div className="bg-[#1E1E1E] rounded-xl p-4 flex items-center">
               <Image src={InfoAlert} alt="info-alert" className="mr-2 h-12" />
-              <span className="text-sm">
+              <span className="text-sm !text-white">
                 We are committed to delivering a high-quality service every
                 time. If you&aposre not happy with the results, we&aposll make
                 it right, guaranteed.

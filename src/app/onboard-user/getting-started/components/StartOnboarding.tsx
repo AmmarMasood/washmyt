@@ -44,7 +44,7 @@ export default function StartOnboarding(props: IOnboardingPageProps) {
           </h1>
 
           <p className="text-[#1E1E1E] text-xl text-center relative z-10 mt-10">
-            We&aposre genuinely excited to add more washes to your schedule. To
+            We are genuinely excited to add more washes to your schedule. To
             begin receiving wash requests from us, please fill out our
             application form.
           </p>

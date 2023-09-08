@@ -29,9 +29,6 @@ const Map = () => {
 
   return (
     <div>
-      <div>
-        <p>This is Sidebar...</p>
-      </div>
       <GoogleMap
         options={mapOptions}
         zoom={14}

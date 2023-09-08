@@ -1,63 +1,75 @@
-import { Avatar, Image, Popover, Space, Tag } from "antd";
+import { Avatar, Image, Popover, Space, Tag, Modal, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+const { confirm } = Modal;
+
+const showConfirm = () => {
+  confirm({
+    title: "Are you sure you want to delete this item?",
+    icon: <ExclamationCircleFilled />,
+    content: "",
+    okButtonProps: {
+      className: "!bg-primary-color text-white",
+    },
+    onOk() {
+      console.log("OK");
+    },
+    onCancel() {
+      console.log("Cancel");
+    },
+  });
+};
 
 interface DataType {
   key: string;
-  model: string;
-  color: string;
-  package: string;
-  status: string;
+  timeCompleted: string;
+  washId: string;
+  customerName: string;
+  washProName: string;
+  type: string;
   date: string;
-  address: string;
-  washPro: string;
-  paid: string;
-  rating: number;
-  name: string;
-  email: string;
+  amount: string;
+  status: string;
 }
 
 const content = (
   <div>
-    <p>Content</p>
-    <p>Content</p>
+    <Button type="link" size="large">
+      Edit
+    </Button>
+    <br />
+    <Button type="link" size="large" onClick={showConfirm}>
+      Delete
+    </Button>
   </div>
 );
 
 export const columns: ColumnsType<DataType> = [
   {
-    title: "Name",
-    key: "name",
-    render: (text) => (
-      <div>
-        <p>{text.name}</p>
-        <p className="text-primary-gray font-xs">{text.email}</p>
-      </div>
-    ),
-    sorter: (a, b) => a.name.length - b.name.length,
+    title: "Time Completed",
+    key: "timeCompleted",
+    sorter: (a, b) => a.timeCompleted.length - b.timeCompleted.length,
     sortDirections: ["descend"],
   },
   {
-    title: "Model",
-    dataIndex: "model",
-    key: "model",
+    title: "WashID",
+    dataIndex: "washId",
+    key: "washId",
   },
   {
-    title: "Color",
-    dataIndex: "color",
-    key: "color",
+    title: "Customer Name",
+    dataIndex: "customerName",
+    key: "customerName",
   },
   {
-    title: "Package",
-    dataIndex: "package",
-    key: "package",
-    render: (text) => <p className="text-red-500">{text}</p>,
+    title: "Wash Pro Name",
+    dataIndex: "washProName",
+    key: "washProName",
   },
   {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (text) => <Tag color={"success"}>{text}</Tag>,
+    title: "Type",
+    dataIndex: "type",
+    key: "type",
   },
   {
     title: "Date/Time",
@@ -67,53 +79,38 @@ export const columns: ColumnsType<DataType> = [
   },
 
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-    render: (text) => <p>{text}</p>,
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
   },
   {
-    title: "Wash Pro",
-    dataIndex: "washPro",
-    key: "washPro",
-    render: (text) => <p className="text-red-500 font-bold">{text}</p>,
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (text) => (
+      <p className="text-green-500 border-solid border-2 p-0 border-green-500 text-center rounded-lg text-sm">
+        {text}
+      </p>
+    ),
   },
-  {
-    title: "Paid",
-    dataIndex: "paid",
-    key: "paid",
-    render: (text) => <p className="text-green-500 font-bold">{text}</p>,
-  },
-  {
-    title: "Rating",
-    dataIndex: "rating",
-    key: "rating",
-    render: (text) => <p>{text}</p>,
-  },
+
   {
     title: "",
     dataIndex: "action",
-    render: (text) => (
-      <Popover content={content} title="Title" trigger="click">
-        <MoreOutlined className="text-xl cursor-pointer" />
-      </Popover>
-    ),
+    render: (text) => <p className="text-red-500 font-bold">View</p>,
   },
 ];
 
 export const data: DataType[] = [
   {
     key: "1",
-    name: "Olivia Rhyn",
-    email: "@oliviarhyn",
-    model: "Model S",
-    color: "Tesla White",
-    package: "Handwash+",
-    status: "Confirmed",
-    date: "10 December at 11.00 AM",
-    address: "1234 Main St, San Francisco, CA 94123",
-    washPro: "No",
-    paid: "Yes",
-    rating: 5.0,
+    timeCompleted: "5-29-2023 11:00 AM",
+    washId: "123456",
+    customerName: "John Doe",
+    washProName: "John Doe",
+    type: "Payment for wash",
+    date: "10 December at 11:00 AM",
+    amount: "$100",
+    status: "Paid Out",
   },
 ];

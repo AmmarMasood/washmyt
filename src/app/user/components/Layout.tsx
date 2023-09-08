@@ -18,6 +18,7 @@ import LedgerIcon from "../../../../public/imgs/user-ledger.svg";
 import LedgerIconActive from "../../../../public/imgs/user-ledger-active.svg";
 import LogoutIcon from "../../../../public/imgs/logout.svg";
 import { useRouter } from "next/navigation";
+import Chip from "@/app/components/Chip";
 
 interface IProfile {
   name: string;
@@ -108,6 +109,7 @@ function Layout(props: ILayout) {
               <span className="paragraph-1 text-sm ml-2 font-bold">
                 {profile.name}
               </span>
+              <Chip text="Admin" className="ml-6 !text-[10px]" />
             </div>
             <div className="flex items-center ml-2 cursor-pointer">
               <Image src={LogoutIcon} alt="logout" />
@@ -118,6 +120,9 @@ function Layout(props: ILayout) {
                 Logout
               </span>
             </div>
+            <p className="text-sm text-primary-gray ml-2 mt-6 opacity-60">
+              v 2.5.1
+            </p>
           </div>
         </div>
       </div>

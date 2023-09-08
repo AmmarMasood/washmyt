@@ -27,12 +27,7 @@ export default function FirstPart(props: IOnboardingPageProps) {
 
   return (
     <div className="max-md:w-full">
-      <Image
-        src={LogoIcon}
-        alt="washmyt"
-        className="absolute top-24 left-24 max-md:top-10 max-md:left-10"
-      />
-      <Card className="p-12 w-[800px] max-md:w-full max-md:p-6">
+      <Card className="p-12 w-[800px] max-md:w-full max-md:p-6 ">
         <>
           <StepperBar current={0} total={5} />
           <div className="p-4 mt-4">
@@ -61,7 +56,7 @@ export default function FirstPart(props: IOnboardingPageProps) {
               placeholder="000 000 000"
               onChange={handleOnChange}
               value={inputValues.mobileNumber}
-              preField="-1"
+              preField="+1"
               className="mt-8"
             />
             <FormField

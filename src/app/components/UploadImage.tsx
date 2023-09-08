@@ -33,7 +33,7 @@ function UploadImage(props: IUploadImage) {
           </p>
         ) : (
           <p className="text-primary-gray text-base	font-medium">
-            Drag &aposn&apos drop some files here, or click to select files
+            Drag and drop some files here, or click to select files
           </p>
         )}
       </div>

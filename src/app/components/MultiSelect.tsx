@@ -74,10 +74,10 @@ function MultiSelect(props: IMultiSelect) {
       <div className="mt-2">
         {selectedValues.map((t, i) => (
           <span
-            className="badge badge-lg mr-2 bg-primary-gray border-0"
+            className="badge badge-lg mr-2 bg-primary-gray border-0 mt-2"
             key={i}
           >
-            <label className="text-[#fff]">{t.value}</label>
+            <label className="text-[#fff] font-normal">{t.value}</label>
             <Image
               className="ml-2 cursor-pointer"
               src={CrossIcon}

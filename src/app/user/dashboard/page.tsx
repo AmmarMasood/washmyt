@@ -18,14 +18,19 @@ import { Select } from "antd";
 import CardFilter from "../components/CardFilter";
 
 function Page() {
+  const [showCards, setShowCards] = React.useState(true);
+
+  const onHide = () => {
+    setShowCards((prev) => !prev);
+  };
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
       <Layout currentOption={0} profile={PROFILE}>
         <Card className="h-full p-4 bg-white">
-          <CardFilter />
+          <CardFilter onHide={onHide} />
           <div
             style={{
-              display: "grid",
+              display: showCards ? "grid" : "none",
               gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
               gridGap: "20px",
             }}
@@ -61,7 +66,7 @@ function Page() {
               bottomDescription="152 Reviews"
             />
           </div>
-          <div className="mt-8">
+          <div className={`mt-8`}>
             <CustomTable
               columns={columns}
               data={data}

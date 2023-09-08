@@ -27,11 +27,6 @@ export default function FifthPart() {
 
   return (
     <div className="max-md:w-full">
-      <Image
-        src={LogoIcon}
-        alt="washmyt"
-        className="absolute top-24 left-24 max-md:top-10 max-md:left-10"
-      />
       <Card className="p-12 w-[800px] max-md:w-full max-md:p-6">
         <>
           <StepperBar current={4} total={5} />

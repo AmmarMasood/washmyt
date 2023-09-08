@@ -1,6 +1,26 @@
-import { Avatar, Image, Popover, Space, Tag } from "antd";
+import { Avatar, Button, Image, Popover, Space, Tag, Modal } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { MoreOutlined } from "@ant-design/icons";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+
+const { confirm } = Modal;
+
+const showConfirm = () => {
+  confirm({
+    title: "Are you sure you want to delete this item?",
+    icon: <ExclamationCircleFilled />,
+    content: "",
+    okButtonProps: {
+      className: "!bg-primary-color text-white",
+    },
+    onOk() {
+      console.log("OK");
+    },
+    onCancel() {
+      console.log("Cancel");
+    },
+  });
+};
 
 interface DataType {
   key: string;
@@ -19,14 +39,19 @@ interface DataType {
 
 const content = (
   <div>
-    <p>Content</p>
-    <p>Content</p>
+    <Button type="link" size="large">
+      Edit
+    </Button>
+    <br />
+    <Button type="link" size="large" onClick={showConfirm}>
+      Delete
+    </Button>
   </div>
 );
 
 export const columns: ColumnsType<DataType> = [
   {
-    title: "Name",
+    title: "Contact",
     key: "name",
     render: (text) => (
       <div>
@@ -38,17 +63,17 @@ export const columns: ColumnsType<DataType> = [
     sortDirections: ["descend"],
   },
   {
-    title: "Model",
+    title: "Business Name",
     dataIndex: "model",
     key: "model",
   },
   {
-    title: "Color",
+    title: "City",
     dataIndex: "color",
     key: "color",
   },
   {
-    title: "Package",
+    title: "State",
     dataIndex: "package",
     key: "package",
     render: (text) => <p className="text-red-500">{text}</p>,
@@ -60,41 +85,30 @@ export const columns: ColumnsType<DataType> = [
     render: (text) => <Tag color={"success"}>{text}</Tag>,
   },
   {
-    title: "Date/Time",
+    title: "Washes Completed",
     dataIndex: "date",
     key: "date",
     render: (text) => <p>{text}</p>,
   },
 
   {
-    title: "Address",
+    title: "Ratings",
     dataIndex: "address",
     key: "address",
     render: (text) => <p>{text}</p>,
   },
   {
-    title: "Wash Pro",
+    title: "Avg Ratings",
     dataIndex: "washPro",
     key: "washPro",
     render: (text) => <p className="text-red-500 font-bold">{text}</p>,
   },
-  {
-    title: "Paid",
-    dataIndex: "paid",
-    key: "paid",
-    render: (text) => <p className="text-green-500 font-bold">{text}</p>,
-  },
-  {
-    title: "Rating",
-    dataIndex: "rating",
-    key: "rating",
-    render: (text) => <p>{text}</p>,
-  },
+
   {
     title: "",
     dataIndex: "action",
     render: (text) => (
-      <Popover content={content} title="Title" trigger="click">
+      <Popover content={content} trigger="click">
         <MoreOutlined className="text-xl cursor-pointer" />
       </Popover>
     ),

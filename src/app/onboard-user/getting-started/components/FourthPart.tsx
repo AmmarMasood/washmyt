@@ -50,11 +50,6 @@ export default function FourthPart(props: IOnboardingPageProps) {
 
   return (
     <div className="max-md:w-full">
-      <Image
-        src={LogoIcon}
-        alt="washmyt"
-        className="absolute top-24 left-24 max-md:top-10 max-md:left-10"
-      />
       <Card className="p-12 w-[800px] max-md:w-full max-md:p-6">
         <>
           <StepperBar current={3} total={5} />
@@ -74,16 +69,56 @@ export default function FourthPart(props: IOnboardingPageProps) {
                   value: "",
                 },
                 {
-                  id: "wash",
-                  value: "Wash",
+                  id: "exterior_window_cleaning",
+                  value: "Exterior Window Cleaning",
                 },
                 {
-                  id: "repair",
-                  value: "Repair",
+                  id: "exterior_hand_wash_dry",
+                  value: "Exterior Hand Wash & Dry",
                 },
                 {
-                  id: "fixes",
-                  value: "Fixes",
+                  id: "clean_dress_tires",
+                  value: "Clean & Dress Tires",
+                },
+                {
+                  id: "clean_wheel_wells",
+                  value: "Clean Wheel Wells",
+                },
+                {
+                  id: "foam_cannon",
+                  value: "Foam Cannon",
+                },
+                {
+                  id: "interior_vacuum",
+                  value: "Interior Vacuum",
+                },
+                {
+                  id: "interior_wipe_down",
+                  value: "Interior Wipe Down",
+                },
+                {
+                  id: "bug_removal",
+                  value: "Bug Removal",
+                },
+                {
+                  id: "full_clay_bar_process",
+                  value: "Full Clay Bar Process",
+                },
+                {
+                  id: "shampoo_floor_mats",
+                  value: "Shampoo Floor Mats",
+                },
+                {
+                  id: "carnauba_wax",
+                  value: "Carnauba Wax",
+                },
+                {
+                  id: "synthetic_sealant",
+                  value: "Synthetic Sealant",
+                },
+                {
+                  id: "ceramic_coating",
+                  value: "Ceramic Coating",
                 },
               ]}
             />

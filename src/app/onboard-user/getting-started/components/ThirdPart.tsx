@@ -15,8 +15,8 @@ export default function ThirdPart(props: IOnboardingPageProps) {
   const [inputValues, setInputValues] = useState({
     radius: "",
     ownCar: "yes",
-    waterCapabilities: "capabilities",
-    electricCapabilities: "mobileCapabilities",
+    waterCapabilities: "yes",
+    electricCapabilities: "yes",
   });
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,11 +28,6 @@ export default function ThirdPart(props: IOnboardingPageProps) {
 
   return (
     <div className="max-md:w-full">
-      <Image
-        src={LogoIcon}
-        alt="washmyt"
-        className="absolute top-24 left-24 max-md:top-10 max-md:left-10"
-      />
       <Card className="p-12 w-[800px] max-md:w-full max-md:p-6">
         <>
           <StepperBar current={2} total={5} />
@@ -72,8 +67,12 @@ export default function ThirdPart(props: IOnboardingPageProps) {
               className="mt-8"
               options={[
                 {
-                  id: "capabilities",
-                  value: "Capabilities",
+                  id: "yes",
+                  value: "Yes",
+                },
+                {
+                  id: "no",
+                  value: "No",
                 },
               ]}
             />
@@ -85,8 +84,12 @@ export default function ThirdPart(props: IOnboardingPageProps) {
               className="mt-8"
               options={[
                 {
-                  id: "mobileCapabilities",
-                  value: "Mobile Electric Capabilities",
+                  id: "yes",
+                  value: "Yes",
+                },
+                {
+                  id: "no",
+                  value: "No",
                 },
               ]}
             />

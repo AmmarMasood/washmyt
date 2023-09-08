@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import type { Dayjs } from "dayjs";
 import type { BadgeProps, CalendarProps } from "antd";
-import { Badge, Calendar, Col, Select, Radio, Typography, Row } from "antd";
+import {
+  Badge,
+  Calendar,
+  Col,
+  Select,
+  Radio,
+  Typography,
+  Row,
+  Popover,
+} from "antd";
 import dayjs from "dayjs";
 
 const getListData = (value: Dayjs) => {
@@ -9,27 +18,26 @@ const getListData = (value: Dayjs) => {
   switch (value.date()) {
     case 8:
       listData = [
-        { type: "warning", content: "This is warning event." },
-        { type: "success", content: "This is usual event." },
+        {
+          type: "Meeting with the brand",
+          content: "10.00 AM - 11.00 AM",
+          color: "#f9e292",
+        },
+        {
+          type: "Meeting with the brand",
+          content: "10.00 AM - 11.00 AM",
+          color: "#8bf4e1",
+        },
       ];
       break;
     case 10:
       listData = [
-        { type: "warning", content: "This is warning event." },
-        { type: "success", content: "This is usual event." },
-        { type: "error", content: "This is error event." },
+        {
+          type: "Meeting with the brand",
+          content: "10.00 AM - 11.00 AM",
+          color: "#8b96f4",
+        },
       ];
-      break;
-    case 15:
-      listData = [
-        { type: "warning", content: "This is warning event" },
-        { type: "success", content: "This is very long usual event......" },
-        { type: "error", content: "This is error event 1." },
-        { type: "error", content: "This is error event 2." },
-        { type: "error", content: "This is error event 3." },
-        { type: "error", content: "This is error event 4." },
-      ];
-      break;
     default:
   }
   return listData || [];
@@ -64,19 +72,56 @@ const CustomCalender: React.FC = () => {
     ) : null;
   };
 
+  const content = (listData: any) => {
+    return (
+      <>
+        {listData.map((item: any, key: number) => (
+          <div
+            key={key}
+            className={key === 0 && listData.length !== 1 ? "mb-5" : ""}
+          >
+            <p className="font-bold text-base mb-2">{item.type}</p>
+            <p className="flex items-center">
+              <div
+                style={{ backgroundColor: item.color }}
+                className="rounded-full h-2 w-2 mr-2"
+              ></div>
+              <span className="text-secondary-gray text-sm">
+                {item.content}
+              </span>
+            </p>
+          </div>
+        ))}
+      </>
+    );
+  };
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
     return (
-      <ul className="events">
-        {listData.map((item) => (
-          <li key={item.content}>
-            <Badge
-              status={item.type as BadgeProps["status"]}
-              text={item.content}
-            />
-          </li>
-        ))}
-      </ul>
+      <>
+        {listData.length > 0 && (
+          <p className="text-primary-color mb-4">{listData.length} Washes</p>
+        )}
+        <Popover
+          content={() => content(listData)}
+          trigger="hover"
+          placement="bottomLeft"
+        >
+          <ul className="flex">
+            {listData.map((item) => (
+              <li key={item.content}>
+                <div
+                  key={item.color}
+                  style={{
+                    backgroundColor: item.color,
+                  }}
+                  className={`bg-[${item.color}] rounded-full h-4 w-4 -mr-1`}
+                ></div>
+              </li>
+            ))}
+          </ul>
+        </Popover>
+      </>
     );
   };
 

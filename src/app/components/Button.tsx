@@ -12,7 +12,7 @@ function Button(props: IButton) {
   return (
     <button
       onClick={onClick}
-      className={`bg-primary-color font-white pointer text-lg p-2 rounded-xl w-full	border-0 cursor-pointer ${className}`}
+      className={`!bg-primary-color !font-white pointer text-lg p-2 rounded-xl w-full	border-0 cursor-pointer ${className}`}
       type={type}
     >
       {children}

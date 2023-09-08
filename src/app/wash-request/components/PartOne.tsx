@@ -45,7 +45,11 @@ export default function PartOne(props: IOnboardingPageProps) {
       <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
         <>
           <Image src={LogoIcon} alt="washmyt" className="float-right" />
+
           <div className="p-4 mt-32 flex flex-col items-center justfiy-center">
+            <h1 className="text-black font-semibold text-center text-2xl mb-28">
+              Select Your Tesla
+            </h1>
             <div className="flex items-center max-md:flex-wrap">
               {models.map((model, index) => (
                 <div
@@ -65,7 +69,7 @@ export default function PartOne(props: IOnboardingPageProps) {
             </div>
             <Button onClick={onNext} className="mt-20 !w-[150px] mb-14">
               <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
+                <label className="mr-4 !text-white">OK</label>
                 <Image src={Tick} alt="tick" />
               </span>
             </Button>

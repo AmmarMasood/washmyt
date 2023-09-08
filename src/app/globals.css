@@ -185,3 +185,21 @@ body {
   border-inline-end-width: 1px;
   outline: 0;
 }
+
+.ant-picker-ok > button {
+  background-color: #ff4a4a !important;
+  margin-left: 10px !important;
+}
+
+.ant-picker-footer > a {
+  color: #ff4a4a !important;
+}
+
+.ant-picker-focused {
+  border-color: #ff4a4a !important;
+  border-inline-end-width: 1px;
+}
+
+.ant-picker:hover {
+  border-color: #ff4a4a !important;
+}

@@ -9,6 +9,7 @@ import StepperBar from "@/app/components/StepperBar";
 import FormField from "@/app/components/FormField";
 import Select from "@/app/components/Select";
 import { IOnboardingPageProps } from "./StartOnboarding";
+import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
 
 export default function SecondPart(props: IOnboardingPageProps) {
   const { onNext } = props;
@@ -28,11 +29,6 @@ export default function SecondPart(props: IOnboardingPageProps) {
 
   return (
     <div className="max-md:w-full">
-      <Image
-        src={LogoIcon}
-        alt="washmyt"
-        className="absolute top-24 left-24 max-md:top-10 max-md:left-10"
-      />
       <Card className="p-12 w-[800px] max-md:w-full max-md:p-6">
         <>
           <StepperBar current={1} total={5} />
@@ -78,16 +74,15 @@ export default function SecondPart(props: IOnboardingPageProps) {
                   id: "xl",
                   value: "XL",
                 },
+                {
+                  id: "xxl",
+                  value: "XXL",
+                },
               ]}
             />
-            <FormField
-              type="text"
-              name="businessAdderess"
+            <GoogleAutocomplete
               label="Business Address"
-              placeholder="Business Address"
-              onChange={handleOnChange}
-              value={inputValues.businessAdderess}
-              className="mt-8"
+              onSelect={(place) => console.log(place)}
             />
             <Button onClick={onNext} className="mt-10">
               Next

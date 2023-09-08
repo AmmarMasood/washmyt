@@ -48,7 +48,7 @@ export default function PartTwo(props: IOnboardingPageProps) {
           <Image src={LogoIcon} alt="washmyt" className="float-right" />
 
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
-            <h1 className="text-black text-2xl text-center mb-16">
+            <h1 className="text-black text-2xl text-center mb-16 font-semibold">
               Select the color of your Model X
             </h1>
             <div>
@@ -70,7 +70,7 @@ export default function PartTwo(props: IOnboardingPageProps) {
 
             <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
               <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
+                <label className="mr-4 !text-white">OK</label>
                 <Image src={Tick} alt="tick" />
               </span>
             </Button>

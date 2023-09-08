@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function PartTen(props: IOnboardingPageProps) {
   const { onNext } = props;
-  const [extension, setExtension] = useState("+94");
+  const [extension, setExtension] = useState("+1");
   const [phone, setPhone] = useState("");
 
   const handleOnChange = (e: any) => {

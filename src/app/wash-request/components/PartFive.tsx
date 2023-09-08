@@ -9,6 +9,7 @@ import StepperBar from "@/app/components/StepperBar";
 import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
 import { Input } from "antd";
+import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
 
 export default function PartFive(props: IOnboardingPageProps) {
   const { onNext } = props;
@@ -26,13 +27,15 @@ export default function PartFive(props: IOnboardingPageProps) {
           <Image src={LogoIcon} alt="washmyt" className="float-right" />
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
             <h1 className="text-black text-2xl text-center mb-2">Address</h1>
-            <h3 className=" mb-16 text-primary-gray text-xl text-center">
+            <h3 className=" mb-2 text-primary-gray text-xl text-center">
               Please provide the address including street, city, state, zip
             </h3>
-            <Input.TextArea
+
+            <GoogleAutocomplete
+              onSelect={(e) => setAddress(e)}
+              label=""
+              className="!p-4 !mb-6 !mt-0 !w-[500px] !max-md:w-[300px] !rounded-xl border-1 border-black"
               placeholder="Type your answer here"
-              onChange={handleOnChange}
-              className="p-4 mb-6 w-[500px] max-md:w-[300px] rounded-xl border-1 border-black"
             />
             <p className="paragraph-1 text-center">
               Shift ⇧ + Enter ↵ to make a line break

@@ -8,25 +8,27 @@ import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
-import { Input } from "antd";
+import { Input, TimePicker } from "antd";
 import CaldendarIcon from "../../../../public/imgs/calendar-icon.svg";
 import WeatherPart from "../../../../public/imgs/temprature.svg";
+import { DatePicker, Space } from "antd";
+import dayjs from "dayjs";
 
 export default function PartFour(props: IOnboardingPageProps) {
   const { onNext } = props;
-  const [time, setTime] = useState({
-    dd: "",
-    mm: "",
-    yy: "",
-    hh: "",
-    min: "",
-  });
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTime((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const handleDateChange = (e: any) => {
+    console.log("ammar", e);
+    console.log(e.$d);
+    setDate(e);
+  };
+
+  const handleTime = (e: any) => {
+    console.log("ammar", e);
+    console.log(e.$d);
+    setTime(e);
   };
 
   return (
@@ -47,40 +49,77 @@ export default function PartFour(props: IOnboardingPageProps) {
             </h3>
             <div>
               <div className="flex items-center justify-center">
-                <Input
-                  name="dd"
+                <DatePicker
+                  size="large"
+                  suffixIcon={false}
+                  format={"DD"}
+                  value={date ? dayjs(date, "D") : null}
+                  onChange={handleDateChange}
                   placeholder="DD"
-                  onChange={handleOnChange}
-                  className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
+                  allowClear={false}
+                  className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                 />
-                <Input
-                  name="mm"
+
+                <DatePicker
+                  size="large"
+                  suffixIcon={false}
+                  picker="month"
+                  format={"MM"}
+                  value={date ? dayjs(date, "MM") : null}
+                  onChange={handleDateChange}
                   placeholder="MM"
-                  onChange={handleOnChange}
-                  className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
+                  allowClear={false}
+                  className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                 />
-                <Input
-                  name="yy"
+
+                <DatePicker
+                  size="large"
+                  suffixIcon={false}
+                  format={"YYYY"}
+                  picker="year"
+                  value={date ? dayjs(date, "YYYY") : null}
+                  onChange={handleDateChange}
                   placeholder="YYYY"
-                  onChange={handleOnChange}
-                  className="p-4 mb-6  !w-[100px] rounded-xl border-1 border-black text-black text-lg mr-3"
+                  allowClear={false}
+                  className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                 />
+
                 <Image src={CaldendarIcon} alt="caldendar" className="-mt-7" />
               </div>
               <div className="flex items-center justify-center">
-                <Input
+                <TimePicker
+                  allowClear={false}
+                  className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
+                  placeholder="HH"
+                  size="large"
+                  suffixIcon={false}
+                  onChange={handleTime}
+                  value={time ? dayjs(time, "h") : null}
+                  format={"H"}
+                />
+                {/* <Input
                   name="hh"
                   placeholder="HH"
                   onChange={handleOnChange}
                   className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
-                />
+                /> */}
                 <span className="mb-7 text-black">:</span>
-                <Input
+                <TimePicker
+                  allowClear={false}
+                  className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg ml-3"
+                  placeholder="MM"
+                  size="large"
+                  suffixIcon={false}
+                  onChange={handleTime}
+                  value={time ? dayjs(time, "m") : null}
+                  format={"m"}
+                />
+                {/* <Input
                   name="min"
                   placeholder="MM"
                   onChange={handleOnChange}
                   className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg ml-3"
-                />
+                /> */}
               </div>
             </div>
             <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">

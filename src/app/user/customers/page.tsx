@@ -18,14 +18,20 @@ import Map from "../components/Map";
 import CardFilter from "../components/CardFilter";
 
 function Page() {
+  const [showCards, setShowCards] = React.useState(true);
+
+  const onHide = () => {
+    setShowCards((prev) => !prev);
+  };
+
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
       <Layout currentOption={2} profile={PROFILE}>
         <Card className="h-full p-4 bg-white">
-          <CardFilter />
+          <CardFilter onHide={onHide} />
           <div
             style={{
-              display: "grid",
+              display: showCards ? "grid" : "none",
               gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
               gridGap: "20px",
             }}

@@ -1,7 +1,10 @@
 import { Select } from "antd";
 import React from "react";
 
-function CardFilter() {
+interface ICardFilter {
+  onHide: () => void;
+}
+function CardFilter({ onHide }: ICardFilter) {
   return (
     <div className="px-2 flex items-center justify-between mb-5">
       <Select
@@ -15,7 +18,9 @@ function CardFilter() {
           { value: "30days", label: "Last 30 Days" },
         ]}
       />
-      <p className="text-primary-color text-sm cursor-pointer">Hide</p>
+      <p className="text-primary-color text-sm cursor-pointer" onClick={onHide}>
+        Hide
+      </p>
     </div>
   );
 }

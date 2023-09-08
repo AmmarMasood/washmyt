@@ -8,7 +8,7 @@ import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
-import { Input } from "antd";
+import { Input, Select } from "antd";
 
 const options = [
   {
@@ -68,13 +68,13 @@ export default function PartThree(props: IOnboardingPageProps) {
         <>
           <Image src={LogoIcon} alt="washmyt" className="float-right" />
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
-            <h1 className="text-black text-2xl text-center mb-2">
+            <h1 className="text-black text-2xl text-center mb-2 font-semibold">
               Choose a wash package.
             </h1>
             <h3 className=" mb-16 text-primary-gray text-xl text-center">
               You will be asked for payment once you confirm the payment
             </h3>
-            <Input
+            {/* <Input
               placeholder="Search for option"
               onChange={(e) => {
                 const value = e.target.value;
@@ -99,9 +99,40 @@ export default function PartThree(props: IOnboardingPageProps) {
                     {option.name}
                   </p>
                 </div>
-              ))}
-            </div>
-            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
+              ))} */}
+            {/* </div> */}
+            <Select
+              showSearch
+              size="large"
+              defaultOpen
+              className="w-[600px] max-md:w-full  rounded-xl border-1 border-black"
+              placeholder="Search for option"
+              direction="ltr"
+              listHeight={350}
+              placement="bottomRight"
+              open={true}
+              dropdownStyle={{
+                padding: "10px",
+              }}
+              listItemHeight={2000}
+              filterOption={(input, option) =>
+                (option?.value ?? "").includes(input)
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.value ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.value ?? "").toLowerCase())
+              }
+              options={options.map((option) => ({
+                value: option.name,
+                label: (
+                  <p className="!whitespace-normal text-lg mb-4">
+                    {`${option.name} (${option.description}) (${option.price})`}
+                  </p>
+                ),
+              }))}
+            ></Select>
+            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14 !mt-96">
               <span className="flex items-center justify-center">
                 <label className="mr-4">OK</label>
                 <Image src={Tick} alt="tick" />
