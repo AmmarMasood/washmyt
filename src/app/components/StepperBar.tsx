@@ -10,7 +10,7 @@ function StepperBar(props: IStepperBar) {
   const { total, current } = props;
   return (
     <div
-      className={`grid gap-4`}
+      className={`grid gap-4 max-md:hidden`}
       style={{
         gridTemplateColumns: `repeat(${total}, 1fr)`,
       }}

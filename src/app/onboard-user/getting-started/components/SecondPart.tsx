@@ -83,6 +83,7 @@ export default function SecondPart(props: IOnboardingPageProps) {
             <GoogleAutocomplete
               label="Business Address"
               onSelect={(place) => console.log(place)}
+              className="!w-full"
             />
             <Button onClick={onNext} className="mt-10">
               Next

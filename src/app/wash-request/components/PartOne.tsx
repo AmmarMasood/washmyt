@@ -44,10 +44,11 @@ export default function PartOne(props: IOnboardingPageProps) {
       <StepperBar current={0} total={10} />
       <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
         <>
-          <Image src={LogoIcon} alt="washmyt" className="float-right" />
-
-          <div className="p-4 mt-32 flex flex-col items-center justfiy-center">
-            <h1 className="text-black font-semibold text-center text-2xl mb-28">
+          <div className="flex items-end justify-end">
+            <Image src={LogoIcon} alt="washmyt" />
+          </div>
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0 ">
+            <h1 className="text-black font-semibold text-center text-2xl mb-28 max-md:mb-8">
               Select Your Tesla
             </h1>
             <div className="flex items-center max-md:flex-wrap">

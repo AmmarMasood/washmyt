@@ -25,7 +25,7 @@ const GoogleAutocomplete = ({
       <Autocomplete
         style={style}
         placeholder={placeholder}
-        className={`text-primary-gray text-base font-medium rounded-xl p-3 w-full border focus:border-primary-color active:border-primary-color focus:outline-none bg-secondary-color  ${className}  `}
+        className={`text-primary-gray text-base font-medium rounded-xl p-3 border focus:border-primary-color active:border-primary-color focus:outline-none bg-secondary-color  ${className}  `}
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}
         onPlaceSelected={(place) => {
           onSelect(place);

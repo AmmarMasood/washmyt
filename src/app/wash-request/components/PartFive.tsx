@@ -22,10 +22,12 @@ export default function PartFive(props: IOnboardingPageProps) {
   return (
     <div className="max-md:w-full max-md:mt-10 ">
       <StepperBar current={4} total={10} />
-      <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
+      <Card className="p-12 w-[1300px] mt-12 max-md:w-full max-md:p-4">
         <>
-          <Image src={LogoIcon} alt="washmyt" className="float-right" />
-          <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
+          <div className="flex items-end justify-end">
+            <Image src={LogoIcon} alt="washmyt" />
+          </div>
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0 ">
             <h1 className="text-black text-2xl text-center mb-2">Address</h1>
             <h3 className=" mb-2 text-primary-gray text-xl text-center">
               Please provide the address including street, city, state, zip
@@ -34,7 +36,7 @@ export default function PartFive(props: IOnboardingPageProps) {
             <GoogleAutocomplete
               onSelect={(e) => setAddress(e)}
               label=""
-              className="!p-4 !mb-6 !mt-0 !w-[500px] !max-md:w-[300px] !rounded-xl border-1 border-black"
+              className="!p-4 !mb-6 !mt-0  w-[500px] !rounded-xl border-1 border-black max-md:w-[300px]"
               placeholder="Type your answer here"
             />
             <p className="paragraph-1 text-center">

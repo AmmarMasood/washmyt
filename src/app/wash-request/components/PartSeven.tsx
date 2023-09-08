@@ -29,9 +29,10 @@ export default function PartSeven(props: IOnboardingPageProps) {
       <StepperBar current={6} total={10} />
       <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
         <>
-          <Image src={LogoIcon} alt="washmyt" className="float-right" />
-
-          <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
+          <div className="flex items-end justify-end">
+            <Image src={LogoIcon} alt="washmyt" />
+          </div>
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0">
             <h1 className="text-black text-2xl text-center mb-16">
               Is there an electrical outlet available?
             </h1>

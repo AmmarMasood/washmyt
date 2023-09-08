@@ -40,7 +40,7 @@ export default function PartFour(props: IOnboardingPageProps) {
             <Image src={WeatherPart} alt="weather" />
             <Image src={LogoIcon} alt="washmyt" />
           </div>
-          <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center  max-md:p-0 ">
             <h1 className="text-black text-2xl text-center mb-2">
               Choose a wash package.
             </h1>

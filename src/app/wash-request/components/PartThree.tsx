@@ -64,50 +64,24 @@ export default function PartThree(props: IOnboardingPageProps) {
   return (
     <div className="max-md:w-full max-md:mt-10 ">
       <StepperBar current={2} total={10} />
-      <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
+      <Card className="p-12 w-[1300px] mt-12 max-md:w-full ">
         <>
-          <Image src={LogoIcon} alt="washmyt" className="float-right" />
-          <div className="p-4 mt-4 flex flex-col items-center justfiy-center">
-            <h1 className="text-black text-2xl text-center mb-2 font-semibold">
+          <div className="flex items-end justify-end">
+            <Image src={LogoIcon} alt="washmyt" />
+          </div>
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0 ">
+            <h1 className="text-black text-2xl text-center mb-2 font-semibold ">
               Choose a wash package.
             </h1>
             <h3 className=" mb-16 text-primary-gray text-xl text-center">
               You will be asked for payment once you confirm the payment
             </h3>
-            {/* <Input
-              placeholder="Search for option"
-              onChange={(e) => {
-                const value = e.target.value;
-                const filteredOptions = options.filter((option) =>
-                  option.name.toLowerCase().includes(value.toLowerCase())
-                );
-                setAllOptions(filteredOptions);
-              }}
-              className="p-4 mb-6 w-[500px] max-md:w-[200px]  rounded-xl border-1 border-black"
-            />
-            <div>
-              {allOptions.map((option, index) => (
-                <div
-                  onClick={() => setPackageType(option.id)}
-                  key={index}
-                  className={`min-w-[500px] max-md:min-w-[200px] cursor-pointer p-4 border-transparent rounded-xl border-2 bg-secondary-color mb-4 ${
-                    option.id === packageType &&
-                    "!border-black rounded-xl border-2 bg-black/[0.1]"
-                  }`}
-                >
-                  <p className="text-primary-gray text-lg	font-bold	 text-center">
-                    {option.name}
-                  </p>
-                </div>
-              ))} */}
-            {/* </div> */}
             <Select
               showSearch
               size="large"
               defaultOpen
-              className="w-[600px] max-md:w-full  rounded-xl border-1 border-black"
+              className="w-[600px] max-md:w-full  rounded-xl border-1 border-black !max-md:w-full"
               placeholder="Search for option"
-              direction="ltr"
               listHeight={350}
               placement="bottomRight"
               open={true}
