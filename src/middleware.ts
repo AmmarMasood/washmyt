@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const auth = request.headers.get("authorization");
   const responseAPI = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/authenticate`,
+    `https://washmyt.vercel.app/api/authenticate`,
     {
       headers: {
         authorization: auth as any,
