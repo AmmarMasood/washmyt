@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
+import { IOnboardingPageProps } from "./PartOne";
+
 //
 const options = [
   {
@@ -23,6 +24,21 @@ const options = [
 export default function PartSix(props: IOnboardingPageProps) {
   const { onNext } = props;
   const [hookup, setHookup] = useState("yes");
+
+  const verifyFields = () => {
+    if (!hookup) {
+      return false;
+    }
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (verifyFields()) {
+      onNext({
+        waterHookupAvailable: hookup === "yes" ? true : false,
+      });
+    }
+  };
 
   return (
     <div className="max-md:w-full max-md:mt-10 ">
@@ -53,7 +69,11 @@ export default function PartSix(props: IOnboardingPageProps) {
               ))}
             </div>
 
-            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
+            <Button
+              onClick={onNextClick}
+              disabled={false}
+              className="mt-16 !w-[150px] mb-14"
+            >
               <span className="flex items-center justify-center">
                 <label className="mr-4">OK</label>
                 <Image src={Tick} alt="tick" />

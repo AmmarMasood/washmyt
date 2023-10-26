@@ -1,20 +1,26 @@
 "use client";
 
-import Image from "next/image";
 import Button from "../../../components/Button";
 import { ChangeEvent, useState } from "react";
 import Card from "../../../components/Card";
-import LogoIcon from "../../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import Select from "@/app/components/Select";
-import MultiSelect, { ISelectedValue } from "@/app/components/MultiSelect";
 import UploadImage from "@/app/components/UploadImage";
-import Link from "next/link";
+import { storage } from "@/app/lib/firebase";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { UserAuth } from "@/app/context/AuthContext";
+import axiosApiInstance from "@/app/utils/axiosClient";
+import { useRouter } from "next/navigation";
+import { message } from "antd";
 
 export default function FifthPart() {
+  const { profile, user, setLoading, getUser } = UserAuth() as any;
+  const router = useRouter();
+
   const [inputValues, setInputValues] = useState({
-    businessInsurance: "yes",
+    businessInsurance: profile.ownInsurance === false ? "no" : "yes",
   });
+  const [file, setFile] = useState(null);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValues((prev) => ({
@@ -23,7 +29,55 @@ export default function FifthPart() {
     }));
   };
 
-  const onUpload = (file: any) => {};
+  const updateData = async (file: File) => {
+    if (!file) return;
+
+    try {
+      const fileRef = ref(storage, `${profile.userId}/insurance/${file.name}`);
+      const uploadTask = await uploadBytes(fileRef, file);
+      const link = await getDownloadURL(uploadTask.ref);
+      return link;
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to upload file. Please try again.");
+    }
+  };
+
+  const onUpload = (file: any) => {
+    setFile(file[0]);
+  };
+
+  const verifyFields = () => {
+    if (inputValues.businessInsurance === "yes" && !file) {
+      return false;
+    }
+    return true;
+  };
+
+  const onClickNext = async () => {
+    if (!verifyFields()) {
+      message.error("Please fill all the required fields.");
+      return;
+    }
+    setLoading(true);
+
+    const link =
+      typeof file === "string" ? file : await updateData(file as any);
+    try {
+      await axiosApiInstance.post("/api/onboard/complete-profile", {
+        ownInsurance: inputValues.businessInsurance === "yes" ? true : false,
+        insuranceImage: inputValues.businessInsurance === "yes" ? link : "",
+        onboardingCompleted: true,
+      });
+      await getUser(true);
+
+      router.push("/user/dashboard");
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong. Please try again.");
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="max-md:w-full">
@@ -34,32 +88,32 @@ export default function FifthPart() {
             <Select
               name="businessInsurance"
               label="Does your business have General Liability insurance?"
-              placeholder="Yes"
+              placeholder="yes"
               onChange={handleOnChange}
               value={inputValues.businessInsurance}
               className="mt-8"
               options={[
                 {
                   id: "yes",
-                  value: "Yes",
+                  value: "yes",
                 },
                 {
                   id: "no",
-                  value: "No",
+                  value: "no",
                 },
               ]}
             />
 
             <UploadImage
+              file={file}
               label="Please take a photo of your insurance"
               onUpload={onUpload}
               className="mt-8"
             />
-            <Link href={"/user/dashboard"}>
-              <Button onClick={() => console.log("next")} className="mt-10">
-                Complete Registration
-              </Button>
-            </Link>
+
+            <Button disabled={false} onClick={onClickNext} className="mt-10">
+              Complete Registration
+            </Button>
           </div>
         </>
       </Card>

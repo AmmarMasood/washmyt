@@ -2,42 +2,38 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
-//
-import ModelS from "../../../../public/imgs/big-model-s.svg";
-import Model3 from "../../../../public/imgs/big-model-3.svg";
-import ModelX from "../../../../public/imgs/big-model-x.svg";
-
+import { message } from "antd";
+import { modelsData } from "@/app/utils/static-data";
+export interface IOnboardingPageProps {
+  onNext: (values: any) => void;
+  final?: boolean;
+}
 export default function PartOne(props: IOnboardingPageProps) {
   const { onNext } = props;
   const [selectedModel, setSelectedModel] = useState("modelS");
-  const [models, setModels] = useState([
-    {
-      id: "modelS",
-      name: "Model S",
-      img: ModelS,
-    },
-    {
-      id: "model3",
-      name: "Model 3",
-      img: Model3,
-    },
-    {
-      id: "modelX",
-      name: "Model X",
-      img: ModelX,
-    },
-    {
-      id: "modelS2",
-      name: "Model S",
-      img: ModelS,
-    },
-  ]);
+  const [models, setModels] = useState(modelsData);
+
+  const verifyFields = () => {
+    if (!selectedModel) {
+      message.error("Please select a model.");
+      return false;
+    }
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (!verifyFields()) {
+      return;
+    }
+    onNext({
+      selectedModel,
+    });
+  };
 
   return (
     <div className="max-md:w-full max-md:mt-10 ">
@@ -68,7 +64,11 @@ export default function PartOne(props: IOnboardingPageProps) {
                 </div>
               ))}
             </div>
-            <Button onClick={onNext} className="mt-20 !w-[150px] mb-14">
+            <Button
+              disabled={false}
+              onClick={onNextClick}
+              className="mt-20 !w-[150px] mb-14"
+            >
               <span className="flex items-center justify-center">
                 <label className="mr-4 !text-white">OK</label>
                 <Image src={Tick} alt="tick" />

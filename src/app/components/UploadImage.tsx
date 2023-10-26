@@ -6,14 +6,23 @@ interface IUploadImage {
   label: string;
   onUpload: (files: any) => void;
   className?: string;
+  file?: any;
 }
 function UploadImage(props: IUploadImage) {
-  const { label, onUpload, className } = props;
+  const { label, onUpload, className, file } = props;
   const onDrop = useCallback((acceptedFiles: any) => {
     // Do something with the files
-    console.log(acceptedFiles);
+    onUpload(acceptedFiles);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    multiple: false,
+    maxSize: 3000000,
+    accept: {
+      "image/png": [".png"],
+    },
+  });
 
   return (
     <div className={className}>
@@ -26,7 +35,7 @@ function UploadImage(props: IUploadImage) {
         {...getRootProps()}
         className="bg-[#f5f5f5] h-32 rounded-xl border-dotted border-black flex items-center justify-center cursor-pointer"
       >
-        <input {...getInputProps()} className="p-3 w-full" />
+        <input {...getInputProps()} className="p-3 w-full" type="" />
         {isDragActive ? (
           <p className="text-primary-gray text-base	font-medium">
             Drop the files here ...
@@ -34,6 +43,17 @@ function UploadImage(props: IUploadImage) {
         ) : (
           <p className="text-primary-gray text-base	font-medium">
             Drag and drop some files here, or click to select files
+          </p>
+        )}
+      </div>
+      <div>
+        <p className="text-primary-gray text-xs font-medium mt-2 text-center">
+          File must be in PNG format and no larger than 3MB
+        </p>
+
+        {file && (
+          <p className="text-primary-gray text-md font-medium mt-2 overflow-hidden">
+            {typeof file === "string" ? file : file.name}
           </p>
         )}
       </div>

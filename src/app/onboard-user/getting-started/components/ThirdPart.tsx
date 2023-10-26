@@ -9,14 +9,20 @@ import StepperBar from "@/app/components/StepperBar";
 import FormField from "@/app/components/FormField";
 import Select from "@/app/components/Select";
 import { IOnboardingPageProps } from "./StartOnboarding";
+import { UserAuth } from "@/app/context/AuthContext";
+import axiosApiInstance from "@/app/utils/axiosClient";
+import { message } from "antd";
 
 export default function ThirdPart(props: IOnboardingPageProps) {
   const { onNext } = props;
+  const { profile, setLoading } = UserAuth() as any;
+
   const [inputValues, setInputValues] = useState({
-    radius: "",
-    ownCar: "yes",
-    waterCapabilities: "yes",
-    electricCapabilities: "yes",
+    radius: profile.serviceRadius || "",
+    ownCar: profile.ownACar === false ? "no" : "yes",
+    waterCapabilities: profile.mobileWaterCapability === false ? "no" : "yes",
+    electricCapabilities:
+      profile.mobileElectricCapability === false ? "no" : "yes",
   });
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +30,36 @@ export default function ThirdPart(props: IOnboardingPageProps) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const verifyFields = () => {
+    if (!inputValues.radius) {
+      return false;
+    }
+    return true;
+  };
+
+  const updateData = async () => {
+    if (!verifyFields()) {
+      message.error("Please fill all the required fields.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await axiosApiInstance.post("/api/onboard/complete-profile", {
+        serviceRadius: parseFloat(inputValues.radius),
+        ownACar: inputValues.ownCar === "yes" ? true : false,
+        mobileWaterCapability:
+          inputValues.waterCapabilities === "yes" ? true : false,
+        mobileElectricCapability:
+          inputValues.electricCapabilities === "yes" ? true : false,
+      });
+      onNext();
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -35,7 +71,7 @@ export default function ThirdPart(props: IOnboardingPageProps) {
             <FormField
               type="number"
               name="radius"
-              label="Service Radius (how far will you travel?)"
+              label="Service Radius (how far will you travel?)*"
               placeholder="0 miles"
               onChange={handleOnChange}
               value={inputValues.radius}
@@ -51,11 +87,11 @@ export default function ThirdPart(props: IOnboardingPageProps) {
               options={[
                 {
                   id: "yes",
-                  value: "Yes",
+                  value: "yes",
                 },
                 {
                   id: "no",
-                  value: "No",
+                  value: "no",
                 },
               ]}
             />
@@ -68,11 +104,11 @@ export default function ThirdPart(props: IOnboardingPageProps) {
               options={[
                 {
                   id: "yes",
-                  value: "Yes",
+                  value: "yes",
                 },
                 {
                   id: "no",
-                  value: "No",
+                  value: "no",
                 },
               ]}
             />
@@ -85,15 +121,15 @@ export default function ThirdPart(props: IOnboardingPageProps) {
               options={[
                 {
                   id: "yes",
-                  value: "Yes",
+                  value: "yes",
                 },
                 {
                   id: "no",
-                  value: "No",
+                  value: "no",
                 },
               ]}
             />
-            <Button onClick={onNext} className="mt-10">
+            <Button disabled={false} onClick={updateData} className="mt-10">
               Next
             </Button>
           </div>

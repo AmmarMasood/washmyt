@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Layout from "../components/Layout";
 import { PROFILE } from "@/app/store";
@@ -16,9 +16,16 @@ import CustomTable from "@/app/components/Table";
 import { columns, data } from "./helpers/table-data";
 import Map from "../components/Map";
 import CardFilter from "../components/CardFilter";
+import { useRouter } from "next/navigation";
+import { withAuth } from "@/app/hoc/withAuth";
 
 function Page() {
   const [showCards, setShowCards] = React.useState(true);
+
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/user/access-denied");
+  }, []);
 
   const onHide = () => {
     setShowCards((prev) => !prev);
@@ -26,7 +33,7 @@ function Page() {
 
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
-      <Layout currentOption={2} profile={PROFILE}>
+      <Layout currentOption={2}>
         <Card className="h-full p-4 bg-white">
           <CardFilter onHide={onHide} />
           <div
@@ -38,19 +45,15 @@ function Page() {
           >
             <InfoCard
               img={WashRequestIcon}
-              title="7"
+              title="0"
               description="Total Customers"
             />
-            <InfoCard
-              img={MatchIcon}
-              title="$35,021"
-              description="On Recurr Plan"
-            />
+            <InfoCard img={MatchIcon} title="0" description="On Recurr Plan" />
 
-            <InfoCard img={SalesIcon} title="$20,123" description="Avg. LTV" />
+            <InfoCard img={SalesIcon} title="0" description="Avg. LTV" />
             <InfoCard
               img={WashCompletedIcon}
-              title="272"
+              title="0"
               description="Acive Now"
             />
           </div>
@@ -68,4 +71,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default withAuth(Page);

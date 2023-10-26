@@ -10,14 +10,18 @@ import FormField from "@/app/components/FormField";
 import Select from "@/app/components/Select";
 import { IOnboardingPageProps } from "./StartOnboarding";
 import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
+import { UserAuth } from "@/app/context/AuthContext";
+import axiosApiInstance from "@/app/utils/axiosClient";
+import { message } from "antd";
 
 export default function SecondPart(props: IOnboardingPageProps) {
   const { onNext } = props;
+  const { profile, setLoading } = UserAuth() as any;
   const [inputValues, setInputValues] = useState({
-    businessAdderess: "",
-    tShirtSize: "m",
-    website: "",
-    email: "",
+    businessAdderess: profile.businessAddress || "",
+    tShirtSize: profile.tShirtSize || "",
+    website: profile.website || "",
+    email: profile.email || "",
   });
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +29,33 @@ export default function SecondPart(props: IOnboardingPageProps) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const verifyFields = () => {
+    if (!inputValues.businessAdderess) {
+      return false;
+    }
+    return true;
+  };
+
+  const updateData = async () => {
+    if (!verifyFields()) {
+      message.error("Please fill all the required fields.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await axiosApiInstance.post("/api/onboard/complete-profile", {
+        businessAddress: inputValues.businessAdderess,
+        tShirtSize: inputValues.tShirtSize,
+        website: inputValues.website,
+      });
+      onNext();
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -41,6 +72,7 @@ export default function SecondPart(props: IOnboardingPageProps) {
               onChange={handleOnChange}
               value={inputValues.email}
               className="mt-4"
+              disabled={true}
             />
             <FormField
               type="text"
@@ -59,33 +91,44 @@ export default function SecondPart(props: IOnboardingPageProps) {
               className="mt-8"
               options={[
                 {
-                  id: "s",
+                  id: "S",
                   value: "S",
                 },
                 {
-                  id: "m",
+                  id: "M",
                   value: "M",
                 },
                 {
-                  id: "l",
+                  id: "L",
                   value: "L",
                 },
                 {
-                  id: "xl",
+                  id: "XL",
                   value: "XL",
                 },
                 {
-                  id: "xxl",
+                  id: "XXL",
                   value: "XXL",
                 },
               ]}
             />
             <GoogleAutocomplete
-              label="Business Address"
-              onSelect={(place) => console.log(place)}
+              label="Business Address*"
+              onSelect={(place) => {
+                setInputValues((prevValues) => ({
+                  ...prevValues,
+                  businessAdderess: JSON.stringify(place),
+                }));
+              }}
               className="!w-full"
             />
-            <Button onClick={onNext} className="mt-10">
+            {inputValues.businessAdderess &&
+              typeof inputValues.businessAdderess === "string" && (
+                <p className="text-primary-gray text-md font-medium mt-2">
+                  {JSON.parse(inputValues.businessAdderess)?.formatted_address}
+                </p>
+              )}
+            <Button disabled={false} onClick={updateData} className="mt-10">
               Next
             </Button>
           </div>

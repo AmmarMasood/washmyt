@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Layout from "../components/Layout";
 import { PROFILE } from "@/app/store";
@@ -16,16 +16,23 @@ import CustomTable from "@/app/components/Table";
 import { columns, data } from "./helpers/table-data";
 import { Select } from "antd";
 import CardFilter from "../components/CardFilter";
+import { withAuth } from "@/app/hoc/withAuth";
+import { useRouter } from "next/navigation";
 
 function Page() {
   const [showCards, setShowCards] = React.useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/user/access-denied");
+  });
 
   const onHide = () => {
     setShowCards((prev) => !prev);
   };
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
-      <Layout currentOption={0} profile={PROFILE}>
+      <Layout currentOption={0}>
         <Card className="h-full p-4 bg-white">
           <CardFilter onHide={onHide} />
           <div
@@ -37,33 +44,33 @@ function Page() {
           >
             <InfoCard
               img={WashRequestIcon}
-              title="7"
+              title="0"
               description="New Washes Requests"
-              bottomDescription="2 Cancelled"
+              bottomDescription="0 Cancelled"
             />
             <InfoCard
               img={MatchIcon}
-              title="352"
+              title="0"
               description="Assign washes matched"
-              bottomDescription="41 Not Matched"
+              bottomDescription="0 Not Matched"
             />
             <InfoCard
               img={SalesIcon}
-              title="$20,123"
+              title="0"
               description="Total Sales"
-              bottomDescription="$7,034 Uncollected"
+              bottomDescription="0 Uncollected"
             />
             <InfoCard
               img={WashCompletedIcon}
-              title="272"
+              title="0"
               description="Wash Completed"
-              bottomDescription="121 Pending"
+              bottomDescription="0 Pending"
             />
             <InfoCard
               img={RatingIcon}
-              title="4.7"
+              title="0"
               description="Average Rating"
-              bottomDescription="152 Reviews"
+              bottomDescription="0 Reviews"
             />
           </div>
           <div className={`mt-8`}>
@@ -80,4 +87,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default withAuth(Page);

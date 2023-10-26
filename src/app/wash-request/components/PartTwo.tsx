@@ -6,8 +6,10 @@ import { ChangeEvent, useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
+
 import Tick from "../../../../public/imgs/tick.svg";
+import { IOnboardingPageProps } from "./PartOne";
+import { message } from "antd";
 //
 const options = [
   {
@@ -40,6 +42,22 @@ export default function PartTwo(props: IOnboardingPageProps) {
   const { onNext } = props;
   const [color, setColor] = useState("black");
 
+  const verifyFields = () => {
+    if (!color) {
+      message.error("Please select a color.");
+      return false;
+    }
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (verifyFields()) {
+      onNext({
+        color,
+      });
+    }
+  };
+
   return (
     <div className="max-md:w-full max-md:mt-10 ">
       <StepperBar current={1} total={10} />
@@ -69,7 +87,11 @@ export default function PartTwo(props: IOnboardingPageProps) {
               ))}
             </div>
 
-            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
+            <Button
+              disabled={false}
+              onClick={onNextClick}
+              className="mt-16 !w-[150px] mb-14"
+            >
               <span className="flex items-center justify-center">
                 <label className="mr-4 !text-white">OK</label>
                 <Image src={Tick} alt="tick" />

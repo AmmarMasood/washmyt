@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
-import Tick from "../../../../public/imgs/tick.svg";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import Link from "next/link";
+import { IOnboardingPageProps } from "./PartOne";
 
 export default function PartTen(props: IOnboardingPageProps) {
   const { onNext } = props;
@@ -18,6 +17,26 @@ export default function PartTen(props: IOnboardingPageProps) {
 
   const handleOnChange = (e: any) => {
     setPhone(e.target.value);
+  };
+
+  const verifyFields = () => {
+    if (!phone) {
+      message.error("Please enter phone.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (verifyFields()) {
+      onNext(
+        {
+          customerPhoneNumber: phone,
+        },
+        true
+      );
+    }
   };
 
   return (
@@ -47,16 +66,15 @@ export default function PartTen(props: IOnboardingPageProps) {
               />
             </div>
 
-            <Link href={"/wash-request/payment"}>
-              <Button
-                onClick={() => console.log("test")}
-                className="mt-16 !w-fit mb-14 px-4"
-              >
-                <span className="flex items-center justify-center">
-                  <label>Submit Wash Request</label>
-                </span>
-              </Button>
-            </Link>
+            <Button
+              disabled={false}
+              onClick={onNextClick}
+              className="mt-16 !w-fit mb-14 px-4"
+            >
+              <span className="flex items-center justify-center">
+                <label>Submit Wash Request</label>
+              </span>
+            </Button>
           </div>
         </>
       </Card>

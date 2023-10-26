@@ -4,18 +4,21 @@ import Image from "next/image";
 import Button from "../../../components/Button";
 import { ChangeEvent, useState } from "react";
 import Card from "../../../components/Card";
-import LogoIcon from "../../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import FormField from "@/app/components/FormField";
 import { IOnboardingPageProps } from "./StartOnboarding";
+import axiosApiInstance from "@/app/utils/axiosClient";
+import { UserAuth } from "@/app/context/AuthContext";
+import { message } from "antd";
 
 export default function FirstPart(props: IOnboardingPageProps) {
   const { onNext } = props;
+  const { profile, setLoading } = UserAuth() as any;
   const [inputValues, setInputValues] = useState({
-    businessName: "",
-    name: "",
-    mobileNumber: "",
-    email: "",
+    businessName: profile?.businessName || "",
+    name: profile?.name || "",
+    mobileNumber: profile?.phoneNumber || "",
+    email: profile?.email || "",
   });
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +26,37 @@ export default function FirstPart(props: IOnboardingPageProps) {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const verifyFields = () => {
+    if (
+      !inputValues.businessName ||
+      !inputValues.name ||
+      !inputValues.mobileNumber
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const updateData = async () => {
+    if (!verifyFields()) {
+      message.error("Please fill all the required fields.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await axiosApiInstance.post("/api/onboard/complete-profile", {
+        businessName: inputValues.businessName,
+        name: inputValues.name,
+        phoneNumber: inputValues.mobileNumber,
+      });
+      onNext();
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -67,8 +101,9 @@ export default function FirstPart(props: IOnboardingPageProps) {
               onChange={handleOnChange}
               value={inputValues.email}
               className="mt-8"
+              disabled={true}
             />
-            <Button onClick={onNext} className="mt-10">
+            <Button onClick={updateData} className="mt-10" disabled={false}>
               Next
             </Button>
           </div>

@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
-import { Input } from "antd";
+import { Input, message } from "antd";
+import { IOnboardingPageProps } from "./PartOne";
 
 export default function PartEight(props: IOnboardingPageProps) {
   const { onNext } = props;
@@ -16,6 +16,22 @@ export default function PartEight(props: IOnboardingPageProps) {
 
   const handleOnChange = (e: any) => {
     setName(e.target.value);
+  };
+
+  const verifyFields = () => {
+    if (!name) {
+      message.error("Please enter name.");
+      return false;
+    }
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (verifyFields()) {
+      onNext({
+        customerName: name,
+      });
+    }
   };
 
   return (
@@ -34,7 +50,11 @@ export default function PartEight(props: IOnboardingPageProps) {
               className="p-4 mb-6 w-[500px]  max-md:w-[250px] rounded-xl border-1 border-black"
             />
 
-            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
+            <Button
+              onClick={onNextClick}
+              disabled={false}
+              className="mt-16 !w-[150px] mb-14"
+            >
               <span className="flex items-center justify-center">
                 <label className="mr-4">OK</label>
                 <Image src={Tick} alt="tick" />

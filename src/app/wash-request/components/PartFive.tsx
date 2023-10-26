@@ -6,17 +6,33 @@ import { ChangeEvent, useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
-import { IOnboardingPageProps } from "@/app/onboard-user/getting-started/components/StartOnboarding";
 import Tick from "../../../../public/imgs/tick.svg";
-import { Input } from "antd";
+import { message } from "antd";
 import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
+import { IOnboardingPageProps } from "./PartOne";
 
 export default function PartFive(props: IOnboardingPageProps) {
   const { onNext } = props;
   const [address, setAddress] = useState("");
 
-  const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setAddress(e.target.value);
+  const handleOnChange = (e: any) => {
+    setAddress(JSON.stringify(e));
+  };
+
+  const verifyFields = () => {
+    if (!address) {
+      message.error("Please enter address.");
+      return false;
+    }
+    return true;
+  };
+
+  const onNextClick = () => {
+    if (verifyFields()) {
+      onNext({
+        address,
+      });
+    }
   };
 
   return (
@@ -34,7 +50,7 @@ export default function PartFive(props: IOnboardingPageProps) {
             </h3>
 
             <GoogleAutocomplete
-              onSelect={(e) => setAddress(e)}
+              onSelect={handleOnChange}
               label=""
               className="!p-4 !mb-6 !mt-0  w-[500px] !rounded-xl border-1 border-black max-md:w-[300px]"
               placeholder="Type your answer here"
@@ -42,7 +58,11 @@ export default function PartFive(props: IOnboardingPageProps) {
             <p className="paragraph-1 text-center">
               Shift ⇧ + Enter ↵ to make a line break
             </p>
-            <Button onClick={onNext} className="mt-16 !w-[150px] mb-14">
+            <Button
+              disabled={false}
+              onClick={onNextClick}
+              className="mt-16 !w-[150px] mb-14"
+            >
               <span className="flex items-center justify-center">
                 <label className="mr-4">OK</label>
                 <Image src={Tick} alt="tick" />

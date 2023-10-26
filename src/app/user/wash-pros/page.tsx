@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Layout from "../components/Layout";
 import { PROFILE } from "@/app/store";
@@ -15,11 +15,35 @@ import RatingIcon from "../../../../public/imgs/rating-icon.svg";
 import CustomTable from "@/app/components/Table";
 import { columns, data } from "./helpers/table-data";
 import Map from "../components/Map";
+import { UserAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { withAuth } from "@/app/hoc/withAuth";
 
 function Page() {
+  const { profile } = UserAuth() as any;
+  const router = useRouter();
+  const [address, setAddress] = useState({
+    geometry: {
+      location: {
+        lat: 0,
+        lng: 0,
+      },
+    },
+  });
+
+  useEffect(() => {
+    router.push("/user/access-denied");
+  }, []);
+
+  useEffect(() => {
+    if (profile) {
+      setAddress(JSON.parse(profile.businessAddress));
+    }
+  }, [profile]);
+
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
-      <Layout currentOption={1} profile={PROFILE}>
+      <Layout currentOption={1}>
         <Card className="h-full p-4 bg-white">
           <div className="flex items-center justify-between">
             <div
@@ -32,24 +56,29 @@ function Page() {
             >
               <InfoCard
                 img={WashRequestIcon}
-                title="702"
+                title="0"
                 description="Live Wash Pros"
               />
               <InfoCard
                 img={OnboardingIcon}
-                title="48"
+                title="0"
                 description="Onboarding"
               />
 
               <InfoCard
                 img={WashCompletedIcon}
-                title="8332"
+                title="0"
                 description="Washes Completed"
               />
-              <InfoCard img={RatingIcon} title="5663" description="Ratings" />
+              <InfoCard img={RatingIcon} title="0" description="Ratings" />
             </div>
             <div className="h-[400px] overflow-hidden w-[600px] rounded-3xl">
-              <Map />
+              <Map
+                coordinates={{
+                  lat: address?.geometry?.location.lat,
+                  lng: address?.geometry?.location.lng,
+                }}
+              />
             </div>
           </div>
           <div className="mt-8">
@@ -66,4 +95,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default withAuth(Page);

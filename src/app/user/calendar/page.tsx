@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/Layout";
 import { PROFILE } from "@/app/store";
 import Card from "@/app/components/Card";
@@ -10,11 +10,18 @@ import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import Image from "next/image";
 import WashCard from "./components/WashCard";
 import Tesla from "../../../../public/imgs/wash-card-tesla.svg";
+import { withAuth } from "@/app/hoc/withAuth";
+import { useRouter } from "next/navigation";
 
 function Page() {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/user/access-denied");
+  }, []);
+
   return (
     <div className="min-h-screen  bg-secondary-color p-6 relative">
-      <Layout currentOption={3} profile={PROFILE}>
+      <Layout currentOption={3}>
         <div
           style={{
             display: "grid",
@@ -28,7 +35,7 @@ function Page() {
               <h3 className="text-primary-gray text-base font-semibold mb-5">
                 Today
               </h3>
-              <WashCard
+              {/* <WashCard
                 img={Tesla}
                 title="Ted Baker x Wash Pro Name"
                 date="Nov 01, 2023"
@@ -44,14 +51,14 @@ function Page() {
                 schedule="10.00 AM - 11.00 AM"
                 scheduleColor=""
                 className="mb-4"
-              />
+              /> */}
             </div>
           </div>
           <Card className="h-full p-4 bg-white">
             <div className="flex items-center justify-end mt-2 mb-2">
               <Image src={LogoIcon} alt="washmyt" />
             </div>
-            <CustomCalender />
+            {/* <CustomCalender /> */}
           </Card>
         </div>
       </Layout>
@@ -59,4 +66,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default withAuth(Page);

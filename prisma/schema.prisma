@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique
+  name String?
+  businessName String?
+  phoneNumber String?
+  email String
+  website String?
+  tShirtSize String? @default("M")
+  businessAddress String?
+  serviceRadius Int?
+  ownACar Boolean?
+  mobileWaterCapability Boolean?
+  mobileElectricCapability Boolean?
+  services String[]
+  ownBusinessLicense Boolean?
+  businessLicenseImage String?
+  ownInsurance Boolean?
+  insuranceImage String?
+  documentsVerified Boolean?
+  onboardingCompleted Boolean? @default(false)
+  profileImage String?
+  acceptingWashes Boolean @default(true)
+  createdAt DateTime @default(now())
+}
+
+
+model Package{
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    name String @unique
+    description String 
+    price Float 
+    washRequests WashRequest[]
+}
+
+model Coupon{
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    name String @unique
+    description String 
+    discountPercentage Float 
+    isValid Boolean @default(true)
+    washRequests WashRequest[]
+    createdAt DateTime @default(now())
+}
+
+model WashRequest{
+      id String @id @default(auto()) @map("_id") @db.ObjectId
+      packageId String @db.ObjectId
+      package Package @relation(fields: [packageId], references: [id])
+      address String
+      color String
+      customerEmail String
+      customerName String
+      customerPhoneNumber String
+      electricalHookupAvailable Boolean
+      selectedModel String
+      washDateAndTimeUTC DateTime
+      waterHookupAvailable Boolean
+      paymentCompleted Boolean @default(false)
+      createdAt DateTime @default(now())
+      chargedAmount Float?
+      stripeId String?
+      couponId String? @db.ObjectId
+      coupon Coupon? @relation(fields: [couponId], references: [id])
+}

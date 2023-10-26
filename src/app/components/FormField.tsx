@@ -15,6 +15,7 @@ interface IFormField {
   errorMessage?: string;
   preField?: string;
   postField?: any;
+  disabled?: boolean;
 }
 function FormField(props: IFormField) {
   const {
@@ -31,6 +32,7 @@ function FormField(props: IFormField) {
     errorMessage,
     preField,
     postField,
+    disabled = false,
   } = props;
   return (
     <div className={className}>
@@ -52,6 +54,7 @@ function FormField(props: IFormField) {
           ${preField ? "rounded-l-none rounded-r-xl" : "rounded-xl"}
           ${postField ? "rounded-r-none rounded-l-xl" : "rounded-xl"}
           `}
+          disabled={disabled}
           type={type}
           value={value}
           onChange={onChange}
