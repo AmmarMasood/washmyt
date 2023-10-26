@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const auth = request.headers.get("authorization");
+
   const responseAPI = await fetch(
     `https://washmyt.vercel.app/api/authenticate`,
     {
@@ -12,6 +13,12 @@ export async function middleware(request: NextRequest) {
     }
   );
   const responseAPIJson = await responseAPI.json();
+  console.log(
+    "auth",
+    `https://washmyt.vercel.app/api/authenticate`,
+    responseAPIJson,
+    responseAPI
+  );
 
   //Return to /login if token is not authorized
   if (responseAPI.status !== 200) {
