@@ -41,6 +41,7 @@ function CustomTable(props: ITable) {
             )}
 
             <Button
+              disabled={false}
               onClick={() => console.log("test")}
               className="flex items-center ml-2 !w-fit pr-7"
             >

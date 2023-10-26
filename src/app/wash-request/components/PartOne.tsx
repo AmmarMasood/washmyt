@@ -10,7 +10,7 @@ import Tick from "../../../../public/imgs/tick.svg";
 import { message } from "antd";
 import { modelsData } from "@/app/utils/static-data";
 export interface IOnboardingPageProps {
-  onNext: (values: any) => void;
+  onNext: (values: any, force?: any) => void;
   final?: boolean;
 }
 export default function PartOne(props: IOnboardingPageProps) {

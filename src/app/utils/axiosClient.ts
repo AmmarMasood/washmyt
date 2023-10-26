@@ -27,7 +27,7 @@ const getLatestFirebaseToken = async () => {
 
 // Request interceptor for API calls
 axiosApiInstance.interceptors.request.use(
-  async (config) => {
+  async (config: any) => {
     const firebaseToken = localStorage.getItem("auth");
     if (firebaseToken) {
       config.headers = {

@@ -105,7 +105,7 @@ export default function FourthPart(props: IOnboardingPageProps) {
     setInputValues((prev) => ({
       ...prev,
       selectedServices: prev.selectedServices.filter(
-        (v) => (v as ISelectedValue).id !== id
+        (v: any) => (v as ISelectedValue).id !== id
       ),
     }));
   };
@@ -153,7 +153,7 @@ export default function FourthPart(props: IOnboardingPageProps) {
         ownBusinessLicense:
           inputValues.businessLicense === "yes" ? true : false,
         businessLicenseImage: inputValues.businessLicense === "yes" ? link : "",
-        services: inputValues.selectedServices.map((v) => (v as any).id),
+        services: inputValues.selectedServices.map((v: any) => (v as any).id),
       });
       onNext();
     } catch (error) {
