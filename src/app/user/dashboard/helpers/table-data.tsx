@@ -114,15 +114,6 @@ export const columns: ColumnsType<DataType> = [
     key: "rating",
     render: (text) => <p>{text}</p>,
   },
-  {
-    title: "",
-    dataIndex: "action",
-    render: (text) => (
-      <Popover content={content} trigger="click">
-        <MoreOutlined className="text-xl cursor-pointer" />
-      </Popover>
-    ),
-  },
 ];
 
 export const data: DataType[] = [

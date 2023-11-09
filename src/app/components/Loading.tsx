@@ -12,7 +12,7 @@ const antIcon = (
 function Loading(props: ILoading) {
   const { show } = props;
   return show ? (
-    <div className="h-full w-full absolute flex items-center justify-center z-[100000] bg-opacity-10 bg-primary-color top-0 left-0">
+    <div className="h-[100vh] w-[100vw] absolute flex items-center justify-center z-[100000] bg-opacity-10 bg-primary-color top-0 left-0">
       <Spin indicator={antIcon} />
     </div>
   ) : null;

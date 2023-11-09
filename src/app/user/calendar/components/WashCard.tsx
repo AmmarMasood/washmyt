@@ -18,7 +18,7 @@ function WashCard(props: IWashCard) {
   return (
     <div className={`bg-white rounded-3xl p-4 ${className}`}>
       <div className="flex items-start justify-between mb-2">
-        <Image src={img} alt={"wash"} />
+        <Image src={img} alt={"wash"} height={50} />
         <p className="font-medium text-primary-gray text-sm">{date}</p>
       </div>
       <h1 className="font-semibold text-xl text-black">{title}</h1>

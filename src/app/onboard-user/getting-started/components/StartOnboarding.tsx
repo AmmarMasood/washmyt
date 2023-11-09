@@ -18,7 +18,7 @@ export interface IOnboardingPageProps {
 export default function StartOnboarding(props: IOnboardingPageProps) {
   const { onNext } = props;
   const [messageApi, contextHolder] = message.useMessage();
-  const { user, sendVerificationEmail } = UserAuth() as any;
+  const { user, sendVerificationEmail, profile } = UserAuth() as any;
   const [inputValues, setInputValues] = useState({
     accepted: false,
   });
@@ -128,9 +128,9 @@ export default function StartOnboarding(props: IOnboardingPageProps) {
               label="Accept Terms and Conditions to Start"
             />
             <Button
-              onClick={onNext}
+              onClick={profile === null ? () => console.log("") : onNext}
               className=" mt-5 w-[250px] z-10"
-              disabled={false}
+              disabled={profile === null}
             >
               Start
             </Button>

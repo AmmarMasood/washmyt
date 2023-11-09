@@ -15,6 +15,7 @@ import axios from "axios";
 import axiosApiInstance from "../utils/axiosClient";
 import { useRouter } from "next/navigation";
 import { message } from "antd";
+import { Role } from "../types/interface";
 
 const AuthContext = createContext({});
 
@@ -22,6 +23,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [superAdmin, setSuperAdmin] = useState(false);
   const router = useRouter();
 
   const googleSignIn = () => {
@@ -70,6 +72,7 @@ export const AuthContextProvider = ({ children }) => {
       const res = await axiosApiInstance.get(`/api/user`);
       const { data } = res;
       setProfile(data.user);
+      setSuperAdmin(data.user.role === Role.ADMIN);
       if (data.user.onboardingCompleted !== true) {
         router.push("/onboard-user/getting-started");
       }
@@ -103,6 +106,7 @@ export const AuthContextProvider = ({ children }) => {
         loading,
         setLoading,
         getUser,
+        superAdmin,
       }}
     >
       {children}

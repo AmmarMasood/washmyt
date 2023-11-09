@@ -67,7 +67,12 @@ function Login() {
         );
 
         await setToken(res.user.accessToken);
-        router.push("/user/dashboard");
+        if (localStorage.getItem("lastPath")) {
+          router.push(localStorage.getItem("lastPath") || "/user/calendar");
+          localStorage.removeItem("lastPath");
+        } else {
+          router.push("/user/calendar");
+        }
       } catch (error: any) {
         const err = mapAuthCodeToMessage(error?.message as any);
         setInputValues((prev) => ({ ...prev, error: err }));

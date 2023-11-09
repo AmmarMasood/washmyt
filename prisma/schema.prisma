@@ -10,6 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  WASHER
+  ADMIN
+}
 model UserProfile {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @unique
@@ -32,8 +36,10 @@ model UserProfile {
   documentsVerified Boolean?
   onboardingCompleted Boolean? @default(false)
   profileImage String?
+  role Role @default(WASHER)
   acceptingWashes Boolean @default(true)
   createdAt DateTime @default(now())
+  washRequests WashRequest[]
 }
 
 
@@ -54,24 +60,53 @@ model Coupon{
     washRequests WashRequest[]
     createdAt DateTime @default(now())
 }
+model Customer{
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    name String
+    email String @unique
+    phoneNumber String
+    createdAt DateTime @default(now())
+    washRequests WashRequest[]
+    stripeId String
+}
 
+enum WashStatus {
+    ACCEPTED
+    COMPLETED
+    CANCELLED
+    CREATED
+}
+
+enum PaymentStatus {
+    PAID
+    UNPAID
+}
 model WashRequest{
       id String @id @default(auto()) @map("_id") @db.ObjectId
       packageId String @db.ObjectId
       package Package @relation(fields: [packageId], references: [id])
-      address String
       color String
-      customerEmail String
-      customerName String
-      customerPhoneNumber String
-      electricalHookupAvailable Boolean
       selectedModel String
       washDateAndTimeUTC DateTime
-      waterHookupAvailable Boolean
-      paymentCompleted Boolean @default(false)
-      createdAt DateTime @default(now())
+      paymentStatus PaymentStatus @default(UNPAID)
       chargedAmount Float?
       stripeId String?
+      rating Int?
+      tipAmount Float?
+      tipPaid Boolean @default(false)
+      tipStripeId String?
+      electricalHookupAvailable Boolean
+      waterHookupAvailable Boolean
+      address String
+      washStatus WashStatus @default(CREATED)
+      beforePhoto String?
+      afterPhoto String?
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt @default(now())
       couponId String? @db.ObjectId
       coupon Coupon? @relation(fields: [couponId], references: [id])
+      customerId String @db.ObjectId
+      customer Customer @relation(fields: [customerId], references: [id])
+      washerId String?
+      washer UserProfile? @relation(fields: [washerId], references: [userId])
 }

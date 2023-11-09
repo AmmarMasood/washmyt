@@ -1,4 +1,5 @@
 import { Modal as AntdModal } from "antd";
+import React from "react";
 
 interface IModal {
   title: string;
@@ -7,6 +8,7 @@ interface IModal {
   onConfirm: () => void;
   show: boolean;
   showCloseButton?: boolean;
+  style?: React.CSSProperties;
 }
 const Modal = (props: IModal) => {
   const {
@@ -16,6 +18,7 @@ const Modal = (props: IModal) => {
     onConfirm,
     show,
     showCloseButton = true,
+    style,
   } = props;
 
   return (
@@ -26,6 +29,7 @@ const Modal = (props: IModal) => {
       onCancel={onClose}
       closeIcon={showCloseButton}
       footer={null}
+      style={style}
     >
       <>{children}</>
     </AntdModal>

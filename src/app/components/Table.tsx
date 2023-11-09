@@ -14,9 +14,10 @@ interface ITable {
   heading: string;
   showSearch: boolean;
   showSelect?: boolean;
+  showButton?: boolean;
 }
 function CustomTable(props: ITable) {
-  const { columns, data, heading, showSearch, showSelect } = props;
+  const { columns, data, heading, showSearch, showSelect, showButton } = props;
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -40,14 +41,16 @@ function CustomTable(props: ITable) {
               />
             )}
 
-            <Button
-              disabled={false}
-              onClick={() => console.log("test")}
-              className="flex items-center ml-2 !w-fit pr-7"
-            >
-              <Image src={PlusIcon} alt="plus" />
-              <span className="text-sm ml-1 !text-white"> Add</span>
-            </Button>
+            {showButton && (
+              <Button
+                disabled={false}
+                onClick={() => console.log("test")}
+                className="flex items-center ml-2 !w-fit pr-7"
+              >
+                <Image src={PlusIcon} alt="plus" />
+                <span className="text-sm ml-1 !text-white"> Add</span>
+              </Button>
+            )}
           </div>
         )}
       </div>

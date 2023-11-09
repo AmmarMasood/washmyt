@@ -3,22 +3,12 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const auth = request.headers.get("authorization");
-
-  const responseAPI = await fetch(
-    `https://washmyt.vercel.app/api/authenticate`,
-    {
-      headers: {
-        authorization: auth as any,
-      },
-    }
-  );
+  const responseAPI = await fetch("http://localhost:3000/api/authenticate", {
+    headers: {
+      authorization: auth as any,
+    },
+  });
   const responseAPIJson = await responseAPI.json();
-  console.log(
-    "auth",
-    `https://washmyt.vercel.app/api/authenticate`,
-    responseAPIJson,
-    responseAPI
-  );
 
   //Return to /login if token is not authorized
   if (responseAPI.status !== 200) {
@@ -38,5 +28,12 @@ export const config = {
     "/api/onboard/complete-profile",
     "/api/user",
     "/api/user/upload-files",
+    "/api/user/wash-request",
+    "/api/user/wash-request/accept",
+    "/api/user/wash-request/complete",
+    "/api/user/wash-request/upload-images",
+    "/api/admin",
+    "/api/admin/dashboard",
+    "/api/admin/wash-pros",
   ],
 };

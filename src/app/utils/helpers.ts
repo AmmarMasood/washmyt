@@ -30,3 +30,7 @@ export const validateCardNumber = (_: any, value: any) => {
 
   return Promise.resolve();
 };
+
+export const convertFromCent = (value: any) => {
+  return parseFloat(value) / 100;
+};

@@ -10,6 +10,7 @@ export const withAuth = (WrappedComponent: any) => {
       // Check if the user is logged in
       const auth = localStorage.getItem("auth");
       if (!auth) {
+        localStorage.setItem("lastPath", location.pathname);
         router.replace("/login");
       } else {
         setAuthenticated(true);

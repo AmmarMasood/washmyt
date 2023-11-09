@@ -9,6 +9,8 @@ export async function POST(request: any) {
       currency: "USD",
       amount: res.amount,
       automatic_payment_methods: { enabled: true },
+      customer: res.customer,
+      expand: ["latest_charge"],
     });
 
     return NextResponse.json({

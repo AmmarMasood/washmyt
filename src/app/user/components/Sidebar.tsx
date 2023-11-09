@@ -19,7 +19,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { UserAuth } from "@/app/context/AuthContext";
 
 function Sidebar({ currentOption }: { currentOption: number }) {
-  const { profile, logOut } = UserAuth() as any;
+  const { profile, logOut, superAdmin } = UserAuth() as any;
 
   const onLogout = () => {
     logOut();
@@ -31,53 +31,63 @@ function Sidebar({ currentOption }: { currentOption: number }) {
         activeIcon: DashboardIconActive,
         label: "Dashboard",
         route: "/user/dashboard",
+        visible: superAdmin,
       },
       {
         icon: WashProsIcon,
         activeIcon: WashProsIconActive,
         label: "Wash Pros",
         route: "/user/wash-pros",
+        visible: superAdmin,
       },
       {
         icon: CustomersIcon,
         activeIcon: CustomersIconActive,
         label: "Customers",
         route: "/user/customers",
+        visible: superAdmin,
       },
       {
         icon: CalendarIcon,
         activeIcon: CalendarIconActive,
         label: "Calendar",
         route: "/user/calendar",
+        visible: true,
       },
       {
         icon: LedgerIcon,
         activeIcon: LedgerIconActive,
         label: "Ledger",
         route: "/user/ledger",
+        visible: superAdmin,
       },
-    ].map((option, i) => {
-      const { icon, activeIcon, label, route } = option;
-      return (
-        <Link href={route} key={i}>
-          <li
-            key={i}
-            className={`flex items-center cursor-pointer p-3 rounded-2xl mb-2 ${
-              currentOption === i ? "bg-primary-color mb-3" : ""
-            }`}
-          >
-            <Image src={currentOption === i ? activeIcon : icon} alt={label} />
-            <span
-              className={`paragraph-1 text-sm ml-2 font-medium ${
-                currentOption === i && "text-white	"
+    ]
+      .filter((t) => t.visible)
+      .map((option, i) => {
+        const { icon, activeIcon, label, route } = option;
+        return (
+          <Link href={route} key={i}>
+            <li
+              key={i}
+              className={`flex items-center cursor-pointer p-3 rounded-2xl mb-2 ${
+                currentOption === i ? "bg-primary-color mb-3" : ""
               }`}
             >
-              {label}
-            </span>
-          </li>
-        </Link>
-      );
-    });
+              <Image
+                src={currentOption === i ? activeIcon : icon}
+                alt={label}
+              />
+              <span
+                className={`paragraph-1 text-sm ml-2 font-medium ${
+                  currentOption === i && "text-white	"
+                }`}
+              >
+                {label}
+              </span>
+            </li>
+          </Link>
+        );
+      });
   };
 
   return (
@@ -111,7 +121,9 @@ function Sidebar({ currentOption }: { currentOption: number }) {
                 <span className="paragraph-1 text-sm ml-2 font-bold">
                   {profile.name}
                 </span>
-                <Chip text="Admin" className="ml-6 !text-[10px]" />
+                {superAdmin && (
+                  <Chip text="Admin" className="ml-6 !text-[10px]" />
+                )}
               </div>
             </Link>
           )}

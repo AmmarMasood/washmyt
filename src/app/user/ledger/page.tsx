@@ -22,12 +22,7 @@ import { withAuth } from "@/app/hoc/withAuth";
 
 function Page() {
   const [showCards, setShowCards] = React.useState(true);
-  const { profile, loading, user } = UserAuth as any;
-
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/user/access-denied");
-  }, []);
+  const { profile, loading, user, superAdmin } = UserAuth as any;
 
   const onHide = () => {
     setShowCards((prev) => !prev);

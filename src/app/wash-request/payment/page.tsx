@@ -19,6 +19,7 @@ import utc from "dayjs/plugin/utc";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { modelsData } from "@/app/utils/static-data";
 import { withoutAuth } from "@/app/hoc/withoutAuth";
+import { PaymentStatus, WashStatus } from "@/app/types/interface";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -39,9 +40,10 @@ function Payment() {
     setStripePromise(s);
   };
 
-  const getPaymentIntent = async (price: any) => {
+  const getPaymentIntent = async (price: any, customer: any) => {
     const res = await axiosApiInstance.post("/api/wash-request/payment", {
       amount: parseFloat((price * 100).toFixed(2)), // in cents because of stripe
+      customer: customer.stripeId,
     });
     setStripeSecret(res.data.clientSecret);
   };
@@ -63,20 +65,21 @@ function Payment() {
           .format("MM/DD/YY h:mm A"),
         package: {
           ...res.data.package,
-          price: res.data.paymentCompleted
-            ? res.data.chargedAmount / 100
-            : res.data.package.price,
+          price:
+            res.data.paymentStatus === PaymentStatus.PAID
+              ? res.data.chargedAmount / 100
+              : res.data.package.price,
         },
       });
       if (res.data.paymentCompleted) {
         setLoading(false);
         return;
       }
-      await getPaymentIntent(res.data.package.price);
+      await getPaymentIntent(res.data.package.price, res.data.customer);
       await handleStripeInit();
     } catch (error) {
       console.log(error);
-      message.error("Unable to create wash request");
+      message.error("Unable to get wash request");
     }
     setLoading(false);
   };
@@ -101,7 +104,7 @@ function Payment() {
         }));
         console.log(newPrice);
 
-        await getPaymentIntent(newPrice);
+        await getPaymentIntent(newPrice, washInfo.customer);
         setCouponApplied(true);
         setCouponInformtion(res.data);
         message.success("Coupon applied!");
@@ -143,7 +146,8 @@ function Payment() {
                 <p className="text-black text-xl font-bold text-center">
                   Payment Completed. Thank you!
                 </p>
-              ) : (
+              ) : washInfo.washStatus === WashStatus.ACCEPTED &&
+                washInfo.paymentStatus === PaymentStatus.UNPAID ? (
                 <div>
                   <h1 className="text-[#1E1E1E] text-2xl font-semibold">
                     Ready for Payment
@@ -172,6 +176,11 @@ function Payment() {
                   )}
                   {/* PAYMENT COMPONENT END */}
                 </div>
+              ) : (
+                <p className="text-black text-xl font-bold text-center">
+                  Please wait for the wash pros to accept your request. We will
+                  notify you once they accept.
+                </p>
               )}
               <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between">
                 <div className="flex max-md:flex-wrap">

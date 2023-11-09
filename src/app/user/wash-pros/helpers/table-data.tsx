@@ -2,6 +2,7 @@ import { Avatar, Button, Image, Popover, Space, Tag, Modal } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { MoreOutlined } from "@ant-design/icons";
 import { ExclamationCircleFilled } from "@ant-design/icons";
+import { WashStatus } from "@/app/types/interface";
 
 const { confirm } = Modal;
 
@@ -22,21 +23,6 @@ const showConfirm = () => {
   });
 };
 
-interface DataType {
-  key: string;
-  model: string;
-  color: string;
-  package: string;
-  status: string;
-  date: string;
-  address: string;
-  washPro: string;
-  paid: string;
-  rating: number;
-  name: string;
-  email: string;
-}
-
 const content = (
   <div>
     <Button type="link" size="large">
@@ -49,7 +35,7 @@ const content = (
   </div>
 );
 
-export const columns: ColumnsType<DataType> = [
+export const columns: ColumnsType<any> = [
   {
     title: "Contact",
     key: "name",
@@ -64,44 +50,67 @@ export const columns: ColumnsType<DataType> = [
   },
   {
     title: "Business Name",
-    dataIndex: "model",
-    key: "model",
+    dataIndex: "businessName",
+    key: "businessName",
   },
   {
-    title: "City",
-    dataIndex: "color",
-    key: "color",
-  },
-  {
-    title: "State",
-    dataIndex: "package",
-    key: "package",
-    render: (text) => <p className="text-red-500">{text}</p>,
+    title: "Address",
+    dataIndex: "businessAddress",
+    key: "businessAddress",
+    render: (text) => (
+      <div>
+        <p>{JSON.parse(text)?.formatted_address}</p>
+      </div>
+    ),
   },
   {
     title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (text) => <Tag color={"success"}>{text}</Tag>,
+    dataIndex: "onboardingCompleted",
+    key: "onboardingCompleted",
+    render: (text) =>
+      text === true ? (
+        <Tag color={"success"}>Onboarding Completed</Tag>
+      ) : (
+        <Tag color={"error"}>Onboarding Pending</Tag>
+      ),
   },
   {
     title: "Washes Completed",
-    dataIndex: "date",
-    key: "date",
-    render: (text) => <p>{text}</p>,
+    dataIndex: "washRequests",
+    key: "washRequests",
+    render: (text) => (
+      <p>
+        {
+          text.filter((wash: any) => wash.washStatus === WashStatus.COMPLETED)
+            .length
+        }
+      </p>
+    ),
   },
 
   {
     title: "Ratings",
-    dataIndex: "address",
-    key: "address",
-    render: (text) => <p>{text}</p>,
+    dataIndex: "washRequests",
+    key: "washRequests",
+    render: (text) => (
+      <p>{text.filter((wash: any) => wash.rating && wash.rating > 0).length}</p>
+    ),
   },
   {
     title: "Avg Ratings",
-    dataIndex: "washPro",
-    key: "washPro",
-    render: (text) => <p className="text-red-500 font-bold">{text}</p>,
+    dataIndex: "washRequests",
+    key: "washRequests",
+    render: (text) => (
+      <p className="text-red-500 font-bold">
+        {text
+          .filter((wash: any) => wash.rating && wash.rating > 0)
+          .reduce((a: any, b: any) => {
+            return a + b.rating;
+          }, 0) /
+          text.filter((wash: any) => wash.rating && wash.rating > 0).length ||
+          0}
+      </p>
+    ),
   },
 
   {
@@ -112,22 +121,5 @@ export const columns: ColumnsType<DataType> = [
         <MoreOutlined className="text-xl cursor-pointer" />
       </Popover>
     ),
-  },
-];
-
-export const data: DataType[] = [
-  {
-    key: "1",
-    name: "Olivia Rhyn",
-    email: "@oliviarhyn",
-    model: "Model S",
-    color: "Tesla White",
-    package: "Handwash+",
-    status: "Confirmed",
-    date: "10 December at 11.00 AM",
-    address: "1234 Main St, San Francisco, CA 94123",
-    washPro: "No",
-    paid: "Yes",
-    rating: 5.0,
   },
 ];

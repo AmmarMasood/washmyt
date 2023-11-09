@@ -3,6 +3,7 @@
 import Button from "@/app/components/Button";
 import FormField from "@/app/components/FormField";
 import Loading from "@/app/components/Loading";
+import { PaymentStatus } from "@/app/types/interface";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import {
   Elements,
@@ -49,6 +50,8 @@ function CheckoutForm({
       setError(error.message);
       message.error("Unable to process payment");
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
+      console.log(paymentIntent);
+      // const invoie = await stripe.upda
       setSuccess(true);
       setShowPaymentElement(false);
       await onPaymentConfirmation(paymentIntent.id, paymentIntent.amount);
@@ -59,9 +62,7 @@ function CheckoutForm({
   };
 
   const onPaymentConfirmation = async (paymentId: string, amount: any) => {
-    // couponInformation
     const b = {
-      paymentCompleted: true,
       stripeId: paymentId,
       chargedAmount: amount,
     } as any;
@@ -69,7 +70,10 @@ function CheckoutForm({
       b.couponId = couponInformation.id;
     }
     try {
-      await axiosApiInstance.put(`/api/wash-request?id=${id}`, b);
+      await axiosApiInstance.put(
+        `/api/wash-request/payment/complete?id=${id}`,
+        b
+      );
       message.success("Payment successful");
     } catch (error) {
       console.log(error);

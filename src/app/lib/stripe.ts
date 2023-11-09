@@ -1,7 +1,8 @@
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET as string, {
-  apiVersion: "2023-10-16",
+  // @ts-ignore
+  apiVersion: "2022-11-15",
 });
 
 export default stripe;

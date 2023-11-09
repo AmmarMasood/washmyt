@@ -16,6 +16,7 @@ import axiosApiInstance from "../utils/axiosClient";
 import { message } from "antd";
 import Loading from "../components/Loading";
 import { useRouter } from "next/navigation";
+import stripe from "../lib/stripe";
 
 function WashRequest() {
   const [content, setContent] = useState(0);
@@ -36,13 +37,45 @@ function WashRequest() {
     setContent((prev) => prev + 1);
   };
 
+  const createCustomer = async (values: any) => {
+    let d: any = {
+      name: values.customerName,
+      email: values.customerEmail,
+      phoneNumber: `+1${values.customerPhoneNumber}`,
+    };
+    try {
+      const stripeCustomer = await stripe.customers.create(
+        {
+          email: d.email,
+          phone: d.phoneNumber,
+          name: d.name,
+        },
+        {
+          apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
+        }
+      );
+      d.stripeId = stripeCustomer.id;
+      const res = await axiosApiInstance.post("/api/customer", d);
+      return res.data.customer.id;
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to create customer");
+      throw error;
+    }
+  };
+
   const saveWashRequest = async (requestValues: any) => {
     setLoading(true);
     try {
-      const res = await axiosApiInstance.post(
-        "/api/wash-request",
-        requestValues
-      );
+      const customer = await createCustomer(requestValues);
+      const d = {
+        ...requestValues,
+        customerId: customer,
+      };
+      delete d.customerName;
+      delete d.customerEmail;
+      delete d.customerPhoneNumber;
+      const res = await axiosApiInstance.post("/api/wash-request", d);
       router.push(`/wash-request/payment?wash=${res.data.requestId}`);
     } catch (error) {
       console.log(error);

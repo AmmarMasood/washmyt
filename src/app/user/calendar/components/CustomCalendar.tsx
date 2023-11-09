@@ -1,46 +1,13 @@
 import React, { useState } from "react";
 import type { Dayjs } from "dayjs";
 import type { BadgeProps, CalendarProps } from "antd";
-import {
-  Badge,
-  Calendar,
-  Col,
-  Select,
-  Radio,
-  Typography,
-  Row,
-  Popover,
-} from "antd";
+import { Calendar, Col, Select, Row, Popover } from "antd";
 import dayjs from "dayjs";
+import Link from "next/link";
 
-const getListData = (value: Dayjs) => {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        {
-          type: "Meeting with the brand",
-          content: "10.00 AM - 11.00 AM",
-          color: "#f9e292",
-        },
-        {
-          type: "Meeting with the brand",
-          content: "10.00 AM - 11.00 AM",
-          color: "#8bf4e1",
-        },
-      ];
-      break;
-    case 10:
-      listData = [
-        {
-          type: "Meeting with the brand",
-          content: "10.00 AM - 11.00 AM",
-          color: "#8b96f4",
-        },
-      ];
-    default:
-  }
-  return listData || [];
+const getListData = (value: Dayjs, data: any) => {
+  const dateKey = value.format("MM-DD-YYYY");
+  return data[dateKey] || [];
 };
 
 const getMonthData = (value: Dayjs) => {
@@ -49,13 +16,11 @@ const getMonthData = (value: Dayjs) => {
   }
 };
 
-const CustomCalender: React.FC = () => {
-  const [value, setValue] = useState(() => dayjs("2023-08-25"));
-  const [selectedValue, setSelectedValue] = useState(() => dayjs("2017-08-25"));
+const CustomCalender = (props: any) => {
+  const [value, setValue] = useState(() => dayjs(Date.now()));
 
   const onSelect = (newValue: Dayjs) => {
     setValue(newValue);
-    setSelectedValue(newValue);
   };
 
   const onPanelChange = (newValue: Dayjs) => {
@@ -76,27 +41,30 @@ const CustomCalender: React.FC = () => {
     return (
       <>
         {listData.map((item: any, key: number) => (
-          <div
-            key={key}
-            className={key === 0 && listData.length !== 1 ? "mb-5" : ""}
-          >
-            <p className="font-bold text-base mb-2">{item.type}</p>
-            <p className="flex items-center">
-              <div
-                style={{ backgroundColor: item.color }}
-                className="rounded-full h-2 w-2 mr-2"
-              ></div>
-              <span className="text-secondary-gray text-sm">
-                {item.content}
-              </span>
-            </p>
-          </div>
+          <Link href={`/user/wash-detail/${item.key}`}>
+            <div
+              key={key}
+              className={key === 0 && listData.length !== 1 ? "mb-5" : ""}
+            >
+              <p className="font-bold text-base mb-2">
+                {"Wash appointment for " + item.fullCustomer.name}
+              </p>
+              <p className="flex items-center">
+                <div
+                  style={{ backgroundColor: item.color }}
+                  className="rounded-full h-2 w-2 mr-2"
+                ></div>
+                <span className="text-secondary-gray text-sm">{item.time}</span>
+              </p>
+            </div>
+          </Link>
         ))}
       </>
     );
   };
   const dateCellRender = (value: Dayjs) => {
-    const listData = getListData(value);
+    const listData = getListData(value, props.data);
+    console.log("listdata", listData, value);
     return (
       <>
         {listData.length > 0 && (
@@ -108,8 +76,8 @@ const CustomCalender: React.FC = () => {
           placement="bottomLeft"
         >
           <ul className="flex">
-            {listData.map((item) => (
-              <li key={item.content}>
+            {listData.map((item: any) => (
+              <li key={item.key}>
                 <div
                   key={item.color}
                   style={{
@@ -176,9 +144,6 @@ const CustomCalender: React.FC = () => {
               justifyContent: "space-between",
             }}
           >
-            <h1 className="text-xl font-semibold">
-              {selectedValue?.format("MMMM D, YYYY")}
-            </h1>
             <Row gutter={8}>
               <Col>
                 <Select
