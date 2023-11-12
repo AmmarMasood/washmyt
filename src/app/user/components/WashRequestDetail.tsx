@@ -28,7 +28,7 @@ interface IWashRequestDetail {
   addressDetail: any;
   electricalAvailable: boolean;
   waterAvailable: boolean;
-  payoutDetail?: string;
+  payoutDetail?: any;
   customerDetail: any;
   weatherDetail?: any;
   washerDetail?: any;
@@ -51,6 +51,7 @@ interface IWashRequestDetail {
   isNotWashTime?: boolean;
   receivedAmount?: any;
   receivedTip?: any;
+  snowPackage?: boolean;
 }
 const rowStyle = "flex flex-row justify-between items-center mt-4";
 const labelStyle = "text-primary-gray text-base";
@@ -240,13 +241,14 @@ function WashRequestDetail(props: IWashRequestDetail) {
       if (
         props.washStatus === WashStatus.ACCEPTED &&
         props.paymentStatus === PaymentStatus.PAID &&
-        props.washerDetail.userId === user.uid
+        props.washerDetail.userId === user.uid &&
+        props.isNotWashTime === false
       ) {
         return (
           <div className="mt-6">
             <p className="text-primary-gray text-lg">BEFORE/AFTER PHOTOS</p>
             <div className="flex max-sm:flex-wrap">
-              <div className="bg-primary-gray/[0.2] p-3 rounded-sm h-52 w-full mr-2 relative">
+              <div className="bg-[#f5f5f5] p-3 rounded-sm h-52 w-full mr-2 relative">
                 {props.beforePhoto && (
                   <Image src={props.beforePhoto} alt="before" fill />
                 )}
@@ -254,7 +256,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
                   <UploadImage label="" onUpload={props.onUploadBeforeImage} />
                 )}
               </div>
-              <div className="bg-primary-gray/[0.2] p-3 rounded-sm h-52 w-full relative">
+              <div className="bg-[#f5f5f5] p-3 rounded-sm h-52 w-full relative">
                 {props.afterPhoto && (
                   <Image src={props.afterPhoto} alt="before" fill />
                 )}
@@ -312,6 +314,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
             height={350}
           />
           <Map
+            multipleCoordinates={[]}
             containerStyle={{
               width: "100%",
               height: "250px",
@@ -348,6 +351,12 @@ function WashRequestDetail(props: IWashRequestDetail) {
             <p className={labelStyle}>Address</p>
             <p className={valueStyle}>
               {props.addressDetail.formatted_address}
+            </p>
+          </div>
+          <div className={rowStyle}>
+            <p className={labelStyle}>Snow Package</p>
+            <p className={valueStyle}>
+              {props.snowPackage === true ? "YES" : "NO"}
             </p>
           </div>
           <div className={rowStyle}>

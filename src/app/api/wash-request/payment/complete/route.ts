@@ -50,12 +50,12 @@ export async function PUT(request: any) {
     }
 
     await sendSms(
-      `whatsapp:+923327317911`, //set customer number here later, rightnow hardcoding mine
+      customer.phoneNumber, //set customer number here later, rightnow hardcoding mine
       `Hi ${customer.name}, great news! \n\nWe have received payment for your request.\n\nThanks for the confirmation!\n\nOnce the was is complete you can rate your wash experience here:\nhttps://washmyt.vercel.app/wash-request/detail/${r.id} \n\n- WashMyT Team`
     );
 
     await sendSms(
-      `whatsapp:+923327317911`, //set customer number here later, rightnow hardcoding mine
+      washer.phoneNumber as string, //set customer number here later, rightnow hardcoding mine
       `Hi ${washer.name}, great news! \n\nCustomer have completed the payment, please upload before and after images once wash is completed.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
     );
 

@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [superAdmin, setSuperAdmin] = useState(false);
+  const [superAdmin, setSuperAdmin] = useState(null);
   const router = useRouter();
 
   const googleSignIn = () => {

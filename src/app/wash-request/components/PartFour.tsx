@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { IOnboardingPageProps } from "./PartOne";
+import Weather from "@/app/components/Weather";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -62,8 +63,9 @@ export default function PartFour(props: IOnboardingPageProps) {
       <StepperBar current={3} total={10} />
       <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-4">
             {/* <Image src={WeatherPart} alt="weather" /> */}
+            <Weather />
             <Image src={LogoIcon} alt="washmyt" />
           </div>
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center  max-md:p-0 ">
@@ -118,6 +120,26 @@ export default function PartFour(props: IOnboardingPageProps) {
                   className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                   placeholder="HH"
                   size="large"
+                  showNow={false}
+                  disabledTime={
+                    // disable all times between 8am and 6pm
+                    () => {
+                      return {
+                        disabledHours: () => {
+                          const hours: number[] = [];
+                          for (let i = 0; i < 8; i++) {
+                            hours.push(i);
+                          }
+                          for (let i = 19; i < 24; i++) {
+                            hours.push(i);
+                          }
+                          return hours;
+                        },
+                      };
+                    }
+                  }
+                  // hideDisabledOptions={true}
+                  changeOnBlur={true}
                   suffixIcon={false}
                   onChange={handleTime}
                   value={time ? dayjs(time, "h") : null}
@@ -135,6 +157,25 @@ export default function PartFour(props: IOnboardingPageProps) {
                   className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg ml-3"
                   placeholder="MM"
                   size="large"
+                  showNow={false}
+                  disabledTime={
+                    // disable minute with interval of 30
+                    () => {
+                      return {
+                        disabledMinutes: () => {
+                          const minutes: number[] = [];
+                          for (let i = 0; i < 60; i++) {
+                            if (i % 30 !== 0) {
+                              minutes.push(i);
+                            }
+                          }
+                          return minutes;
+                        },
+                      };
+                    }
+                  }
+                  hideDisabledOptions={true}
+                  changeOnBlur={true}
                   suffixIcon={false}
                   onChange={handleTime}
                   value={time ? dayjs(time, "m") : null}

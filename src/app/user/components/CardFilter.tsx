@@ -3,20 +3,20 @@ import React from "react";
 
 interface ICardFilter {
   onHide: () => void;
+  options: any;
+  value: any;
+  onChangeTime: (value: any) => void;
 }
-function CardFilter({ onHide }: ICardFilter) {
+function CardFilter({ onHide, onChangeTime, value, options }: ICardFilter) {
   return (
     <div className="px-2 flex items-center justify-between mb-5">
       <Select
         className="text-secondary-color"
-        defaultValue="7days"
+        defaultValue={value}
         style={{ width: 120 }}
+        onChange={onChangeTime}
         bordered={false}
-        options={[
-          { value: "7days", label: "Last 7 Days" },
-          { value: "14days", label: "Last 14 Days" },
-          { value: "30days", label: "Last 30 Days" },
-        ]}
+        options={options}
       />
       <p className="text-primary-color text-sm cursor-pointer" onClick={onHide}>
         Hide

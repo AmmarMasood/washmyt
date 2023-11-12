@@ -15,6 +15,8 @@ import axiosApiInstance from "@/app/utils/axiosClient";
 import ProfileImage from "./components/ProfileImage";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/app/lib/firebase";
+import Image from "next/image";
+import GreenCheckmark from "../../../../public/imgs/icons8-checkmark-30.png";
 
 const label = `text-md text-primary-gray mr-4`;
 const value = `text-md text-primary-black text-right`;
@@ -132,9 +134,17 @@ function Page() {
                       />
                       {businessAddress &&
                         typeof businessAddress === "string" && (
-                          <p className="text-primary-gray text-md font-medium mt-2">
-                            {JSON.parse(businessAddress)?.formatted_address}
-                          </p>
+                          <div className="flex items-center mt-2 ml-1">
+                            <p className="text-primary-gray text-md font-medium  mr-2 ">
+                              {JSON.parse(businessAddress)?.formatted_address}
+                            </p>
+                            <Image
+                              src={GreenCheckmark}
+                              alt="checkmark"
+                              height={20}
+                              width={20}
+                            />
+                          </div>
                         )}
                     </p>
                   </div>
@@ -162,7 +172,7 @@ function Page() {
                   <p className="text-base text-primary-gray mt-20">
                     Questions? Email
                     <span className="text-primary-color ml-4">
-                      washmyteslamail@example.com
+                      team@washmyt.com
                     </span>
                   </p>
                 </div>
@@ -219,10 +229,6 @@ function Page() {
                           }
                         />
                       </p>
-                    </div>
-                    <div className={row}>
-                      <p className={label}>Business Name</p>
-                      <p className={value}>{profile.businessName}</p>
                     </div>
                   </div>
                 </div>

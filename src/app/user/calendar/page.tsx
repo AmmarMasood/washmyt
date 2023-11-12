@@ -20,15 +20,20 @@ import {
 import { message } from "antd";
 import Loading from "@/app/components/Loading";
 import { modelsData } from "@/app/utils/static-data";
+import { UserAuth } from "@/app/context/AuthContext";
 
 function Page() {
+  const { superAdmin, profile } = UserAuth() as any;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>([]);
   const getData = async () => {
     setLoading(true);
     try {
-      const res = await axiosApiInstance.get("/api/user/wash-request");
+      // handle for not wash-pros only handleing for admin
+      const res = await axiosApiInstance.get(
+        superAdmin === true ? "/api/admin/calendar" : "/api/user/wash-request"
+      );
       const d = normalizeWashRequestForCalendar(res.data);
       setData(d);
     } catch (error) {
@@ -39,13 +44,15 @@ function Page() {
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (profile) {
+      getData();
+    }
+  }, [profile]);
   return (
     <>
       <Loading show={loading} />
       <div className="min-h-screen  bg-secondary-color p-6 relative">
-        <Layout currentOption={1}>
+        <Layout currentOption={superAdmin === false ? 0 : 3}>
           <div
             style={{
               display: "grid",
@@ -64,12 +71,13 @@ function Page() {
                     No washes for today.
                   </p>
                 ) : (
-                  data["today"]?.map((item: any) => (
+                  data["today"]?.map((item: any, key: number) => (
                     <WashCard
+                      key={key}
                       img={modelsData.filter((r) => r.id === item.model)[0].img}
                       title={`${item.fullCustomer.name} x ${item.washPro}`}
                       date={item.date}
-                      washType={item.fullPackage.name}
+                      washType={item.fullPackage.name.split("(")[0]}
                       schedule={item.time}
                       scheduleColor={item.color}
                       className="mb-4"

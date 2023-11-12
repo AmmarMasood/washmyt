@@ -1,6 +1,7 @@
 import { Avatar, Image, Popover, Space, Tag, Modal, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+import dayjs from "dayjs";
 const { confirm } = Modal;
 
 const showConfirm = () => {
@@ -20,18 +21,6 @@ const showConfirm = () => {
   });
 };
 
-interface DataType {
-  key: string;
-  timeCompleted: string;
-  washId: string;
-  customerName: string;
-  washProName: string;
-  type: string;
-  date: string;
-  amount: string;
-  status: string;
-}
-
 const content = (
   <div>
     <Button type="link" size="large">
@@ -44,73 +33,50 @@ const content = (
   </div>
 );
 
-export const columns: ColumnsType<DataType> = [
+export const columns: ColumnsType<any> = [
   {
     title: "Time Completed",
-    key: "timeCompleted",
-    sorter: (a, b) => a.timeCompleted.length - b.timeCompleted.length,
-    sortDirections: ["descend"],
+    dataIndex: "washCompletedTime",
+    key: "washCompletedTime",
+    render: (text) => <p>{dayjs(text).format("DD-MM-YYYY H:mm")}</p>,
   },
   {
     title: "WashID",
-    dataIndex: "washId",
-    key: "washId",
+    dataIndex: "id",
+    key: "id",
   },
   {
     title: "Customer Name",
-    dataIndex: "customerName",
-    key: "customerName",
+    dataIndex: "customer",
+    key: "customer",
+    render: (text) => <p>{text.name}</p>,
   },
   {
     title: "Wash Pro Name",
-    dataIndex: "washProName",
-    key: "washProName",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    key: "type",
+    dataIndex: "washer",
+    key: "washer",
+    render: (text) => <p>{text?.name}</p>,
   },
   {
     title: "Date/Time",
-    dataIndex: "date",
-    key: "date",
-    render: (text) => <p>{text}</p>,
+    dataIndex: "createdAt",
+    key: "createdAt",
+    render: (text) => <p>{dayjs(text).format("DD-MM-YYYY H:mm")}</p>,
   },
-
   {
     title: "Amount",
-    dataIndex: "amount",
     key: "amount",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
     render: (text) => (
-      <p className="text-green-500 border-solid border-2 p-0 border-green-500 text-center rounded-lg text-sm">
-        {text}
-      </p>
+      <p>{`$${text.chargedAmount ? text.chargedAmount / 100 : 0} ${
+        text.tipAmount ? `+ $${text.tipAmount / 100}` : ""
+      }`}</p>
     ),
   },
 
   {
-    title: "",
-    dataIndex: "action",
-    render: (text) => <p className="text-red-500 font-bold">View</p>,
-  },
-];
-
-export const data: DataType[] = [
-  {
-    key: "1",
-    timeCompleted: "5-29-2023 11:00 AM",
-    washId: "123456",
-    customerName: "John Doe",
-    washProName: "John Doe",
-    type: "Payment for wash",
-    date: "10 December at 11:00 AM",
-    amount: "$100",
-    status: "Paid Out",
+    title: "Status",
+    dataIndex: "washStatus",
+    key: "washStatus",
+    render: (text) => <Tag color={"success"}>{text}</Tag>,
   },
 ];

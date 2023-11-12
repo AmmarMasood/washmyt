@@ -7,13 +7,14 @@ interface ICheckbox {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   name: string;
+  className?: string;
 }
 
 function Checkbox(props: ICheckbox) {
-  const { checked, onChange, label, name } = props;
+  const { checked, onChange, label, name, className } = props;
 
   return (
-    <div className="flex items-center">
+    <div className={`flex items-center ${className}`}>
       <input
         checked={checked}
         type="checkbox"

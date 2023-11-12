@@ -1,79 +1,139 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image from "next/image";
 import Layout from "../components/Layout";
-import { PROFILE } from "@/app/store";
 import Card from "@/app/components/Card";
 import InfoCard from "../components/InfoCard";
 // icons
 import WashRequestIcon from "../../../../public/imgs/wash-request-icon.svg";
 import MatchIcon from "../../../../public/imgs/match-icon.svg";
-import OnboardingIcon from "../../../../public/imgs/onboarding.svg";
 import WashCompletedIcon from "../../../../public/imgs/wash-completed.svg";
-import SalesIcon from "../../../../public/imgs/sales-icon.svg";
 import CustomTable from "@/app/components/Table";
-import { columns, data } from "./helpers/table-data";
-import Map from "../components/Map";
+import { columns } from "./helpers/table-data";
 import CardFilter from "../components/CardFilter";
 import { UserAuth } from "@/app/context/AuthContext";
-import { useRouter } from "next/navigation";
 import { withAuth } from "@/app/hoc/withAuth";
+import axiosApiInstance from "@/app/utils/axiosClient";
+import { message } from "antd";
+import Loading from "@/app/components/Loading";
+
+const timeOptions = [
+  { value: "7days", label: "Last 7 Days" },
+  { value: "14days", label: "Last 14 Days" },
+  { value: "30days", label: "Last 30 Days" },
+];
 
 function Page() {
+  const { profile, user, superAdmin } = UserAuth() as any;
+  const [timeFilter, setTimeFilter] = React.useState(timeOptions[0].value);
   const [showCards, setShowCards] = React.useState(true);
-  const { profile, loading, user, superAdmin } = UserAuth as any;
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState({
+    washRequests: [],
+    totalWashRequests: "",
+    totalPaymentsReceived: "",
+    percentageRecurrentCustomers: "",
+    percentageOneTimeCustomers: "",
+  });
+  const [filteredR, setFilteredR] = React.useState([]);
 
   const onHide = () => {
     setShowCards((prev) => !prev);
   };
 
-  return (
-    <div className="min-h-screen  bg-secondary-color p-6 relative">
-      <Layout currentOption={4}>
-        <Card className="h-full p-4 bg-white">
-          <CardFilter onHide={onHide} />
-          <div
-            style={{
-              display: showCards ? "grid" : "none",
-              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-              gridGap: "20px",
-            }}
-          >
-            <InfoCard
-              img={WashRequestIcon}
-              title="0"
-              description="Total Customers"
-            />
-            <InfoCard img={MatchIcon} title="0" description="On Recurr Plan" />
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosApiInstance(
+        `/api/admin/ledger?time=${timeFilter}`
+      );
+      setFilteredR(res.data.washRequests);
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to get data");
+    }
+    setLoading(false);
+  };
 
-            <InfoCard img={SalesIcon} title="$20,123" description="Avg. LTV" />
-            <InfoCard
-              img={WashCompletedIcon}
-              multiValues={[
-                {
-                  title: "0",
-                  description: "Recurring",
-                },
-                {
-                  title: "0",
-                  description: "One Time",
-                },
-              ]}
-            />
-          </div>
-          <div className="mt-8">
-            <CustomTable
-              columns={columns}
-              data={data}
-              showSearch={true}
-              showSelect={true}
-              heading="LEDGER"
-            />
-          </div>
-        </Card>
-      </Layout>
-    </div>
+  const handleTimeChange = (time: any) => {
+    setTimeFilter(time);
+  };
+
+  useEffect(() => {
+    if (profile && superAdmin === true) {
+      getData();
+    }
+  }, [profile, timeFilter]);
+
+  return (
+    <>
+      <Loading show={loading} />
+      <div className="min-h-screen  bg-secondary-color p-6 relative">
+        {profile && superAdmin === true && (
+          <Layout currentOption={4}>
+            <Card className="h-full p-4 bg-white">
+              <CardFilter
+                onHide={onHide}
+                onChangeTime={handleTimeChange}
+                options={timeOptions}
+                value={timeFilter}
+              />
+              <div
+                style={{
+                  display: showCards ? "grid" : "none",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                  gridGap: "20px",
+                }}
+              >
+                <InfoCard
+                  img={WashRequestIcon}
+                  title={data.totalWashRequests}
+                  description="Washes Completed"
+                />
+                <InfoCard
+                  img={MatchIcon}
+                  title={`$${data.totalPaymentsReceived}`}
+                  description="Payment Received"
+                />
+                <InfoCard
+                  img={WashCompletedIcon}
+                  multiValues={[
+                    {
+                      title: `${data.percentageRecurrentCustomers}%`,
+                      description: "Recurring",
+                    },
+                    {
+                      title: `${data.percentageOneTimeCustomers}%`,
+                      description: "One Time",
+                    },
+                  ]}
+                />
+              </div>
+              <div className="mt-8">
+                <CustomTable
+                  pagination={{
+                    position: "bottomRight",
+                  }}
+                  columns={columns}
+                  onSearch={(v) =>
+                    setFilteredR((prev) =>
+                      data.washRequests.filter((r: any) =>
+                        r.customer.name.toLowerCase().includes(v.toLowerCase())
+                      )
+                    )
+                  }
+                  data={filteredR}
+                  showSearch={true}
+                  showSelect={false}
+                  heading="LEDGER"
+                />
+              </div>
+            </Card>
+          </Layout>
+        )}
+      </div>
+    </>
   );
 }
 

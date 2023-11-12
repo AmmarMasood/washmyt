@@ -9,8 +9,10 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: any) {
+export async function DELETE(request: any) {
   const userId = request.headers.get("userId");
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id");
 
   if (!userId) {
     return NextResponse.json(
@@ -28,13 +30,19 @@ export async function GET(request: any) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
 
-  const washRequests = await prisma.washRequest.findMany({
-    include: {
-      package: true, // Include the related package data
-      customer: true, // Include the related customer data
-      washer: true, // Include the related washer data
-    },
-  });
+  try {
+    const washRequest = await prisma.washRequest.delete({
+      where: {
+        id: id as string,
+      },
+    });
 
-  return NextResponse.json(washRequests);
+    return NextResponse.json(washRequest);
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 400 }
+    );
+  }
 }

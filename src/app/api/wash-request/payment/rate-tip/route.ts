@@ -50,7 +50,7 @@ export async function PUT(request: any) {
     }
 
     await sendSms(
-      `whatsapp:+923327317911`, //set customer number here later, rightnow hardcoding mine
+      washer.phoneNumber as string, //set customer number here later, rightnow hardcoding mine
       `Hi ${washer.name}, \n\nWash request have been reviewed by the customer.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
     );
 

@@ -93,54 +93,56 @@ function Sidebar({ currentOption }: { currentOption: number }) {
   return (
     <div className="w-[260px]">
       <Image src={Logo} alt="washmyt" />
-      <div className="min-h-[600px] relative mt-8">
-        <ul>{renderOptions()}</ul>
-        <div className="absolute bottom-0">
-          {profile && (
-            <Link href="/user/profile">
-              <div className="flex items-center mb-7 cursor-pointer">
-                {profile.profileImage ? (
-                  <Image
-                    src={profile.profileImage}
-                    alt={profile?.name}
-                    width={45}
-                    height={45}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <UserOutlined
-                    style={{
-                      color: "black",
-                      fontSize: "28px",
-                      border: "1px solid #000",
-                      borderRadius: "50%",
-                      padding: "5px",
-                    }}
-                  />
-                )}
-                <span className="paragraph-1 text-sm ml-2 font-bold">
-                  {profile.name}
-                </span>
-                {superAdmin && (
-                  <Chip text="Admin" className="ml-6 !text-[10px]" />
-                )}
-              </div>
-            </Link>
-          )}
-          <div className="flex items-center ml-2 cursor-pointer">
-            <Image src={LogoutIcon} alt="logout" />
-            <span
-              onClick={onLogout}
-              className="paragraph-1 text-sm ml-5 font-medium"
-            >
-              Logout
-            </span>
+      {profile && (
+        <div className="min-h-[600px] relative mt-8">
+          <ul>{renderOptions()}</ul>
+          <div className="absolute bottom-0">
+            {profile && (
+              <Link href="/user/profile">
+                <div className="flex items-center mb-7 cursor-pointer">
+                  {profile.profileImage ? (
+                    <Image
+                      src={profile.profileImage}
+                      alt={profile?.name}
+                      width={45}
+                      height={45}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <UserOutlined
+                      style={{
+                        color: "black",
+                        fontSize: "28px",
+                        border: "1px solid #000",
+                        borderRadius: "50%",
+                        padding: "5px",
+                      }}
+                    />
+                  )}
+                  <span className="paragraph-1 text-sm ml-2 font-bold">
+                    {profile.name}
+                  </span>
+                  {superAdmin && (
+                    <Chip text="Admin" className="ml-6 !text-[10px]" />
+                  )}
+                </div>
+              </Link>
+            )}
+            <div className="flex items-center ml-2 cursor-pointer">
+              <Image src={LogoutIcon} alt="logout" />
+              <span
+                onClick={onLogout}
+                className="paragraph-1 text-sm ml-5 font-medium"
+              >
+                Logout
+              </span>
+            </div>
+            <p className="text-sm text-primary-gray ml-2 mt-6 opacity-60">
+              v 2.5.1
+            </p>
           </div>
-          <p className="text-sm text-primary-gray ml-2 mt-6 opacity-60">
-            v 2.5.1
-          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }

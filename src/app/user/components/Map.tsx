@@ -72,7 +72,7 @@ const Map = (props: IMap) => {
         mapContainerStyle={containerStyle}
         onLoad={() => console.log("Map Component Loaded...")}
       >
-        {multipleCoordinates ? (
+        {multipleCoordinates.length > 0 ? (
           multipleCoordinates.map((co, index) => (
             <Marker
               key={index}

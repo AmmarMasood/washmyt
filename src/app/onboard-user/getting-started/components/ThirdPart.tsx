@@ -18,7 +18,7 @@ export default function ThirdPart(props: IOnboardingPageProps) {
   const { profile, setLoading } = UserAuth() as any;
 
   const [inputValues, setInputValues] = useState({
-    radius: profile.serviceRadius || "",
+    radius: profile.serviceRadius || "30",
     ownCar: profile.ownACar === false ? "no" : "yes",
     waterCapabilities: profile.mobileWaterCapability === false ? "no" : "yes",
     electricCapabilities:
@@ -71,7 +71,7 @@ export default function ThirdPart(props: IOnboardingPageProps) {
             <FormField
               type="number"
               name="radius"
-              label="Service Radius (how far will you travel?)*"
+              label="Service Radius (how far will you travel in miles?)*"
               placeholder="0 miles"
               onChange={handleOnChange}
               value={inputValues.radius}

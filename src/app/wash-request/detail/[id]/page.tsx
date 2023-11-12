@@ -134,6 +134,7 @@ function Page() {
               accessType={WashDetailAccessType.CUSTOMER}
               modelDetail={model.filter((m) => m.id === data.selectedModel)[0]}
               packageDetail={data.package}
+              snowPackage={data.snowPackage}
               date={data.date}
               time={data.time}
               addressDetail={data.address}

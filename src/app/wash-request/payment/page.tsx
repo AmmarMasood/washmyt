@@ -68,14 +68,18 @@ function Payment() {
           price:
             res.data.paymentStatus === PaymentStatus.PAID
               ? res.data.chargedAmount / 100
-              : res.data.package.price,
+              : res.data.package.price + res.data.snowPackage,
         },
       });
       if (res.data.paymentCompleted) {
         setLoading(false);
         return;
       }
-      await getPaymentIntent(res.data.package.price, res.data.customer);
+      let price = res.data.package.price;
+      if (res.data.snowPackage === true) {
+        price = price + 79;
+      }
+      await getPaymentIntent(price, res.data.customer);
       await handleStripeInit();
     } catch (error) {
       console.log(error);
@@ -187,10 +191,11 @@ function Payment() {
                   <div className="w-[300px] mb-4">
                     <div>
                       <h1 className="text-primary-gray text-md whitespace-nowrap mb-4">
-                        {washInfo?.package?.name}
+                        {washInfo?.package?.name.split("+")[0]}+
                       </h1>
                       <h1 className="text-[#1E1E1E] text-4xl font-bold mb-6">
-                        $ {washInfo?.package?.price}
+                        $ {washInfo?.package?.price}{" "}
+                        {washInfo.snowPackage && "+ $79"}
                       </h1>
                     </div>
                     <div
@@ -207,6 +212,11 @@ function Payment() {
                       <p className="text-primary-gray text-md mt-4">
                         {washInfo?.washDateAndTimeUTC}
                       </p>
+
+                      <p className="text-primary-gray text-md mt-4">
+                        Snow Package:{" "}
+                        {washInfo?.snowPackage === true ? "Yes" : "No"}
+                      </p>
                       <p className="text-primary-gray text-md">
                         Electrical:{" "}
                         {washInfo?.electricalHookupAvailable === true
@@ -220,7 +230,11 @@ function Payment() {
                       </p>
                     </div>
                   </div>
-                  <Image src={washInfo?.modelImage} alt="modal" />
+                  <Image
+                    src={washInfo?.modelImage}
+                    alt="modal"
+                    className="h-fit"
+                  />
                 </div>
                 <div className="mb-4">
                   <div className="flex items-center mb-2">
@@ -255,7 +269,7 @@ function Payment() {
                   />
                   <span className="text-sm !text-white">
                     We are committed to delivering a high-quality service every
-                    time. If you&aposre not happy with the results, we&aposll
+                    time. If you&apos;re not happy with the results, we&apos;ll
                     make it right, guaranteed.
                   </span>
                 </div>

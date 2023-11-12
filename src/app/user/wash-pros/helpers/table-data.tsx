@@ -23,18 +23,6 @@ const showConfirm = () => {
   });
 };
 
-const content = (
-  <div>
-    <Button type="link" size="large">
-      Edit
-    </Button>
-    <br />
-    <Button type="link" size="large" onClick={showConfirm}>
-      Delete
-    </Button>
-  </div>
-);
-
 export const columns: ColumnsType<any> = [
   {
     title: "Contact",
@@ -110,16 +98,6 @@ export const columns: ColumnsType<any> = [
           text.filter((wash: any) => wash.rating && wash.rating > 0).length ||
           0}
       </p>
-    ),
-  },
-
-  {
-    title: "",
-    dataIndex: "action",
-    render: (text) => (
-      <Popover content={content} trigger="click">
-        <MoreOutlined className="text-xl cursor-pointer" />
-      </Popover>
     ),
   },
 ];

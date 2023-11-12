@@ -159,7 +159,7 @@ function Page() {
               addressDetail={data.address}
               electricalAvailable={data.electricalHookupAvailable}
               waterAvailable={data.waterHookupAvailable}
-              payoutDetail={data.package.price}
+              payoutDetail={data.package.price + (data.snowPackage ? 79 : 0)}
               receivedAmount={convertFromCent(data.chargedAmount)}
               receivedTip={convertFromCent(data.tipAmount)}
               customerDetail={data.customer}
@@ -175,6 +175,7 @@ function Page() {
               paymentStatus={data.paymentStatus}
               rating={data.rating}
               isNotWashTime={data.isNotWashTime}
+              snowPackage={data.snowPackage}
             />
           )}
         </Layout>

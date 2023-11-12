@@ -71,7 +71,7 @@ export default function FifthPart() {
       });
       await getUser(true);
 
-      router.push("/user/calendar");
+      router.push("/user/profile");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong. Please try again.");

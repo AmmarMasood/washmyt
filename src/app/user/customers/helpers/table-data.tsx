@@ -1,23 +1,10 @@
 import { Avatar, Image, Popover, Space, Tag, Modal, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+import dayjs from "dayjs";
+import { PaymentStatus, WashStatus } from "@/app/types/interface";
 
 const { confirm } = Modal;
-
-interface DataType {
-  key: string;
-  model: string;
-  color: string;
-  package: string;
-  status: string;
-  date: string;
-  address: string;
-  washPro: string;
-  paid: string;
-  rating: number;
-  name: string;
-  email: string;
-}
 
 const showConfirm = () => {
   confirm({
@@ -48,7 +35,7 @@ const content = (
   </div>
 );
 
-export const columns: ColumnsType<DataType> = [
+export const columns: ColumnsType<any> = [
   {
     title: "Customer Name",
     key: "name",
@@ -63,47 +50,47 @@ export const columns: ColumnsType<DataType> = [
   },
   {
     title: "Joined Date",
-    dataIndex: "model",
-    key: "model",
+    key: "createdAt",
+    render: (text) => (
+      <div>
+        <p>{dayjs(text.createdAt).format("DD MMMM YYYY")}</p>
+      </div>
+    ),
   },
-  {
-    title: "Type",
-    dataIndex: "color",
-    key: "color",
-    render: (text) => <p>{text}</p>,
-  },
+
   {
     title: "Washes",
-    dataIndex: "status",
-    key: "status",
+    key: "washRequests",
+    render: (text) => (
+      <div>
+        <p>{text.washRequests.length}</p>
+      </div>
+    ),
   },
   {
     title: "Spent",
-    dataIndex: "date",
-    key: "date",
-    render: (text) => <p>{text}</p>,
-  },
-
-  {
-    title: "",
-    dataIndex: "action",
-    render: (text) => <p className="text-red-500 font-bold">View</p>,
-  },
-];
-
-export const data: DataType[] = [
-  {
-    key: "1",
-    name: "Olivia Rhyn",
-    email: "@oliviarhyn",
-    model: "10 December",
-    color: "Member One Off",
-    package: "Handwash+",
-    status: "3",
-    date: "$25.00",
-    address: "1234 Main St, San Francisco, CA 94123",
-    washPro: "No",
-    paid: "Yes",
-    rating: 5.0,
+    key: "washRequests",
+    render: (text) => (
+      <div>
+        <p>
+          {text?.washRequests?.length > 0 &&
+            `$${
+              text.washRequests.reduce(
+                (customerAccumulator: any, wash: any) => {
+                  if (
+                    wash.paymentStatus === PaymentStatus.PAID &&
+                    wash.washStatus === WashStatus.COMPLETED
+                  ) {
+                    const tipAmount = wash.tipAmount || 0;
+                    return customerAccumulator + wash.chargedAmount + tipAmount;
+                  }
+                  return customerAccumulator;
+                },
+                0
+              ) / 100
+            }`}
+        </p>
+      </div>
+    ),
   },
 ];

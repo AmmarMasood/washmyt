@@ -35,5 +35,9 @@ export const config = {
     "/api/admin",
     "/api/admin/dashboard",
     "/api/admin/wash-pros",
+    "/api/admin/customers",
+    "/api/admin/calendar",
+    "/api/admin/ledger",
+    "/api/admin/wash-request",
   ],
 };

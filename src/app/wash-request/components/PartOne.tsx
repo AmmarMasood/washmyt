@@ -2,21 +2,33 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import Tick from "../../../../public/imgs/tick.svg";
 import { message } from "antd";
 import { modelsData } from "@/app/utils/static-data";
+import { useSearchParams, useRouter } from "next/navigation";
 export interface IOnboardingPageProps {
   onNext: (values: any, force?: any) => void;
   final?: boolean;
 }
 export default function PartOne(props: IOnboardingPageProps) {
   const { onNext } = props;
-  const [selectedModel, setSelectedModel] = useState("modelS");
+  const params = useSearchParams();
+  const router = useRouter();
+  const [selectedModel, setSelectedModel] = useState("");
   const [models, setModels] = useState(modelsData);
+
+  useEffect(() => {
+    const model = params.get("model");
+    const modelExist = modelsData.filter((f) => f.id === model).length > 0;
+    if (model && modelExist) {
+      setSelectedModel(model);
+    } else {
+    }
+  }, []);
 
   const verifyFields = () => {
     if (!selectedModel) {
@@ -50,7 +62,10 @@ export default function PartOne(props: IOnboardingPageProps) {
             <div className="flex items-center max-md:flex-wrap">
               {models.map((model, index) => (
                 <div
-                  onClick={() => setSelectedModel(model.id)}
+                  onClick={() => {
+                    setSelectedModel(model.id);
+                    router.push(`/wash-request/?model=${model.id}`);
+                  }}
                   key={index}
                   className={`cursor-pointer p-4  border-transparent rounded-xl border-2 ${
                     model.id === selectedModel &&

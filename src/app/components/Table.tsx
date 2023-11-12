@@ -15,9 +15,20 @@ interface ITable {
   showSearch: boolean;
   showSelect?: boolean;
   showButton?: boolean;
+  onSearch?: (value: any) => void;
+  pagination: any;
 }
 function CustomTable(props: ITable) {
-  const { columns, data, heading, showSearch, showSelect, showButton } = props;
+  const {
+    columns,
+    data,
+    heading,
+    showSearch,
+    showSelect,
+    showButton,
+    onSearch,
+    pagination = false,
+  } = props;
   return (
     <>
       <div className="flex items-center justify-between mb-6">
@@ -29,6 +40,11 @@ function CustomTable(props: ITable) {
               placeholder="Search"
               style={{
                 width: "200px",
+              }}
+              onChange={(e) => {
+                if (props.onSearch) {
+                  props.onSearch(e.target.value);
+                }
               }}
               className="text-primary-gray text-base font-medium px-3 py-1.5 w-full border focus:border-primary-color active:border-primary-color focus:outline-none bg-secondary-color rounded-xl w-[200px]"
             />
@@ -54,7 +70,7 @@ function CustomTable(props: ITable) {
           </div>
         )}
       </div>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table columns={columns} dataSource={data} pagination={pagination} />
     </>
   );
 }

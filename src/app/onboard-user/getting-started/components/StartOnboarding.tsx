@@ -11,6 +11,7 @@ import Checkbox from "@/app/components/Checkbox";
 import SmallClock from "../../../../../public/imgs/small-clock.svg";
 import { UserAuth } from "@/app/context/AuthContext";
 import Modal from "@/app/components/Modal";
+import Link from "next/link";
 
 export interface IOnboardingPageProps {
   onNext: () => void;
@@ -115,22 +116,30 @@ export default function StartOnboarding(props: IOnboardingPageProps) {
               application form.
             </p>
             <p className="text-[#1E1E1E] text-xl text-center opacity-50  mt-5">
-              By joining, we do not prohibit you from taking other washes; we
+              By joining, we do not prohibit you from taking other washes, we
               only aim to add washes to your existing business. We look forward
               to working together!
             </p>
           </div>
           <div className="flex flex-col items-center justify-center  mt-5">
+            <Link
+              href={"https://www.washmyt.com/terms-conditions/"}
+              target="_blank"
+              className="text-primary-color text-sm mb-1 mt-4 cursor-pointer text-center underline z-10"
+            >
+              Read terms and conditions.
+            </Link>
             <Checkbox
               checked={inputValues.accepted}
               onChange={handleOnChange}
               name="accepted"
               label="Accept Terms and Conditions to Start"
             />
+
             <Button
               onClick={profile === null ? () => console.log("") : onNext}
               className=" mt-5 w-[250px] z-10"
-              disabled={profile === null}
+              disabled={profile === null || inputValues.accepted === false}
             >
               Start
             </Button>

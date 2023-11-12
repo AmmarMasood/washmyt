@@ -167,7 +167,7 @@ function OnboardUser() {
             <p className="text-sm	text-primary-color mt-6">
               Tesla Owner?{" "}
               <span className="cursor-pointer text-primary-gray">
-                Click Here
+                Book a wash here.
               </span>
             </p>
             <p className="paragraph-1 opacity-70 my-3">- Or sign up with -</p>

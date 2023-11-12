@@ -20,6 +20,10 @@ const servicesArr = [
     value: "",
   },
   {
+    id: "all",
+    value: "All",
+  },
+  {
     id: "exterior_window_cleaning",
     value: "Exterior Window Cleaning",
   },

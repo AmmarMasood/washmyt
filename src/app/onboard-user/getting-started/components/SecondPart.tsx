@@ -13,6 +13,7 @@ import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
 import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import { message } from "antd";
+import GreenCheckmark from "../../../../../public/imgs/icons8-checkmark-30.png";
 
 export default function SecondPart(props: IOnboardingPageProps) {
   const { onNext } = props;
@@ -64,7 +65,7 @@ export default function SecondPart(props: IOnboardingPageProps) {
         <>
           <StepperBar current={1} total={5} />
           <div className="p-4 mt-4">
-            <FormField
+            {/* <FormField
               type="email"
               name="email"
               label="Your Email*"
@@ -73,7 +74,7 @@ export default function SecondPart(props: IOnboardingPageProps) {
               value={inputValues.email}
               className="mt-4"
               disabled={true}
-            />
+            /> */}
             <FormField
               type="text"
               name="website"
@@ -82,10 +83,11 @@ export default function SecondPart(props: IOnboardingPageProps) {
               onChange={handleOnChange}
               value={inputValues.website}
               className="mt-8"
+              preField="https://"
             />
             <Select
               name="tShirtSize"
-              label="T shirt size"
+              label="T-shirt size"
               onChange={handleOnChange}
               value={inputValues.tShirtSize}
               className="mt-8"
@@ -124,9 +126,20 @@ export default function SecondPart(props: IOnboardingPageProps) {
             />
             {inputValues.businessAdderess &&
               typeof inputValues.businessAdderess === "string" && (
-                <p className="text-primary-gray text-md font-medium mt-2">
-                  {JSON.parse(inputValues.businessAdderess)?.formatted_address}
-                </p>
+                <div className="flex items-center mt-2 ml-1">
+                  <p className="text-primary-gray text-md font-medium  mr-2 ">
+                    {
+                      JSON.parse(inputValues.businessAdderess)
+                        ?.formatted_address
+                    }
+                  </p>
+                  <Image
+                    src={GreenCheckmark}
+                    alt="checkmark"
+                    height={20}
+                    width={20}
+                  />
+                </div>
               )}
             <Button disabled={false} onClick={updateData} className="mt-10">
               Next

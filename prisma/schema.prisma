@@ -88,7 +88,9 @@ model WashRequest{
       color String
       selectedModel String
       washDateAndTimeUTC DateTime
+      washCompletedTime DateTime?
       paymentStatus PaymentStatus @default(UNPAID)
+      snowPackage Boolean @default(false)
       chargedAmount Float?
       stripeId String?
       rating Int?

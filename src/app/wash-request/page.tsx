@@ -17,6 +17,7 @@ import { message } from "antd";
 import Loading from "../components/Loading";
 import { useRouter } from "next/navigation";
 import stripe from "../lib/stripe";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 function WashRequest() {
   const [content, setContent] = useState(0);
@@ -35,6 +36,13 @@ function WashRequest() {
       setRequestValues((prev: any) => ({ ...prev, ...values }));
     }
     setContent((prev) => prev + 1);
+  };
+
+  const goBack = () => {
+    if (content === 0) {
+    } else {
+      setContent((prev) => prev - 1);
+    }
   };
 
   const createCustomer = async (values: any) => {
@@ -87,17 +95,32 @@ function WashRequest() {
   return (
     <>
       <Loading show={loading} />
+
       <main className="flex min-h-screen flex-col items-center justify-center bg-secondary-color px-24 py-12 relative max-md:p-2">
-        {content === 0 && <PartOne onNext={onNext} />}
-        {content === 1 && <PartTwo onNext={onNext} />}
-        {content === 2 && <PartThree onNext={onNext} />}
-        {content === 3 && <PartFour onNext={onNext} />}
-        {content === 4 && <PartFive onNext={onNext} />}
-        {content === 5 && <PartSix onNext={onNext} />}
-        {content === 6 && <PartSeven onNext={onNext} />}
-        {content === 7 && <PartEight onNext={onNext} />}
-        {content === 8 && <PartNine onNext={onNext} />}
-        {content === 9 && <PartTen onNext={onNext} />}
+        {content > 0 && (
+          <div className="w-full text-left mb-6">
+            <span
+              className="text-primary-color font-md  cursor-pointer"
+              onClick={goBack}
+            >
+              Back
+            </span>
+          </div>
+        )}
+        <GoogleReCaptchaProvider
+          reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_CAPTCHA_KEY as string}
+        >
+          {content === 0 && <PartOne onNext={onNext} />}
+          {content === 1 && <PartTwo onNext={onNext} />}
+          {content === 2 && <PartThree onNext={onNext} />}
+          {content === 3 && <PartFour onNext={onNext} />}
+          {content === 4 && <PartFive onNext={onNext} />}
+          {content === 5 && <PartSix onNext={onNext} />}
+          {content === 6 && <PartSeven onNext={onNext} />}
+          {content === 7 && <PartEight onNext={onNext} />}
+          {content === 8 && <PartNine onNext={onNext} />}
+          {content === 9 && <PartTen onNext={onNext} />}
+        </GoogleReCaptchaProvider>
       </main>
     </>
   );

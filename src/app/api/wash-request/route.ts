@@ -64,7 +64,7 @@ const findAndNotifyWasher = async (
 
   nearbyWashers.forEach(async (washer: any) => {
     await sendSms(
-      `whatsapp:+923327317911`, //set washer number here later, rightnow hardcoding mine
+      washer.phoneNumber, //set washer number here later, rightnow hardcoding mine
       `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://washmyt.vercel.app/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`
     );
   });

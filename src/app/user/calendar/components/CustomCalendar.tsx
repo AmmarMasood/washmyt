@@ -41,11 +41,8 @@ const CustomCalender = (props: any) => {
     return (
       <>
         {listData.map((item: any, key: number) => (
-          <Link href={`/user/wash-detail/${item.key}`}>
-            <div
-              key={key}
-              className={key === 0 && listData.length !== 1 ? "mb-5" : ""}
-            >
+          <Link href={`/user/wash-detail/${item.key}`} key={key}>
+            <div className={key === 0 && listData.length !== 1 ? "mb-5" : ""}>
               <p className="font-bold text-base mb-2">
                 {"Wash appointment for " + item.fullCustomer.name}
               </p>

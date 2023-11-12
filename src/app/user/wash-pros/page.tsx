@@ -15,13 +15,15 @@ import Map from "../components/Map";
 import { UserAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { withAuth } from "@/app/hoc/withAuth";
-import { message } from "antd";
+import { Button, Modal, Popover, message } from "antd";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
+import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 
 function Page() {
   const router = useRouter();
-  const { profile } = UserAuth() as any;
+  const { confirm } = Modal;
+  const { profile, superAdmin } = UserAuth() as any;
   const [data, setData] = useState({
     liveWashPros: "",
     onboarding: "",
@@ -39,16 +41,14 @@ function Page() {
       },
     },
   });
+  const [filteredR, setFilteredR] = useState([]);
 
   const getWashProsData = async () => {
     setLoading(true);
     try {
       const res = await axiosApiInstance.get("/api/admin/wash-pros");
-      console.log(
-        res.data,
-        res.data.washPros.map((re: any) => JSON.parse(re.businessAddress))
-      );
       setData(res.data);
+      setFilteredR(res.data.washPros);
     } catch (err) {
       message.error("Unable to get data");
       console.log(err);
@@ -56,79 +56,153 @@ function Page() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (profile) {
-      setAddress(JSON.parse(profile.businessAddress));
+  const deleteWashPro = async (id: string) => {
+    setLoading(true);
+    try {
+      await axiosApiInstance.delete(`/api/admin/wash-pros?id=${id}`);
+      message.success("Wash pro deleted successfully");
+      setLoading(false);
+      getWashProsData();
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to delete wash pro");
+      setLoading(false);
     }
-  }, [profile]);
+  };
+
+  const showConfirm = (id: string) => {
+    confirm({
+      title: "Are you sure you want to delete this item?",
+      icon: <ExclamationCircleFilled />,
+      content: "",
+      okButtonProps: {
+        className: "!bg-primary-color text-white",
+      },
+      onOk() {
+        deleteWashPro(id);
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+  const myCoulmns = [
+    ...columns,
+    {
+      title: "",
+      dataIndex: "action",
+
+      render: (record: any, rowIndex: any) => (
+        <Popover
+          content={
+            <>
+              {/* <Button
+                type="link"
+                size="large"
+                onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
+              >
+                Details
+              </Button>
+              <br /> */}
+              <Button
+                type="link"
+                size="large"
+                onClick={() => showConfirm(rowIndex.id)}
+              >
+                Delete
+              </Button>
+            </>
+          }
+          trigger="click"
+        >
+          <MoreOutlined className="text-xl cursor-pointer" />
+        </Popover>
+      ),
+    },
+  ];
 
   useEffect(() => {
-    getWashProsData();
-  }, []);
+    if (profile && superAdmin === true) {
+      getWashProsData();
+    }
+  }, [profile]);
 
   return (
     <>
       <Loading show={loading} />
       <div className="min-h-screen  bg-secondary-color p-6 relative">
-        <Layout currentOption={1}>
-          <Card className="h-full p-4 bg-white">
-            <div className="flex items-center justify-between">
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                  gridGap: "20px",
-                  width: "500px",
-                }}
-              >
-                <InfoCard
-                  img={WashRequestIcon}
-                  title={data.liveWashPros}
-                  description="Live Wash Pros"
-                />
-                <InfoCard
-                  img={OnboardingIcon}
-                  title={data.onboarding}
-                  description="Onboarding"
-                />
+        {profile && superAdmin === true && (
+          <Layout currentOption={1}>
+            <Card className="h-full p-4 bg-white">
+              <div className="flex items-center justify-between">
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                    gridGap: "20px",
+                    width: "500px",
+                  }}
+                >
+                  <InfoCard
+                    img={WashRequestIcon}
+                    title={data.liveWashPros}
+                    description="Live Wash Pros"
+                  />
+                  <InfoCard
+                    img={OnboardingIcon}
+                    title={data.onboarding}
+                    description="Onboarding"
+                  />
 
-                <InfoCard
-                  img={WashCompletedIcon}
-                  title={data.totalRequests}
-                  description="Washes Completed"
-                />
-                <InfoCard
-                  img={RatingIcon}
-                  title={data.totalRatings}
-                  description="Ratings"
+                  <InfoCard
+                    img={WashCompletedIcon}
+                    title={data.totalRequests}
+                    description="Washes Completed"
+                  />
+                  <InfoCard
+                    img={RatingIcon}
+                    title={data.totalRatings}
+                    description="Ratings"
+                  />
+                </div>
+                <div className="h-[400px] overflow-hidden w-[600px] rounded-3xl">
+                  <Map
+                    containerStyle={{
+                      width: "100%",
+                      height: "500px",
+                      borderRadius: "30px",
+                    }}
+                    coordinates={{
+                      lat: address?.geometry?.location.lat,
+                      lng: address?.geometry?.location.lng,
+                    }}
+                    multipleCoordinates={data.washProsLocation}
+                    zoom={2}
+                  />
+                </div>
+              </div>
+              <div className="mt-8">
+                <CustomTable
+                  pagination={{
+                    position: "bottomRight",
+                  }}
+                  onSearch={(v) =>
+                    setFilteredR((prev) =>
+                      data.washPros.filter((r: any) => {
+                        return r?.name?.toLowerCase().includes(v.toLowerCase());
+                      })
+                    )
+                  }
+                  columns={myCoulmns}
+                  data={filteredR}
+                  showSearch={true}
+                  heading="WASH PROS"
                 />
               </div>
-              <div className="h-[400px] overflow-hidden w-[600px] rounded-3xl">
-                <Map
-                  containerStyle={{
-                    width: "100%",
-                    height: "500px",
-                    borderRadius: "30px",
-                  }}
-                  coordinates={{
-                    lat: address?.geometry?.location.lat,
-                    lng: address?.geometry?.location.lng,
-                  }}
-                  multipleCoordinates={data.washProsLocation}
-                  zoom={2}
-                />
-              </div>
-            </div>
-            <div className="mt-8">
-              <CustomTable
-                columns={columns}
-                data={data.washPros}
-                showSearch={true}
-                heading="WASH QUEUE"
-              />
-            </div>
-          </Card>
-        </Layout>
+            </Card>
+          </Layout>
+        )}
       </div>
     </>
   );

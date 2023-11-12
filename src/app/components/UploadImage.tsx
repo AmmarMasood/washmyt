@@ -20,7 +20,7 @@ function UploadImage(props: IUploadImage) {
     multiple: false,
     maxSize: 3000000,
     accept: {
-      "image/png": [".png"],
+      "image/png": [".png", ".jpg", ".jpeg"],
     },
   });
 

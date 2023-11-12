@@ -17,6 +17,7 @@ export async function GET(request: any) {
       },
       data: {
         washStatus: WashStatus.COMPLETED,
+        washCompletedTime: new Date(),
       },
     });
 
@@ -31,7 +32,7 @@ export async function GET(request: any) {
     }
 
     await sendSms(
-      `whatsapp:+923327317911`, //set customer number here right now im using min only
+      customer.phoneNumber, //set customer number here right now im using min only
       `Hi ${customer.name}, your wash request have been completed, please give your feedback below:\nhttps://washmyt.vercel.app/wash-request/detail/${r.id}.\n\n- WashMyT Team`
     );
 

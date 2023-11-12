@@ -146,7 +146,7 @@ function Login() {
               Tesla Owner?{" "}
               <Link href={"/wash-request"}>
                 <span className="cursor-pointer text-primary-gray">
-                  Click Here
+                  Book a wash here.
                 </span>
               </Link>
             </p>
@@ -161,7 +161,7 @@ function Login() {
               </SocialButton>
             </div>
             <p className="paragraph-1 ">
-              Dont have Have a Wash Pro Account?{" "}
+              Don&apos;t have Have a Wash Pro Account?{" "}
               <Link href={"/onboard-user"}>
                 <span className="cursor-pointer text-primary-color">
                   Sign Up

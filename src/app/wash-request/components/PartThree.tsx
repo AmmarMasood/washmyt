@@ -11,13 +11,18 @@ import { Select, message } from "antd";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { IOnboardingPageProps } from "./PartOne";
+import { useSearchParams } from "next/navigation";
+import { modelsData } from "@/app/utils/static-data";
+import Checkbox from "@/app/components/Checkbox";
 
 export default function PartThree(props: IOnboardingPageProps) {
   const { onNext } = props;
+  const params = useSearchParams();
   const [packageType, setPackageType] = useState(null);
   const [packageInfo, setPackageInfo] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const [snow, setSnow] = useState(false);
 
   const verifyFields = () => {
     if (!packageType) {
@@ -27,16 +32,38 @@ export default function PartThree(props: IOnboardingPageProps) {
     return true;
   };
 
+  const getModels = (packages: any) => {
+    const matches = packages.map((carDetail: any) => {
+      const match = carDetail.name.match(/\((Models: [^)]+)\)/);
+      return match ? { ...carDetail, model: match[1] } : null;
+    });
+    return matches
+      .map((m: any) => ({ ...m, model: m.model?.replace("Models: ", "") }))
+      .map((model: any) => {
+        const match = model.model.match(/(\w+)/g); // Extract individual words
+        return match ? { ...model, model: `model${match.join("")}` } : null;
+      });
+  };
+
   const getPackages = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosApiInstance.get("/api/wash-request/packages");
-      setOptions(response.data.options);
-    } catch (error) {
-      console.log(error);
-      message.error("Unable to get packages");
+    const model = params.get("model");
+    if (model && modelsData.filter((f) => f.id === model).length > 0) {
+      setLoading(true);
+      try {
+        const response = await axiosApiInstance.get(
+          "/api/wash-request/packages"
+        );
+        const mods = getModels(response.data.options);
+        const filMods = mods.filter((f: any) =>
+          f.model.includes(model.replace("model", ""))
+        );
+        setOptions(filMods);
+      } catch (error) {
+        console.log(error);
+        message.error("Unable to get packages");
+      }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -47,6 +74,7 @@ export default function PartThree(props: IOnboardingPageProps) {
     if (verifyFields()) {
       onNext({
         packageId: packageType,
+        snowPackage: snow,
       });
     }
   };
@@ -101,21 +129,31 @@ export default function PartThree(props: IOnboardingPageProps) {
                   value: option.id,
                   label: (
                     <p className="!whitespace-normal text-lg mb-4">
-                      {`${option.name} (${option.description}) ($ ${option.price})`}
+                      {`${option.description} for $ ${option.price}`}
                     </p>
                   ),
                 }))}
               ></Select>
-              <Button
-                disabled={false}
-                onClick={onNextClick}
-                className="mt-16 !w-[150px] mb-14 !mt-96"
-              >
-                <span className="flex items-center justify-center">
-                  <label className="mr-4">OK</label>
-                  <Image src={Tick} alt="tick" />
-                </span>
-              </Button>
+              <div className="!mt-96">
+                <Checkbox
+                  name="snow"
+                  checked={snow}
+                  label="Add Snow Package ($79)"
+                  onChange={(e) => setSnow(e.target.checked)}
+                  className="-ml-6"
+                />
+
+                <Button
+                  disabled={false}
+                  onClick={onNextClick}
+                  className=" !w-[150px] mb-14 mt-4"
+                >
+                  <span className="flex items-center justify-center">
+                    <label className="mr-4">OK</label>
+                    <Image src={Tick} alt="tick" />
+                  </span>
+                </Button>
+              </div>
             </div>
           </>
         </Card>
