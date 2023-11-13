@@ -166,9 +166,11 @@ function OnboardUser() {
           <div className="flex flex-col items-center justify-center">
             <p className="text-sm	text-primary-color mt-6">
               Tesla Owner?{" "}
-              <span className="cursor-pointer text-primary-gray">
-                Book a wash here.
-              </span>
+              <Link href={"/wash-request"}>
+                <span className="cursor-pointer text-primary-gray">
+                  Book a wash here.
+                </span>
+              </Link>
             </p>
             <p className="paragraph-1 opacity-70 my-3">- Or sign up with -</p>
             <div className="flex items-center w-80 justify-around mb-8 mt-4">
@@ -182,7 +184,9 @@ function OnboardUser() {
             </div>
             <p className="paragraph-1 ">
               Already have a Wash Pro Account?{" "}
-              <span className="cursor-pointer text-primary-color">Login</span>
+              <Link href={"/login"}>
+                <span className="cursor-pointer text-primary-color">Login</span>
+              </Link>
             </p>
           </div>
         </Card>

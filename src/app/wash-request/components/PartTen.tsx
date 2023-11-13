@@ -57,14 +57,12 @@ export default function PartTen(props: IOnboardingPageProps) {
   };
 
   const onNextClick = () => {
-    if (verifyFields()) {
-      onNext(
-        {
-          customerPhoneNumber: phone,
-        },
-        true
-      );
-    }
+    onNext(
+      {
+        customerPhoneNumber: phone,
+      },
+      true
+    );
   };
 
   return (
@@ -98,7 +96,7 @@ export default function PartTen(props: IOnboardingPageProps) {
               </div>
 
               <Button
-                disabled={false}
+                disabled={phone.length === 0}
                 onClick={handleReCaptchaVerify}
                 className="mt-16 !w-fit mb-14 px-4"
               >
