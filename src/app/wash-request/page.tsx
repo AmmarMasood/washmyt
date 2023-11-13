@@ -97,7 +97,7 @@ function WashRequest() {
       <Loading show={loading} />
 
       <main className="flex min-h-screen flex-col items-center justify-center bg-secondary-color px-24 py-12 relative max-md:p-2">
-        {content > 0 && (
+        {/* {content > 0 && (
           <div className="w-full text-left mb-6">
             <span
               className="text-primary-color font-md  cursor-pointer"
@@ -106,7 +106,7 @@ function WashRequest() {
               Back
             </span>
           </div>
-        )}
+        )} */}
         <GoogleReCaptchaProvider
           reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_CAPTCHA_KEY as string}
         >
