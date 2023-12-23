@@ -19,6 +19,7 @@ import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+import NewWash from "./NewWash/NewWash";
 
 const timeOptions = [
   { value: "7days", label: "Last 7 Days" },
@@ -28,6 +29,10 @@ const timeOptions = [
 
 function Page() {
   const { confirm } = Modal;
+  const [showNewWashModal, setShowNewWashModal] = useState(false);
+  const [showWashDetailModal, setShowWashDetailModal] = useState(false);
+  const [washDetail, setWashDetail] = useState({});
+
   const [timeFilter, setTimeFilter] = useState(timeOptions[0].value);
   const [showCards, setShowCards] = React.useState(true);
   const { loading, setLoading, profile, superAdmin } = UserAuth() as any;
@@ -134,6 +139,17 @@ function Page() {
   const handleTimeChange = (time: any) => {
     setTimeFilter(time);
   };
+
+  const onCreateNewWash = () => {
+    setShowNewWashModal(true);
+  };
+
+  const onClickWashDetail = (washDetail: any) => {
+    console.log(washDetail);
+    setWashDetail(washDetail);
+    setShowWashDetailModal(true);
+  };
+
   return (
     <>
       <Loading show={loading} />
@@ -141,6 +157,12 @@ function Page() {
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         {profile && superAdmin === true && (
           <Layout currentOption={0}>
+            <NewWash
+              show={showNewWashModal}
+              onClose={() => setShowNewWashModal(false)}
+              onConfirm={() => setShowNewWashModal(false)}
+            />
+
             <Card className="h-full p-4 bg-white">
               <CardFilter
                 onHide={onHide}
@@ -196,6 +218,9 @@ function Page() {
                   columns={myCoulmns}
                   data={filteredR}
                   showSearch={true}
+                  showButton={true}
+                  onAdd={onCreateNewWash}
+                  onRowClick={onClickWashDetail}
                   heading="WASH QUEUE"
                 />
               </div>

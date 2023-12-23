@@ -98,6 +98,16 @@ export default function FourthPart(props: IOnboardingPageProps) {
 
   const handleMultiChange = (value: ISelectedValue) => {
     if (value.id === "") return;
+    if (value.id === "all") {
+      setInputValues((prev: any) => ({
+        ...prev,
+        service: value.id,
+        selectedServices: servicesArr.filter(
+          (s) => s.id !== "all" && s.id !== ""
+        ),
+      }));
+      return;
+    }
     setInputValues((prev: any) => ({
       ...prev,
       service: value.id,

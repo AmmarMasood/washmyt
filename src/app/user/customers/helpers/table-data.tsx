@@ -4,6 +4,12 @@ import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { PaymentStatus, WashStatus } from "@/app/types/interface";
 
+import utc from "dayjs/plugin/utc";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
 const { confirm } = Modal;
 
 const showConfirm = () => {
@@ -92,5 +98,34 @@ export const columns: ColumnsType<any> = [
         </p>
       </div>
     ),
+  },
+];
+
+export const userWashesTableColumns: ColumnsType<any> = [
+  {
+    title: "Time Completed",
+    dataIndex: "washCompletedTime",
+    key: "washCompletedTime",
+    render: (text) => <p>{dayjs(text).format("DD-MM-YYYY H:mm")}</p>,
+  },
+  {
+    title: "Rating",
+    key: "rating",
+    dataIndex: "rating",
+    render: (text) => <p>{text}</p>,
+  },
+  {
+    title: "Wash Date & Time",
+    dataIndex: "washDateAndTimeUTC",
+    key: "washDateAndTimeUTC",
+    render: (text) => (
+      <p>{dayjs.utc(text).local().format("MM/DD/YY h:mm A")}</p>
+    ),
+  },
+  {
+    title: "Status",
+    dataIndex: "washStatus",
+    key: "washStatus",
+    render: (text) => <p>{text}</p>,
   },
 ];

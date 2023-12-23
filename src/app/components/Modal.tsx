@@ -9,6 +9,7 @@ interface IModal {
   show: boolean;
   showCloseButton?: boolean;
   style?: React.CSSProperties;
+  width?: number;
 }
 const Modal = (props: IModal) => {
   const {
@@ -19,6 +20,7 @@ const Modal = (props: IModal) => {
     show,
     showCloseButton = true,
     style,
+    width = 500,
   } = props;
 
   return (
@@ -29,6 +31,7 @@ const Modal = (props: IModal) => {
       onCancel={onClose}
       closeIcon={showCloseButton}
       footer={null}
+      width={width}
       style={style}
     >
       <>{children}</>

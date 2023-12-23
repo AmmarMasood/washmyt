@@ -12,6 +12,8 @@ import { modelsData } from "@/app/utils/static-data";
 import { useSearchParams, useRouter } from "next/navigation";
 export interface IOnboardingPageProps {
   onNext: (values: any, force?: any) => void;
+  onBack?: () => void;
+  values?: any;
   final?: boolean;
 }
 export default function PartOne(props: IOnboardingPageProps) {

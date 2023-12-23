@@ -42,10 +42,11 @@ export const AuthContextProvider = ({ children }) => {
     return sendEmailVerification(auth.currentUser);
   };
 
-  const initializeUserProfile = (userId, email) => {
+  const initializeUserProfile = (userId, email, photoUrl) => {
     return axios.post("/api/onboard/signup", {
       userId,
       email,
+      photoUrl,
     });
   };
 
@@ -85,7 +86,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      getUser();
+      await getUser();
       setUser(currentUser);
     });
     return () => unsubscribe();

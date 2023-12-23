@@ -19,6 +19,8 @@ import { Button, Modal, Popover, message } from "antd";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 
 import { UserAuth } from "@/app/context/AuthContext";
+import NewCustomer from "./NewCustomer/NewCustomer";
+import CustomerDetail from "./CustomerDetail/CustomerDetail";
 const timeOptions = [
   { value: "7days", label: "Last 7 Days" },
   { value: "14days", label: "Last 14 Days" },
@@ -39,6 +41,10 @@ function Page() {
     customers: [],
   });
   const [filteredR, setFilteredR] = React.useState([]);
+  // modals
+  const [showCustomerDetail, setShowCustomerDetail] = React.useState(false);
+  const [showNewCustomer, setShowNewCustomer] = React.useState(false);
+  const [selectedCustomer, setSelectedCustomer] = React.useState({});
 
   const getWashProsData = async () => {
     setLoading(true);
@@ -109,14 +115,17 @@ function Page() {
         <Popover
           content={
             <>
-              {/* <Button
+              <Button
                 type="link"
                 size="large"
-                onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
+                onClick={() => {
+                  setSelectedCustomer(rowIndex);
+                  setShowCustomerDetail(true);
+                }}
               >
                 Details
-              </Button> */}
-              {/* <br /> */}
+              </Button>
+              <br />
               <Button
                 type="link"
                 size="large"
@@ -140,6 +149,17 @@ function Page() {
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         {profile && superAdmin === true && (
           <Layout currentOption={2}>
+            <NewCustomer
+              show={showNewCustomer}
+              onClose={() => setShowNewCustomer(false)}
+              onConfirm={() => setShowNewCustomer(false)}
+            />
+            <CustomerDetail
+              show={showCustomerDetail}
+              onClose={() => setShowCustomerDetail(false)}
+              onConfirm={() => setShowCustomerDetail(false)}
+              customerDetail={selectedCustomer as any}
+            />
             <Card className="h-full p-4 bg-white">
               <CardFilter
                 onHide={onHide}
@@ -190,6 +210,8 @@ function Page() {
                     )
                   }
                   showSearch={true}
+                  showButton={true}
+                  onAdd={() => setShowNewCustomer(true)}
                   heading="CUSTOMERS"
                 />
               </div>

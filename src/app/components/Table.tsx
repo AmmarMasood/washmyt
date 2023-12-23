@@ -7,6 +7,7 @@ import Button from "./Button";
 // icons
 import PlusIcon from "../../../public/imgs/plus-icon.svg";
 import Image from "next/image";
+import { on } from "events";
 
 interface ITable {
   columns: any;
@@ -15,8 +16,12 @@ interface ITable {
   showSearch: boolean;
   showSelect?: boolean;
   showButton?: boolean;
+  onAdd?: () => void;
   onSearch?: (value: any) => void;
+  onRowClick?: (record: any) => void;
   pagination: any;
+  size?: "small" | "middle" | "large";
+  y?: number;
 }
 function CustomTable(props: ITable) {
   const {
@@ -28,6 +33,9 @@ function CustomTable(props: ITable) {
     showButton,
     onSearch,
     pagination = false,
+    onRowClick,
+    size,
+    y,
   } = props;
   return (
     <>
@@ -57,10 +65,10 @@ function CustomTable(props: ITable) {
               />
             )}
 
-            {showButton && (
+            {showButton && props.onAdd && (
               <Button
                 disabled={false}
-                onClick={() => console.log("test")}
+                onClick={props.onAdd}
                 className="flex items-center ml-2 !w-fit pr-7"
               >
                 <Image src={PlusIcon} alt="plus" />
@@ -70,7 +78,24 @@ function CustomTable(props: ITable) {
           </div>
         )}
       </div>
-      <Table columns={columns} dataSource={data} pagination={pagination} />
+      <Table
+        columns={columns}
+        size={size}
+        dataSource={data}
+        pagination={pagination}
+        scroll={{
+          y: y,
+        }}
+        onRow={(record, index) => {
+          return {
+            onClick: () => {
+              if (onRowClick) {
+                onRowClick(record);
+              }
+            },
+          };
+        }}
+      />
     </>
   );
 }

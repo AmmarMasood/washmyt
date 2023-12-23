@@ -62,9 +62,13 @@ function OnboardUser() {
     return true;
   };
 
-  const initProfile = async (email: string, userId: string) => {
+  const initProfile = async (
+    email: string,
+    userId: string,
+    photoUrl?: string
+  ) => {
     try {
-      await initializeUserProfile(userId, email);
+      await initializeUserProfile(userId, email, photoUrl);
     } catch (err) {
       setInputValues((prev) => ({
         ...prev,
@@ -97,7 +101,7 @@ function OnboardUser() {
     setInputValues((prev) => ({ ...prev, loading: true }));
     try {
       const res = await googleSignIn();
-      await initProfile(res.user.email, res.user.uid);
+      await initProfile(res.user.email, res.user.uid, res.user.photoURL);
       await setToken(res.user.accessToken);
       router.push("/onboard-user/getting-started");
     } catch (error: any) {

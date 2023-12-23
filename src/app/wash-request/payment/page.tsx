@@ -68,7 +68,7 @@ function Payment() {
           price:
             res.data.paymentStatus === PaymentStatus.PAID
               ? res.data.chargedAmount / 100
-              : res.data.package.price + res.data.snowPackage,
+              : res.data.package.price,
         },
       });
       if (res.data.paymentCompleted) {
@@ -138,21 +138,12 @@ function Payment() {
               alt="washmyt"
               className="absolute top-3 right-5"
             />
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(550px, 1fr))",
-                gridGap: "30px",
-              }}
-              className="mt-6 max-md:!flex max-md:flex-col max-md:items-center max-md:justify-center"
-            >
+            <div className="mt-6 flex justify-center max-lg:!flex max-lg:flex-col max-lg:items-center max-lg:justify-center">
               {washInfo.paymentCompleted ? (
-                <p className="text-black text-xl font-bold text-center">
-                  Payment Completed. Thank you!
-                </p>
+                <p className="text-black text-xl font-bold text-center"></p>
               ) : washInfo.washStatus === WashStatus.ACCEPTED &&
                 washInfo.paymentStatus === PaymentStatus.UNPAID ? (
-                <div>
+                <div className="mr-4">
                   <h1 className="text-[#1E1E1E] text-2xl font-semibold">
                     Ready for Payment
                   </h1>
@@ -181,20 +172,18 @@ function Payment() {
                   {/* PAYMENT COMPONENT END */}
                 </div>
               ) : (
-                <p className="text-black text-xl font-bold text-center">
-                  Please wait for the wash pros to accept your request. We will
-                  notify you once they accept.
-                </p>
+                <p className="text-black text-xl font-bold text-center"></p>
               )}
-              <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between">
+
+              <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between w-[550px] mt-4">
                 <div className="flex max-md:flex-wrap">
                   <div className="w-[300px] mb-4">
                     <div>
-                      <h1 className="text-primary-gray text-md whitespace-nowrap mb-4">
+                      <h1 className="text-primary-gray text-md whitespace-nowrap mb-4 ">
                         {washInfo?.package?.name.split("+")[0]}+
                       </h1>
                       <h1 className="text-[#1E1E1E] text-4xl font-bold mb-6">
-                        $ {washInfo?.package?.price}{" "}
+                        ${washInfo?.package?.price}{" "}
                         {washInfo.snowPackage && "+ $79"}
                       </h1>
                     </div>
@@ -268,9 +257,16 @@ function Payment() {
                     className="mr-2 h-12"
                   />
                   <span className="text-sm !text-white">
-                    We are committed to delivering a high-quality service every
+                    {washInfo.washStatus === WashStatus.ACCEPTED &&
+                    washInfo.paymentStatus === PaymentStatus.UNPAID
+                      ? `We are committed to delivering a high-quality service every
                     time. If you&apos;re not happy with the results, we&apos;ll
-                    make it right, guaranteed.
+                    make it right, guaranteed.`
+                      : washInfo.paymentCompleted
+                      ? `We are committed to delivering a high-quality service every
+                    time. If you&apos;re not happy with the results, we&apos;ll
+                    make it right, guaranteed.`
+                      : "Please wait for the wash pros to accept your request. We will notify you once they accept."}
                   </span>
                 </div>
               </div>
@@ -283,3 +279,44 @@ function Payment() {
 }
 
 export default withoutAuth(Payment);
+
+// {washInfo.paymentCompleted ? (
+//   <p className="text-black text-xl font-bold text-center">
+//     Payment Completed. Thank you!
+//   </p>
+// ) : washInfo.washStatus === WashStatus.ACCEPTED &&
+//   washInfo.paymentStatus === PaymentStatus.UNPAID ? (
+//   <div>
+//     <h1 className="text-[#1E1E1E] text-2xl font-semibold">
+//       Ready for Payment
+//     </h1>
+//     <p className="text-primary-gray font-normal text-md mb-6">
+//       To move forward with your (wash/detail), please make payment
+//       in the next 24 hours.
+//     </p>
+//     {/* PAYMENT COMPONENT START */}
+//     {stripePromise && stripeSecret && (
+//       <Elements
+//         stripe={stripePromise}
+//         options={{
+//           clientSecret: stripeSecret,
+//         }}
+//         key={stripeSecret}
+//       >
+//         <CheckoutForm
+//           id={id}
+//           paymentConfirmed={washInfo.paymentCompleted}
+//           applyCoupon={applyCoupon}
+//           couponApplied={couponApplied}
+//           couponInformation={couponInformation}
+//         />
+//       </Elements>
+//     )}
+//     {/* PAYMENT COMPONENT END */}
+//   </div>
+// ) : (
+//   <p className="text-black text-xl font-bold text-center">
+//     Please wait for the wash pros to accept your request. We will
+//     notify you once they accept.
+//   </p>
+// )}

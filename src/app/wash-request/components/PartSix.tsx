@@ -22,8 +22,10 @@ const options = [
 ];
 
 export default function PartSix(props: IOnboardingPageProps) {
-  const { onNext } = props;
-  const [hookup, setHookup] = useState("yes");
+  const { onNext, onBack, values } = props;
+  const [hookup, setHookup] = useState(
+    values.waterHookupAvailable === true ? "yes" : "no"
+  );
 
   const verifyFields = () => {
     if (!hookup) {
@@ -68,17 +70,24 @@ export default function PartSix(props: IOnboardingPageProps) {
                 </div>
               ))}
             </div>
-
-            <Button
-              onClick={onNextClick}
-              disabled={false}
-              className="mt-16 !w-[150px] mb-14"
-            >
-              <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
-                <Image src={Tick} alt="tick" />
-              </span>
-            </Button>
+            <div className="flex items-center pt-12 mb-14">
+              <p
+                onClick={onBack}
+                className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+              >
+                &#8592; Go Back
+              </p>
+              <Button
+                onClick={onNextClick}
+                disabled={false}
+                className="mt-16 !w-[150px] mb-14"
+              >
+                <span className="flex items-center justify-center">
+                  <label className="mr-4 !text-white">OK</label>
+                  <Image src={Tick} alt="tick" />
+                </span>
+              </Button>
+            </div>
           </div>
         </>
       </Card>
