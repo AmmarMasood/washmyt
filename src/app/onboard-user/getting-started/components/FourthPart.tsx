@@ -14,7 +14,7 @@ import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import { message } from "antd";
 
-const servicesArr = [
+export const servicesArr = [
   {
     id: "",
     value: "",
@@ -141,6 +141,7 @@ export default function FourthPart(props: IOnboardingPageProps) {
     } catch (error) {
       console.log(error);
       message.error("Unable to upload file. Please try again.");
+      throw error;
     }
   };
 
@@ -161,8 +162,8 @@ export default function FourthPart(props: IOnboardingPageProps) {
     }
     setLoading(true);
 
-    const link = typeof file === "string" ? file : await updateData(file);
     try {
+      const link = typeof file === "string" ? file : await updateData(file);
       await axiosApiInstance.post("/api/onboard/complete-profile", {
         ownBusinessLicense:
           inputValues.businessLicense === "yes" ? true : false,

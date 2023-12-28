@@ -33,7 +33,7 @@ function Weather({ lat, lng, time }: any) {
     if (time) {
       const targetDate = dayjs.unix(time).format("YYYY-MM-DD");
 
-      const targetEntry = forecast.list.find(
+      const targetEntry = forecast?.list.find(
         (entry: any) => dayjs(entry.dt_txt).format("YYYY-MM-DD") === targetDate
       );
       if (targetEntry) {

@@ -20,6 +20,7 @@ import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
 import NewWash from "./NewWash/NewWash";
+import WashDetail from "./WashDetail/WashDetail";
 
 const timeOptions = [
   { value: "7days", label: "Last 7 Days" },
@@ -116,8 +117,19 @@ function Page() {
                 size="large"
                 onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
               >
+                Open
+              </Button>
+              <br />
+              <Button
+                type="link"
+                size="large"
+                onClick={() => {
+                  onClickWashDetail(rowIndex);
+                }}
+              >
                 Details
               </Button>
+
               <br />
               <Button
                 type="link"
@@ -161,6 +173,13 @@ function Page() {
               show={showNewWashModal}
               onClose={() => setShowNewWashModal(false)}
               onConfirm={() => setShowNewWashModal(false)}
+            />
+            <WashDetail
+              show={showWashDetailModal}
+              onClose={() => setShowWashDetailModal(false)}
+              onConfirm={() => setShowWashDetailModal(false)}
+              washDetail={washDetail}
+              setLoading={setLoading}
             />
 
             <Card className="h-full p-4 bg-white">
@@ -220,7 +239,6 @@ function Page() {
                   showSearch={true}
                   showButton={true}
                   onAdd={onCreateNewWash}
-                  onRowClick={onClickWashDetail}
                   heading="WASH QUEUE"
                 />
               </div>

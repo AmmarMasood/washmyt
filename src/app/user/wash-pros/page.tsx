@@ -150,7 +150,13 @@ function Page() {
             <WashProDetail
               show={showEditWashPro}
               onClose={() => setShowEditWashPro(false)}
-              onConfirm={() => setShowEditWashPro(false)}
+              onConfirm={() => {
+                getWashProsData();
+                setTimeout(() => {
+                  setSelectedWashPro({});
+                  setShowEditWashPro(false);
+                }, 1000);
+              }}
               washProDetail={selectedWashPro}
             />
             <Card className="h-full p-4 bg-white">
