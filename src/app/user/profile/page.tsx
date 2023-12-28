@@ -165,7 +165,7 @@ function Page() {
                   <Button
                     disabled={loading}
                     onClick={updateData}
-                    className="mt-10"
+                    className="mt-10 !text-white"
                   >
                     Save
                   </Button>

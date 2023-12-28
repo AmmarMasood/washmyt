@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "../../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Card from "../../../components/Card";
 import StepperBar from "@/app/components/StepperBar";
 import Select from "@/app/components/Select";
@@ -12,7 +12,8 @@ import { storage } from "@/app/lib/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
-import { message } from "antd";
+import { Input, message } from "antd";
+import { soapBrands } from "@/app/utils/static-data";
 
 export const servicesArr = [
   {
@@ -79,6 +80,7 @@ export const servicesArr = [
 export default function FourthPart(props: IOnboardingPageProps) {
   const { onNext } = props;
   const { profile, user, setLoading } = UserAuth() as any;
+  const [soapName, setSoapName] = useState<any>("");
   const [inputValues, setInputValues] = useState({
     selectedServices:
       (profile.services &&
@@ -86,8 +88,22 @@ export default function FourthPart(props: IOnboardingPageProps) {
       [],
     service: "",
     businessLicense: profile.ownBusinessLicense === false ? "no" : "yes",
+    primarySoapBrand: profile.primarySoapBrand || "",
   });
   const [file, setFile] = useState(profile.businessLicenseImage || null);
+
+  useEffect(() => {
+    if (
+      profile.primarySoapBrand &&
+      !soapBrands.includes(profile.primarySoapBrand)
+    ) {
+      setSoapName(profile.primarySoapBrand);
+      setInputValues((prev) => ({
+        ...prev,
+        primarySoapBrand: "Other",
+      }));
+    }
+  }, []);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValues((prev) => ({
@@ -148,7 +164,9 @@ export default function FourthPart(props: IOnboardingPageProps) {
   const verifyFields = () => {
     if (
       !inputValues.selectedServices.length ||
-      (inputValues.businessLicense === "yes" && !file)
+      (inputValues.businessLicense === "yes" && !file) ||
+      !inputValues.primarySoapBrand ||
+      (inputValues.primarySoapBrand === "Other" && !soapName)
     ) {
       return false;
     }
@@ -169,6 +187,10 @@ export default function FourthPart(props: IOnboardingPageProps) {
           inputValues.businessLicense === "yes" ? true : false,
         businessLicenseImage: inputValues.businessLicense === "yes" ? link : "",
         services: inputValues.selectedServices.map((v: any) => (v as any).id),
+        primarySoapBrand:
+          inputValues.primarySoapBrand === "Other"
+            ? soapName
+            : inputValues.primarySoapBrand,
       });
       onNext();
     } catch (error) {
@@ -197,6 +219,24 @@ export default function FourthPart(props: IOnboardingPageProps) {
               options={servicesArr}
             />
             <Select
+              name="primarySoapBrand"
+              label="Primary soap brand used?*"
+              placeholder="eg. Meguiars"
+              onChange={handleOnChange}
+              value={inputValues.primarySoapBrand}
+              className="mt-8"
+              options={soapBrands.map((s) => ({ id: s, value: s }))}
+            />
+            {inputValues.primarySoapBrand === "Other" && (
+              <Input
+                placeholder="Please enter soap name"
+                className="mt-4"
+                size="large"
+                value={soapName}
+                onChange={(e) => setSoapName(e.target.value)}
+              />
+            )}
+            <Select
               name="businessLicense"
               label="Do you have a business license?"
               placeholder="yes"
@@ -222,7 +262,11 @@ export default function FourthPart(props: IOnboardingPageProps) {
               className="mt-8"
             />
 
-            <Button disabled={false} onClick={onClickNext} className="mt-10">
+            <Button
+              disabled={false}
+              onClick={onClickNext}
+              className="mt-10 !text-white"
+            >
               Next
             </Button>
           </div>

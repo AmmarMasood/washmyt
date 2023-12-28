@@ -13,8 +13,6 @@ interface IProfileImage {
 function ProfileImage(props: IProfileImage) {
   const { url, onChange } = props;
   const onDrop = useCallback((acceptedFiles: any) => {
-    // Do something with the files
-    console.log("testtt", acceptedFiles);
     onChange(acceptedFiles[0]);
   }, []);
 

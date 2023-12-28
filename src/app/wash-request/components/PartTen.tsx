@@ -23,7 +23,6 @@ export default function PartTen(props: IOnboardingPageProps) {
   const handleReCaptchaVerify = useCallback(async () => {
     setLoading(true);
     if (!executeRecaptcha) {
-      console.log("Execute recaptcha not yet available");
       return;
     }
     try {
@@ -105,7 +104,7 @@ export default function PartTen(props: IOnboardingPageProps) {
                 <Button
                   disabled={phone.length === 0}
                   onClick={onNextClick}
-                  className="mt-16 !w-fit mb-14 px-4"
+                  className="mt-16 !w-fit mb-14 px-4 !text-white"
                 >
                   <span className="flex items-center justify-center">
                     <label className="!text-white">Submit Wash Request</label>

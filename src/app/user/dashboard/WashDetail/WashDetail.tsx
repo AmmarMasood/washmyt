@@ -41,7 +41,6 @@ function WashDetail(props: IWashDetailProps) {
   const [step, setStep] = React.useState(1);
 
   useEffect(() => {
-    console.log(washDetail);
     setCustomerDetail(washDetail?.customer);
     setModelInfo(
       modelsData.filter((r) => r.id === washDetail?.selectedModel)[0]
@@ -81,7 +80,10 @@ function WashDetail(props: IWashDetailProps) {
       <WashEdit
         show={editModal}
         onClose={() => setEditModal(false)}
-        onConfirm={() => setEditModal(false)}
+        onConfirm={() => {
+          setEditModal(false);
+          onConfirm();
+        }}
         setLoading={setLoading}
         washDetail={washDetail}
       />
@@ -239,7 +241,7 @@ function WashDetail(props: IWashDetailProps) {
                 Wash Pro {`(${washDetail?.washer?.name || ""})`}
               </h2>
               <Button
-                className="bg-primary-color text-white mr-5"
+                className="bg-primary-color !text-white mr-5"
                 onClick={() =>
                   openTextApplication(washDetail?.washer?.phoneNumber)
                 }

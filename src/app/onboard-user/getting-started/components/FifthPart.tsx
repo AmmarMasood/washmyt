@@ -111,7 +111,11 @@ export default function FifthPart() {
               className="mt-8"
             />
 
-            <Button disabled={false} onClick={onClickNext} className="mt-10">
+            <Button
+              disabled={false}
+              onClick={onClickNext}
+              className="mt-10 !text-white"
+            >
               Complete Registration
             </Button>
           </div>

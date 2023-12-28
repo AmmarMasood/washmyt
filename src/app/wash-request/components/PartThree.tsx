@@ -157,7 +157,7 @@ export default function PartThree(props: IOnboardingPageProps) {
                   <Button
                     disabled={false}
                     onClick={onNextClick}
-                    className=" !w-[150px]"
+                    className=" !w-[150px] !text-white"
                   >
                     <span className="flex items-center justify-center">
                       <label className="mr-4 !text-white">OK</label>

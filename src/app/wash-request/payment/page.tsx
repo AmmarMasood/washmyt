@@ -106,7 +106,6 @@ function Payment() {
             price: newPrice,
           },
         }));
-        console.log(newPrice);
 
         await getPaymentIntent(newPrice, washInfo.customer);
         setCouponApplied(true);

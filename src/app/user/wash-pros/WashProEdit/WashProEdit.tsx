@@ -52,9 +52,8 @@ function WashProEdit(props: ICustomerDetailProps) {
         values
       );
       message.success("Wash Pro updated successfully");
-      console.log("onConfirm 2");
+
       onConfirm();
-      console.log("onConfirm 3");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong. Please try again.");
@@ -365,7 +364,11 @@ function WashProEdit(props: ICustomerDetailProps) {
           </div>
 
           <Form.Item className="flex items-center justify-end">
-            <Button htmlType="submit" type="primary" className="bg-red-400">
+            <Button
+              htmlType="submit"
+              type="primary"
+              className="bg-red-400 !text-white"
+            >
               Save
             </Button>
           </Form.Item>

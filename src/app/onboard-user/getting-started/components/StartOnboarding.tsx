@@ -138,7 +138,7 @@ export default function StartOnboarding(props: IOnboardingPageProps) {
 
             <Button
               onClick={profile === null ? () => console.log("") : onNext}
-              className=" mt-5 w-[250px] z-10"
+              className=" mt-5 w-[250px] z-10 !text-white"
               disabled={profile === null || inputValues.accepted === false}
             >
               Start

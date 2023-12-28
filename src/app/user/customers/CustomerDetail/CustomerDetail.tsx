@@ -108,7 +108,7 @@ function CustomerDetail(props: ICustomerDetailProps) {
         </div>
         <div className="flex justify-between">
           <p className="text-primary-gray">Address</p>
-          <p>{data?.address}</p>
+          <p className="w-1/2">{data?.address}</p>
         </div>
       </div>
       <span className="font-medium text-lg text-primary-gray">WASHES</span>

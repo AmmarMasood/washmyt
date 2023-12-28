@@ -50,7 +50,6 @@ function CheckoutForm({
       setError(error.message);
       message.error("Unable to process payment");
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
-      console.log(paymentIntent);
       // const invoie = await stripe.upda
       setSuccess(true);
       setShowPaymentElement(false);
@@ -117,7 +116,7 @@ function CheckoutForm({
         <Button
           disabled={isProcessing || success}
           onClick={handleSubmit}
-          className={`mt-4`}
+          className={`mt-4 !text-white`}
           style={{
             backgroundColor: success ? "#4CAF50 !important" : "",
           }}

@@ -61,7 +61,7 @@ const CustomCalender = (props: any) => {
   };
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value, props.data);
-    console.log("listdata", listData, value);
+
     return (
       <>
         {listData.length > 0 && (

@@ -105,7 +105,6 @@ function OnboardUser() {
       await setToken(res.user.accessToken);
       router.push("/onboard-user/getting-started");
     } catch (error: any) {
-      console.log("cehcking error ===>", error);
       const err = mapAuthCodeToMessage(error?.message as any);
       setInputValues((prev) => ({ ...prev, error: err }));
     }
@@ -163,6 +162,7 @@ function OnboardUser() {
             <Button
               onClick={handleEmailPasswordSignup}
               disabled={inputValues.loading}
+              className="!text-white"
             >
               Sign Up
             </Button>

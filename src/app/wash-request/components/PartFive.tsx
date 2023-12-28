@@ -82,7 +82,7 @@ export default function PartFive(props: IOnboardingPageProps) {
               <Button
                 disabled={false}
                 onClick={onNextClick}
-                className="mt-16 !w-[150px] mb-14"
+                className="mt-16 !w-[150px] mb-14 !text-white"
               >
                 <span className="flex items-center justify-center">
                   <label className="mr-4 !text-white">OK</label>

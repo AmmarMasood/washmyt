@@ -56,9 +56,13 @@ export async function GET(request: any) {
     const data = {
       new: washRequests.filter((req) => req.washStatus === WashStatus.CREATED)
         .length,
+      cancelled: washRequests.filter(
+        (req) => req.washStatus === WashStatus.CANCELLED
+      ).length,
       matched: washRequests.filter(
         (req) => req.washStatus === WashStatus.ACCEPTED
       ).length,
+
       totalSales:
         washRequests.reduce((acc: any, req) => {
           if (
@@ -72,6 +76,10 @@ export async function GET(request: any) {
       completed: washRequests.filter(
         (req) => req.washStatus === WashStatus.COMPLETED
       ).length,
+      pending: washRequests.filter(
+        (req) =>
+          req.washStatus === WashStatus.ACCEPTED && !req.washCompletedTime
+      ).length,
       averageRating:
         washRequestWithRating.reduce((acc: any, req) => {
           if (req.washStatus === WashStatus.COMPLETED) {
@@ -79,6 +87,7 @@ export async function GET(request: any) {
           }
           return acc;
         }, 0) / washRequestWithRating.length,
+      totalReviews: washRequestWithRating.length,
       washRequests,
     };
 

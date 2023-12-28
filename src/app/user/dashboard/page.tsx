@@ -44,6 +44,9 @@ function Page() {
     completed: "",
     averageRating: "",
     washRequests: [],
+    cancelled: "",
+    pending: "",
+    totalReviews: "",
   });
   const [filteredR, setFilteredR] = useState([]);
   const router = useRouter();
@@ -157,7 +160,6 @@ function Page() {
   };
 
   const onClickWashDetail = (washDetail: any) => {
-    console.log(washDetail);
     setWashDetail(washDetail);
     setShowWashDetailModal(true);
   };
@@ -177,7 +179,12 @@ function Page() {
             <WashDetail
               show={showWashDetailModal}
               onClose={() => setShowWashDetailModal(false)}
-              onConfirm={() => setShowWashDetailModal(false)}
+              onConfirm={() => {
+                getData();
+                setTimeout(() => {
+                  setShowWashDetailModal(false);
+                }, 1000);
+              }}
               washDetail={washDetail}
               setLoading={setLoading}
             />
@@ -200,26 +207,31 @@ function Page() {
                   img={WashRequestIcon}
                   title={info.new as any}
                   description="New Washes Requests"
+                  bottomDescription={`${info.cancelled} Cancelled`}
                 />
                 <InfoCard
                   img={MatchIcon}
                   title={info.matched as any}
                   description="Assign washes matched"
+                  bottomDescription={`${info.new} Not Matched`}
                 />
                 <InfoCard
                   img={SalesIcon}
                   title={`$${info.totalSales}`}
                   description="Total Sales"
+                  bottomDescription={`$0 Uncollected `}
                 />
                 <InfoCard
                   img={WashCompletedIcon}
                   title={info.completed as any}
                   description="Wash Completed"
+                  bottomDescription={`${info.pending} Pending`}
                 />
                 <InfoCard
                   img={RatingIcon}
                   title={info.averageRating as any}
                   description="Average Rating"
+                  bottomDescription={`${info.totalReviews} Reviews`}
                 />
               </div>
               <div className={`mt-8`}>

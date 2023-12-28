@@ -2,13 +2,15 @@ import Modal from "@/app/components/Modal";
 import {
   Image as AntdImage,
   Button,
+  DatePicker,
   Form,
   Input,
   InputNumber,
   Select,
+  TimePicker,
   message,
 } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LogoIcon from "../../../../../public/imgs/logo-icon.svg";
 import EditIcon from "../../../../../public/imgs/edit-icon.svg";
 import Image from "next/image";
@@ -18,6 +20,12 @@ import GreenCheckmark from "../../../../../public/imgs/icons8-checkmark-30.png";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { modelsData } from "@/app/utils/static-data";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 
 interface ICustomerDetailProps {
   show: boolean;
@@ -35,11 +43,13 @@ const keyClassName = `text-primary-gray mr-4`;
 const valueClassName = `text-primary-black font-bold w-2/3 flex items-start justify-end flex-wrap`;
 
 function WashEdit(props: ICustomerDetailProps) {
+  const [form] = Form.useForm();
   const { show, onClose, onConfirm, washDetail, setLoading } = props;
 
-  const [options, setOptions] = React.useState<any>([]);
-  const [businessAddress, setBusinessAddress] = React.useState<any>({});
-  const [form] = Form.useForm();
+  const [options, setOptions] = useState<any>([]);
+  const [businessAddress, setBusinessAddress] = useState<any>({});
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   const getModels = (packages: any) => {
     const matches = packages.map((carDetail: any) => {
@@ -76,31 +86,42 @@ function WashEdit(props: ICustomerDetailProps) {
     }
   };
 
+  const joinDateAndTime = (date: any, time: any) => {
+    const d = dayjs(date.$d).format("DD-MM-YYYY");
+    const t = dayjs(time.$d).format("H:mm:ss");
+
+    const dateTime = dayjs(`${d} ${t} `, "DD-MM-YYYY H:mm:ss");
+
+    return dateTime.utc().format();
+  };
+
   useEffect(() => {
     form.setFieldsValue(washDetail);
     setBusinessAddress(washDetail.address);
     if (washDetail && washDetail.selectedModel && !options.length) {
       getPackages();
+      setTime(dayjs(washDetail?.washDateAndTimeUTC).format("H:mm:ss"));
+      setDate(dayjs(washDetail?.washDateAndTimeUTC).format("DD-MM-YYYY"));
     }
   }, [washDetail]);
 
   const onFinishForm = async (values: any) => {
-    // values.businessAddress = businessAddress;
-    // setLoading(true);
-    // try {
-    //   await axiosApiInstance.patch(
-    //     `/api/admin/wash-pros?id=${washProDetail.id}`,
-    //     values
-    //   );
-    //   message.success("Wash Pro updated successfully");
-    //   console.log("onConfirm 2");
-    //   onConfirm();
-    //   console.log("onConfirm 3");
-    // } catch (error) {
-    //   console.log(error);
-    //   message.error("Something went wrong. Please try again.");
-    // }
-    // setLoading(false);
+    values.address = businessAddress;
+    values.washDateAndTimeUTC = joinDateAndTime(date, time);
+
+    setLoading(true);
+    try {
+      await axiosApiInstance.patch(
+        `/api/admin/wash-request?id=${washDetail.id}`,
+        values
+      );
+      message.success("Wash updated successfully");
+      onConfirm();
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong. Please try again.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -143,6 +164,72 @@ function WashEdit(props: ICustomerDetailProps) {
                     ))}
                   </Select>
                 </Form.Item>
+              </div>
+            </div>
+
+            <div className={rowClassName}>
+              <p className={keyClassName}>Date</p>
+              <div className={valueClassName}>
+                <div className="flex items-center justify-center">
+                  <DatePicker
+                    size="middle"
+                    suffixIcon={false}
+                    format={"DD-MM-YYYY"}
+                    value={date ? dayjs(date, "DD-MM-YYYY") : null}
+                    onChange={(e: any) => setDate(e)}
+                    placeholder="DD-MM-YYYY"
+                    allowClear={false}
+                    className="!w-[350px]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className={`${rowClassName} mt-4 mb-2`}>
+              <p className={keyClassName}>Time</p>
+              <div className={valueClassName}>
+                <div className="flex items-center justify-center">
+                  <TimePicker
+                    allowClear={false}
+                    // className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
+                    placeholder="HH"
+                    size="middle"
+                    showNow={false}
+                    // className="mt-6"
+                    disabledTime={
+                      // disable all times between 8am and 6pm
+                      () => {
+                        return {
+                          disabledHours: () => {
+                            const hours: number[] = [];
+                            for (let i = 0; i < 8; i++) {
+                              hours.push(i);
+                            }
+                            for (let i = 19; i < 24; i++) {
+                              hours.push(i);
+                            }
+                            return hours;
+                          },
+                          disabledMinutes: () => {
+                            const minutes: number[] = [];
+                            for (let i = 0; i < 60; i++) {
+                              if (i % 30 !== 0) {
+                                minutes.push(i);
+                              }
+                            }
+                            return minutes;
+                          },
+                        };
+                      }
+                    }
+                    // hideDisabledOptions={true}
+                    changeOnBlur={true}
+                    suffixIcon={false}
+                    onChange={(e: any) => setTime(e)}
+                    value={time ? dayjs(time, "HH:mm") : null}
+                    format={"HH:mm"}
+                  />
+                </div>
               </div>
             </div>
 
@@ -201,6 +288,7 @@ function WashEdit(props: ICustomerDetailProps) {
                 </Form.Item>
               </div>
             </div>
+
             <div className={rowClassName}>
               <p className={keyClassName}>Water Hookup Available</p>
               <div className={valueClassName}>
@@ -227,7 +315,11 @@ function WashEdit(props: ICustomerDetailProps) {
           </div>
 
           <Form.Item className="flex items-center justify-end">
-            <Button htmlType="submit" type="primary" className="bg-red-400">
+            <Button
+              htmlType="submit"
+              type="primary"
+              className="bg-red-400 !text-white"
+            >
               Save
             </Button>
           </Form.Item>
