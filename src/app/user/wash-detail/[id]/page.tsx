@@ -146,7 +146,6 @@ function Page() {
   return (
     <>
       <Loading show={loading} />
-      {console.log(data, "test-data")}
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         <Layout currentOption={0}>
           {data && (

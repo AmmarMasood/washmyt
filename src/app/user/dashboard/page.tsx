@@ -19,6 +19,8 @@ import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+import NewWash from "./NewWash/NewWash";
+import WashDetail from "./WashDetail/WashDetail";
 
 const timeOptions = [
   { value: "7days", label: "Last 7 Days" },
@@ -28,6 +30,10 @@ const timeOptions = [
 
 function Page() {
   const { confirm } = Modal;
+  const [showNewWashModal, setShowNewWashModal] = useState(false);
+  const [showWashDetailModal, setShowWashDetailModal] = useState(false);
+  const [washDetail, setWashDetail] = useState({});
+
   const [timeFilter, setTimeFilter] = useState(timeOptions[0].value);
   const [showCards, setShowCards] = React.useState(true);
   const { loading, setLoading, profile, superAdmin } = UserAuth() as any;
@@ -38,6 +44,9 @@ function Page() {
     completed: "",
     averageRating: "",
     washRequests: [],
+    cancelled: "",
+    pending: "",
+    totalReviews: "",
   });
   const [filteredR, setFilteredR] = useState([]);
   const router = useRouter();
@@ -111,8 +120,19 @@ function Page() {
                 size="large"
                 onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
               >
+                Open
+              </Button>
+              <br />
+              <Button
+                type="link"
+                size="large"
+                onClick={() => {
+                  onClickWashDetail(rowIndex);
+                }}
+              >
                 Details
               </Button>
+
               <br />
               <Button
                 type="link"
@@ -134,6 +154,16 @@ function Page() {
   const handleTimeChange = (time: any) => {
     setTimeFilter(time);
   };
+
+  const onCreateNewWash = () => {
+    setShowNewWashModal(true);
+  };
+
+  const onClickWashDetail = (washDetail: any) => {
+    setWashDetail(washDetail);
+    setShowWashDetailModal(true);
+  };
+
   return (
     <>
       <Loading show={loading} />
@@ -141,6 +171,24 @@ function Page() {
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         {profile && superAdmin === true && (
           <Layout currentOption={0}>
+            <NewWash
+              show={showNewWashModal}
+              onClose={() => setShowNewWashModal(false)}
+              onConfirm={() => setShowNewWashModal(false)}
+            />
+            <WashDetail
+              show={showWashDetailModal}
+              onClose={() => setShowWashDetailModal(false)}
+              onConfirm={() => {
+                getData();
+                setTimeout(() => {
+                  setShowWashDetailModal(false);
+                }, 1000);
+              }}
+              washDetail={washDetail}
+              setLoading={setLoading}
+            />
+
             <Card className="h-full p-4 bg-white">
               <CardFilter
                 onHide={onHide}
@@ -159,26 +207,31 @@ function Page() {
                   img={WashRequestIcon}
                   title={info.new as any}
                   description="New Washes Requests"
+                  bottomDescription={`${info.cancelled} Cancelled`}
                 />
                 <InfoCard
                   img={MatchIcon}
                   title={info.matched as any}
                   description="Assign washes matched"
+                  bottomDescription={`${info.new} Not Matched`}
                 />
                 <InfoCard
                   img={SalesIcon}
                   title={`$${info.totalSales}`}
                   description="Total Sales"
+                  bottomDescription={`$0 Uncollected `}
                 />
                 <InfoCard
                   img={WashCompletedIcon}
                   title={info.completed as any}
                   description="Wash Completed"
+                  bottomDescription={`${info.pending} Pending`}
                 />
                 <InfoCard
                   img={RatingIcon}
                   title={info.averageRating as any}
                   description="Average Rating"
+                  bottomDescription={`${info.totalReviews} Reviews`}
                 />
               </div>
               <div className={`mt-8`}>
@@ -196,6 +249,8 @@ function Page() {
                   columns={myCoulmns}
                   data={filteredR}
                   showSearch={true}
+                  showButton={true}
+                  onAdd={onCreateNewWash}
                   heading="WASH QUEUE"
                 />
               </div>

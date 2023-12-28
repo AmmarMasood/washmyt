@@ -25,3 +25,22 @@ export const modelsData = [
     img: ModelY,
   },
 ];
+
+export const soapBrands = [
+  "Chemical Guys",
+  "Meguiar's",
+  "Adam's Polishes",
+  "Aero Cosmetics",
+  "Griot's Garage",
+  "CarPro",
+  "Mothers",
+  "Optimum",
+  "P&S Sales",
+  "Turtle Wax",
+  "Koch-Chemie",
+  "Sonax",
+  "Dr. Beasley's",
+  "Bilt Hamber",
+  "Gyeon Quartz",
+  "Other",
+];

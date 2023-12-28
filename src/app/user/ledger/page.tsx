@@ -16,6 +16,7 @@ import { withAuth } from "@/app/hoc/withAuth";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import { message } from "antd";
 import Loading from "@/app/components/Loading";
+import NewLedger from "./NewLedger/NewLedger";
 
 const timeOptions = [
   { value: "7days", label: "Last 7 Days" },
@@ -25,6 +26,7 @@ const timeOptions = [
 
 function Page() {
   const { profile, user, superAdmin } = UserAuth() as any;
+  const [showNewLedgerModal, setShowNewLedgerModal] = React.useState(false);
   const [timeFilter, setTimeFilter] = React.useState(timeOptions[0].value);
   const [showCards, setShowCards] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
@@ -72,6 +74,11 @@ function Page() {
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         {profile && superAdmin === true && (
           <Layout currentOption={4}>
+            <NewLedger
+              show={showNewLedgerModal}
+              onClose={() => setShowNewLedgerModal(false)}
+              onConfirm={() => setShowNewLedgerModal(false)}
+            />
             <Card className="h-full p-4 bg-white">
               <CardFilter
                 onHide={onHide}
@@ -126,6 +133,8 @@ function Page() {
                   data={filteredR}
                   showSearch={true}
                   showSelect={false}
+                  showButton={true}
+                  onAdd={() => setShowNewLedgerModal(true)}
                   heading="LEDGER"
                 />
               </div>

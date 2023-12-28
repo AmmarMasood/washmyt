@@ -54,7 +54,7 @@ function TipPayment({ onPaymentConfirmed }: any) {
         <Button
           disabled={isProcessing || success}
           onClick={handleSubmit}
-          className={`mt-4`}
+          className={`mt-4 !text-white`}
           style={{
             backgroundColor: success ? "#4CAF50 !important" : "",
           }}

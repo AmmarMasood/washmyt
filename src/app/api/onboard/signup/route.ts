@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request: any) {
-  const { userId, email } = await request.json();
+  const { userId, email, photoUrl } = await request.json();
 
   if (!userId) {
     return NextResponse.json(
@@ -27,6 +27,7 @@ export async function POST(request: any) {
     data: {
       userId,
       email,
+      profileImage: photoUrl,
     },
   });
 

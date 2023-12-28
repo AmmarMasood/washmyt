@@ -103,7 +103,11 @@ export default function FirstPart(props: IOnboardingPageProps) {
               className="mt-8"
               disabled={true}
             />
-            <Button onClick={updateData} className="mt-10" disabled={false}>
+            <Button
+              onClick={updateData}
+              className="mt-10 !text-white"
+              disabled={false}
+            >
               Next
             </Button>
           </div>

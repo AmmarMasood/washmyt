@@ -26,8 +26,13 @@ function Login() {
     loading: false,
   });
   const router = useRouter();
-  const { googleSignIn, emailPasswordSignin, setToken, initializeUserProfile } =
-    UserAuth() as any;
+  const {
+    googleSignIn,
+    emailPasswordSignin,
+    setToken,
+    initializeUserProfile,
+    getUser,
+  } = UserAuth() as any;
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValues((prev) => ({
@@ -36,9 +41,13 @@ function Login() {
     }));
   };
 
-  const initProfile = async (email: string, userId: string) => {
+  const initProfile = async (
+    email: string,
+    userId: string,
+    photoUrl?: string
+  ) => {
     try {
-      await initializeUserProfile(userId, email);
+      await initializeUserProfile(userId, email, photoUrl);
     } catch (err) {
       setInputValues((prev) => ({
         ...prev,
@@ -84,9 +93,15 @@ function Login() {
     setInputValues((prev) => ({ ...prev, loading: true }));
     try {
       const res = await googleSignIn();
-      await initProfile(res.user.email, res.user.uid);
+      await initProfile(res.user.email, res.user.uid, res.user.photoURL);
       await setToken(res.user.accessToken);
-      router.push("/onboard-user/getting-started");
+      await getUser(true);
+      if (localStorage.getItem("lastPath")) {
+        router.push(localStorage.getItem("lastPath") || "/user/calendar");
+        localStorage.removeItem("lastPath");
+      } else {
+        router.push("/user/calendar");
+      }
     } catch (error: any) {
       const err = mapAuthCodeToMessage(error?.message as any);
       setInputValues((prev) => ({ ...prev, error: err }));
@@ -137,6 +152,7 @@ function Login() {
             <Button
               onClick={handleEmailPasswordLogin}
               disabled={inputValues.loading}
+              className="!text-white"
             >
               Login
             </Button>
@@ -163,7 +179,7 @@ function Login() {
             <p className="paragraph-1 ">
               Don&apos;t have Have a Wash Pro Account?{" "}
               <Link href={"/onboard-user"}>
-                <span className="cursor-pointer text-primary-color">
+                <span className="cursor-pointer text-primary-color ">
                   Sign Up
                 </span>
               </Link>

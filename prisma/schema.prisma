@@ -39,6 +39,7 @@ model UserProfile {
   role Role @default(WASHER)
   acceptingWashes Boolean @default(true)
   createdAt DateTime @default(now())
+  primarySoapBrand String?
   washRequests WashRequest[]
 }
 

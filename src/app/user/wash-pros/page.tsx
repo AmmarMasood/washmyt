@@ -19,6 +19,8 @@ import { Button, Modal, Popover, message } from "antd";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import Loading from "@/app/components/Loading";
 import { MoreOutlined, ExclamationCircleFilled } from "@ant-design/icons";
+import NewWashPro from "./NewWashPro/NewWashPro";
+import WashProDetail from "./WashProDetail/WashProDetail";
 
 function Page() {
   const router = useRouter();
@@ -42,6 +44,10 @@ function Page() {
     },
   });
   const [filteredR, setFilteredR] = useState([]);
+  //
+  const [selectedWashPro, setSelectedWashPro] = useState({});
+  const [showNewWashPro, setShowNewWashPro] = useState(false);
+  const [showEditWashPro, setShowEditWashPro] = useState(false);
 
   const getWashProsData = async () => {
     setLoading(true);
@@ -96,14 +102,17 @@ function Page() {
         <Popover
           content={
             <>
-              {/* <Button
+              <Button
                 type="link"
                 size="large"
-                onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
+                onClick={() => {
+                  setSelectedWashPro(rowIndex);
+                  setShowEditWashPro(true);
+                }}
               >
                 Details
               </Button>
-              <br /> */}
+              <br />
               <Button
                 type="link"
                 size="large"
@@ -133,6 +142,23 @@ function Page() {
       <div className="min-h-screen  bg-secondary-color p-6 relative">
         {profile && superAdmin === true && (
           <Layout currentOption={1}>
+            <NewWashPro
+              show={showNewWashPro}
+              onClose={() => setShowNewWashPro(false)}
+              onConfirm={() => setShowNewWashPro(false)}
+            />
+            <WashProDetail
+              show={showEditWashPro}
+              onClose={() => setShowEditWashPro(false)}
+              onConfirm={() => {
+                getWashProsData();
+                setTimeout(() => {
+                  setSelectedWashPro({});
+                  setShowEditWashPro(false);
+                }, 1000);
+              }}
+              washProDetail={selectedWashPro}
+            />
             <Card className="h-full p-4 bg-white">
               <div className="flex items-center justify-between">
                 <div
@@ -197,6 +223,8 @@ function Page() {
                   columns={myCoulmns}
                   data={filteredR}
                   showSearch={true}
+                  showButton={true}
+                  onAdd={() => setShowNewWashPro(true)}
                   heading="WASH PROS"
                 />
               </div>

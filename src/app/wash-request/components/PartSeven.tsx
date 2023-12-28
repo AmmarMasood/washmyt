@@ -21,8 +21,10 @@ const options = [
 ];
 
 export default function PartSeven(props: IOnboardingPageProps) {
-  const { onNext } = props;
-  const [outlet, setOutlet] = useState("yes");
+  const { onNext, onBack, values } = props;
+  const [outlet, setOutlet] = useState(
+    values.electricalHookupAvailable === true ? "yes" : "no"
+  );
 
   const verifyFields = () => {
     if (!outlet) {
@@ -67,17 +69,24 @@ export default function PartSeven(props: IOnboardingPageProps) {
                 </div>
               ))}
             </div>
-
-            <Button
-              onClick={onNextClick}
-              disabled={false}
-              className="mt-16 !w-[150px] mb-14"
-            >
-              <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
-                <Image src={Tick} alt="tick" />
-              </span>
-            </Button>
+            <div className="flex items-center pt-12 mb-14">
+              <p
+                onClick={onBack}
+                className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+              >
+                &#8592; Go Back
+              </p>
+              <Button
+                onClick={onNextClick}
+                disabled={false}
+                className="mt-16 !w-[150px] mb-14 !text-white"
+              >
+                <span className="flex items-center justify-center">
+                  <label className="mr-4 !text-white">OK</label>
+                  <Image src={Tick} alt="tick" />
+                </span>
+              </Button>
+            </div>
           </div>
         </>
       </Card>

@@ -27,6 +27,10 @@ function WashRequest() {
 
   const onNext = async (values: any, final: boolean) => {
     if (final) {
+      delete requestValues.washD;
+      delete requestValues.washT;
+      delete values.washD;
+      delete values.washT;
       saveWashRequest({
         ...requestValues,
         ...values,
@@ -111,15 +115,34 @@ function WashRequest() {
           reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_CAPTCHA_KEY as string}
         >
           {content === 0 && <PartOne onNext={onNext} />}
-          {content === 1 && <PartTwo onNext={onNext} />}
-          {content === 2 && <PartThree onNext={onNext} />}
-          {content === 3 && <PartFour onNext={onNext} />}
-          {content === 4 && <PartFive onNext={onNext} />}
-          {content === 5 && <PartSix onNext={onNext} />}
-          {content === 6 && <PartSeven onNext={onNext} />}
-          {content === 7 && <PartEight onNext={onNext} />}
-          {content === 8 && <PartNine onNext={onNext} />}
-          {content === 9 && <PartTen onNext={onNext} />}
+          {content === 1 && (
+            <PartTwo onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 2 && (
+            <PartThree onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 3 && (
+            <PartFive onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 4 && (
+            <PartFour onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+
+          {content === 5 && (
+            <PartSix onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 6 && (
+            <PartSeven onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 7 && (
+            <PartEight onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 8 && (
+            <PartNine onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
+          {content === 9 && (
+            <PartTen onNext={onNext} onBack={goBack} values={requestValues} />
+          )}
         </GoogleReCaptchaProvider>
       </main>
     </>

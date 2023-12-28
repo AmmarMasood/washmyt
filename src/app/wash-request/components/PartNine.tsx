@@ -11,8 +11,8 @@ import { Input, message } from "antd";
 import { IOnboardingPageProps } from "./PartOne";
 
 export default function PartNine(props: IOnboardingPageProps) {
-  const { onNext } = props;
-  const [email, setEmail] = useState("");
+  const { onNext, onBack, values } = props;
+  const [email, setEmail] = useState(values?.customerEmail || "");
 
   const handleOnChange = (e: any) => {
     setEmail(e.target.value);
@@ -57,21 +57,30 @@ export default function PartNine(props: IOnboardingPageProps) {
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center  max-md:p-0 ">
             <h1 className="text-black text-2xl text-center mb-8">Your email</h1>
             <Input
+              value={email}
               placeholder="Type your answer here"
               onChange={handleOnChange}
               className="p-4 mb-6 w-[500px] max-md:w-[250px] rounded-xl border-1 border-black"
             />
+            <div className="flex items-center pt-12 mb-14">
+              <p
+                onClick={onBack}
+                className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+              >
+                &#8592; Go Back
+              </p>
 
-            <Button
-              onClick={onNextClick}
-              disabled={false}
-              className="mt-16 !w-[150px] mb-14"
-            >
-              <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
-                <Image src={Tick} alt="tick" />
-              </span>
-            </Button>
+              <Button
+                onClick={onNextClick}
+                disabled={false}
+                className="mt-16 !w-[150px] mb-14 !text-white"
+              >
+                <span className="flex items-center justify-center">
+                  <label className="mr-4 !text-white">OK</label>
+                  <Image src={Tick} alt="tick" />
+                </span>
+              </Button>
+            </div>
           </div>
         </>
       </Card>

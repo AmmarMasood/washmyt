@@ -62,9 +62,13 @@ function OnboardUser() {
     return true;
   };
 
-  const initProfile = async (email: string, userId: string) => {
+  const initProfile = async (
+    email: string,
+    userId: string,
+    photoUrl?: string
+  ) => {
     try {
-      await initializeUserProfile(userId, email);
+      await initializeUserProfile(userId, email, photoUrl);
     } catch (err) {
       setInputValues((prev) => ({
         ...prev,
@@ -97,11 +101,10 @@ function OnboardUser() {
     setInputValues((prev) => ({ ...prev, loading: true }));
     try {
       const res = await googleSignIn();
-      await initProfile(res.user.email, res.user.uid);
+      await initProfile(res.user.email, res.user.uid, res.user.photoURL);
       await setToken(res.user.accessToken);
       router.push("/onboard-user/getting-started");
     } catch (error: any) {
-      console.log("cehcking error ===>", error);
       const err = mapAuthCodeToMessage(error?.message as any);
       setInputValues((prev) => ({ ...prev, error: err }));
     }
@@ -159,6 +162,7 @@ function OnboardUser() {
             <Button
               onClick={handleEmailPasswordSignup}
               disabled={inputValues.loading}
+              className="!text-white"
             >
               Sign Up
             </Button>

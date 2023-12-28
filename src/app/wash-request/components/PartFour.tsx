@@ -21,9 +21,9 @@ dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
 export default function PartFour(props: IOnboardingPageProps) {
-  const { onNext } = props;
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const { onNext, onBack, values } = props;
+  const [date, setDate] = useState(values?.washD || "");
+  const [time, setTime] = useState(values?.washT || "");
 
   const handleDateChange = (e: any) => {
     setDate(e);
@@ -54,18 +54,24 @@ export default function PartFour(props: IOnboardingPageProps) {
     if (verifyFields()) {
       onNext({
         washDateAndTimeUTC: joinDateAndTime(date, time),
+        washD: date,
+        washT: time,
       });
     }
   };
 
   return (
     <div className="max-md:w-full max-md:mt-10 ">
-      <StepperBar current={3} total={10} />
+      <StepperBar current={4} total={10} />
       <Card className="p-12 w-[1300px] mt-12 max-md:w-full">
         <>
           <div className="flex items-center justify-between mt-4">
             {/* <Image src={WeatherPart} alt="weather" /> */}
-            <Weather />
+            <Weather
+              lat={JSON.parse(values?.address).geometry.location.lat}
+              lng={JSON.parse(values?.address).geometry.location.lng}
+              time={dayjs(date).unix()}
+            />
             <Image src={LogoIcon} alt="washmyt" />
           </div>
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center  max-md:p-0 ">
@@ -189,16 +195,24 @@ export default function PartFour(props: IOnboardingPageProps) {
                 /> */}
               </div>
             </div>
-            <Button
-              onClick={onNextClick}
-              disabled={false}
-              className="mt-16 !w-[150px] mb-14"
-            >
-              <span className="flex items-center justify-center">
-                <label className="mr-4">OK</label>
-                <Image src={Tick} alt="tick" />
-              </span>
-            </Button>
+            <div className="flex items-center pt-12 mb-14">
+              <p
+                onClick={onBack}
+                className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+              >
+                &#8592; Go Back
+              </p>
+              <Button
+                onClick={onNextClick}
+                disabled={false}
+                className="mt-16 !w-[150px] mb-14 !text-white"
+              >
+                <span className="flex items-center justify-center">
+                  <label className="mr-4 !text-white">OK</label>
+                  <Image src={Tick} alt="tick" />
+                </span>
+              </Button>
+            </div>
           </div>
         </>
       </Card>

@@ -14,16 +14,15 @@ import Loading from "@/app/components/Loading";
 import axiosApiInstance from "@/app/utils/axiosClient";
 
 export default function PartTen(props: IOnboardingPageProps) {
-  const { onNext } = props;
+  const { onNext, onBack, values } = props;
   const [loading, setLoading] = useState(false);
   const [extension, setExtension] = useState("+1");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(values?.customerPhoneNumber || "");
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleReCaptchaVerify = useCallback(async () => {
     setLoading(true);
     if (!executeRecaptcha) {
-      console.log("Execute recaptcha not yet available");
       return;
     }
     try {
@@ -88,22 +87,30 @@ export default function PartTen(props: IOnboardingPageProps) {
                   className="p-4 mb-6 rounded-xl border-1 border-black mr-4"
                 />
                 <Input
+                  value={phone}
                   placeholder="Type your answer here"
                   type="number"
                   onChange={handleOnChange}
                   className="p-4 mb-6 w-[500px] max-md:w-[250px] rounded-xl border-1 border-black"
                 />
               </div>
-
-              <Button
-                disabled={phone.length === 0}
-                onClick={handleReCaptchaVerify}
-                className="mt-16 !w-fit mb-14 px-4"
-              >
-                <span className="flex items-center justify-center">
-                  <label>Submit Wash Request</label>
-                </span>
-              </Button>
+              <div className="flex items-center pt-12 mb-14">
+                <p
+                  onClick={onBack}
+                  className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+                >
+                  &#8592; Go Back
+                </p>
+                <Button
+                  disabled={phone.length === 0}
+                  onClick={onNextClick}
+                  className="mt-16 !w-fit mb-14 px-4 !text-white"
+                >
+                  <span className="flex items-center justify-center">
+                    <label className="!text-white">Submit Wash Request</label>
+                  </span>
+                </Button>
+              </div>
             </div>
           </>
         </Card>

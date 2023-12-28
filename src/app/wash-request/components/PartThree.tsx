@@ -16,8 +16,9 @@ import { modelsData } from "@/app/utils/static-data";
 import Checkbox from "@/app/components/Checkbox";
 
 export default function PartThree(props: IOnboardingPageProps) {
-  const { onNext } = props;
+  const { onNext, onBack, values } = props;
   const params = useSearchParams();
+  const [open, setOpen] = useState(true);
   const [packageType, setPackageType] = useState(null);
   const [packageInfo, setPackageInfo] = useState<any>({});
   const [loading, setLoading] = useState(false);
@@ -68,6 +69,8 @@ export default function PartThree(props: IOnboardingPageProps) {
 
   useEffect(() => {
     getPackages();
+    setPackageType(values?.packageId);
+    setSnow(values?.snowPackage);
   }, []);
 
   const onNextClick = () => {
@@ -104,12 +107,14 @@ export default function PartThree(props: IOnboardingPageProps) {
                 placeholder="Search for option"
                 listHeight={350}
                 placement="bottomRight"
-                open={true}
+                value={packageType}
+                open={open}
                 onChange={(value) => {
                   setPackageType(value);
                   setPackageInfo(
                     options.find((option: any) => option.id === value)
                   );
+                  // setOpen(false);
                 }}
                 dropdownStyle={{
                   padding: "10px",
@@ -129,7 +134,7 @@ export default function PartThree(props: IOnboardingPageProps) {
                   value: option.id,
                   label: (
                     <p className="!whitespace-normal text-lg mb-4">
-                      {`${option.description} for $ ${option.price}`}
+                      {`${option.description} for $${option.price}`}
                     </p>
                   ),
                 }))}
@@ -142,17 +147,24 @@ export default function PartThree(props: IOnboardingPageProps) {
                   onChange={(e) => setSnow(e.target.checked)}
                   className="-ml-6"
                 />
-
-                <Button
-                  disabled={false}
-                  onClick={onNextClick}
-                  className=" !w-[150px] mb-14 mt-4"
-                >
-                  <span className="flex items-center justify-center">
-                    <label className="mr-4">OK</label>
-                    <Image src={Tick} alt="tick" />
-                  </span>
-                </Button>
+                <div className="flex items-center pt-12 mb-14">
+                  <p
+                    onClick={onBack}
+                    className="text-primary-color text-xs mr-6 cursor-pointer"
+                  >
+                    &#8592; Go Back
+                  </p>
+                  <Button
+                    disabled={false}
+                    onClick={onNextClick}
+                    className=" !w-[150px] !text-white"
+                  >
+                    <span className="flex items-center justify-center">
+                      <label className="mr-4 !text-white">OK</label>
+                      <Image src={Tick} alt="tick" />
+                    </span>
+                  </Button>
+                </div>
               </div>
             </div>
           </>

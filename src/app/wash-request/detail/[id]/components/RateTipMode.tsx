@@ -123,7 +123,7 @@ function RateTipMode({ show, onClose, onSave, setLoading, customer }: any) {
           </div>
           <Button
             onClick={handleStripeConfig}
-            className="text-white text-sm font-semibold bg-primary-color w-full mt-4"
+            className="!text-white text-sm font-semibold bg-primary-color w-full mt-4"
             disabled={false}
           >
             Done

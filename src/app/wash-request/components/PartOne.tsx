@@ -12,6 +12,8 @@ import { modelsData } from "@/app/utils/static-data";
 import { useSearchParams, useRouter } from "next/navigation";
 export interface IOnboardingPageProps {
   onNext: (values: any, force?: any) => void;
+  onBack?: () => void;
+  values?: any;
   final?: boolean;
 }
 export default function PartOne(props: IOnboardingPageProps) {
@@ -82,7 +84,7 @@ export default function PartOne(props: IOnboardingPageProps) {
             <Button
               disabled={false}
               onClick={onNextClick}
-              className="mt-20 !w-[150px] mb-14"
+              className="mt-20 !w-[150px] mb-14 !text-white"
             >
               <span className="flex items-center justify-center">
                 <label className="mr-4 !text-white">OK</label>

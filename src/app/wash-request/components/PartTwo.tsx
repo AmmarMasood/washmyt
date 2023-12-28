@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Button from "../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
@@ -10,6 +10,8 @@ import StepperBar from "@/app/components/StepperBar";
 import Tick from "../../../../public/imgs/tick.svg";
 import { IOnboardingPageProps } from "./PartOne";
 import { message } from "antd";
+import { modelsData } from "@/app/utils/static-data";
+import { useSearchParams } from "next/navigation";
 //
 const options = [
   {
@@ -39,8 +41,20 @@ const options = [
 ];
 
 export default function PartTwo(props: IOnboardingPageProps) {
-  const { onNext } = props;
-  const [color, setColor] = useState("black");
+  const { onNext, onBack, values } = props;
+  const params = useSearchParams();
+  const [color, setColor] = useState(values?.color || "black");
+  const [selectedModel, setSelectedModel] = useState<any>();
+  const [models, setModels] = useState(modelsData);
+
+  useEffect(() => {
+    const model = params.get("model");
+    const myModel = modelsData.filter((f) => f.id === model);
+    if (model && myModel.length > 0) {
+      setSelectedModel(myModel[0] as any);
+    } else {
+    }
+  }, []);
 
   const verifyFields = () => {
     if (!color) {
@@ -68,7 +82,7 @@ export default function PartTwo(props: IOnboardingPageProps) {
           </div>
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0 ">
             <h1 className="text-black text-2xl text-center mb-16 font-semibold">
-              Select the color of your Model X
+              Select the color of your {selectedModel?.name}
             </h1>
             <div>
               {options.map((option, index) => (
@@ -86,17 +100,24 @@ export default function PartTwo(props: IOnboardingPageProps) {
                 </div>
               ))}
             </div>
-
-            <Button
-              disabled={false}
-              onClick={onNextClick}
-              className="mt-16 !w-[150px] mb-14"
-            >
-              <span className="flex items-center justify-center">
-                <label className="mr-4 !text-white">OK</label>
-                <Image src={Tick} alt="tick" />
-              </span>
-            </Button>
+            <div className="flex items-center">
+              <p
+                onClick={onBack}
+                className="text-primary-color text-xs mr-6 mt-3 cursor-pointer"
+              >
+                &#8592; Go Back
+              </p>
+              <Button
+                disabled={false}
+                onClick={onNextClick}
+                className="mt-16 !w-[150px] mb-14 !text-white"
+              >
+                <span className="flex items-center justify-center">
+                  <label className="mr-4 !text-white">OK</label>
+                  <Image src={Tick} alt="tick" />
+                </span>
+              </Button>
+            </div>
           </div>
         </>
       </Card>

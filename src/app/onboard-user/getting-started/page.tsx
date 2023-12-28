@@ -10,14 +10,28 @@ import FifthPart from "./components/FifthPart";
 import Image from "next/image";
 import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import { withAuth } from "@/app/hoc/withAuth";
-import { message } from "antd";
+import { Avatar, message } from "antd";
 import { UserAuth } from "@/app/context/AuthContext";
 import Loading from "@/app/components/Loading";
+import { UserOutlined } from "@ant-design/icons";
 
 function OnboardUser() {
   const [content, setContent] = useState(0);
   const [messageApi, contextHolder] = message.useMessage();
-  const { loading } = UserAuth() as any;
+  const { loading, profile } = UserAuth() as any;
+
+  function getGreeting() {
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+
+    if (currentHour >= 5 && currentHour < 12) {
+      return "Good morning!";
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return "Good afternoon!";
+    } else {
+      return "Good evening!";
+    }
+  }
 
   const onNext = () => {
     if (content < 5) {
@@ -37,8 +51,22 @@ function OnboardUser() {
       <Loading show={loading} />
       <main className="flex min-h-screen flex-col items-center justify-center bg-secondary-color px-24 py-12 relative max-md:p-2">
         {content !== 0 && (
-          <div className="mb-4 flex items-center justify-start w-full">
+          <div className="mb-4 flex items-center justify-between w-full">
             <Image src={LogoIcon} alt="washmyt" />
+            {
+              <div className="flex items-center">
+                <Avatar
+                  src={profile?.profileImage}
+                  icon={<UserOutlined />}
+                  className="mr-2"
+                  size="large"
+                />
+                <div className="flex flex-col">
+                  <span className="text-black">{getGreeting()} 👋</span>
+                  <span className="text-black font-bold">{profile?.email}</span>
+                </div>
+              </div>
+            }
           </div>
         )}
         {content === 0 && <StartOnboarding onNext={onNext} />}
