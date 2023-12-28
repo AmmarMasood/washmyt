@@ -157,8 +157,8 @@ function WashEdit(props: ICustomerDetailProps) {
                       width: 350,
                     }}
                   >
-                    {options.map((option: any) => (
-                      <Select.Option value={option.id}>
+                    {options.map((option: any, key: number) => (
+                      <Select.Option value={option.id} key={key}>
                         {`${option.name} $ ${option.price}`}
                       </Select.Option>
                     ))}
