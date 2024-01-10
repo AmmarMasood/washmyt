@@ -41,7 +41,13 @@ const CustomCalender = (props: any) => {
     return (
       <>
         {listData.map((item: any, key: number) => (
-          <Link href={`/user/wash-detail/${item.key}`} key={key}>
+          <div
+            onClick={() => props.onClickRequest(item)}
+            key={key}
+            style={{
+              cursor: "pointer",
+            }}
+          >
             <div className={key === 0 && listData.length !== 1 ? "mb-5" : ""}>
               <p className="font-bold text-base mb-2">
                 {"Wash appointment for " + item.fullCustomer.name}
@@ -54,7 +60,7 @@ const CustomCalender = (props: any) => {
                 <span className="text-secondary-gray text-sm">{item.time}</span>
               </p>
             </div>
-          </Link>
+          </div>
         ))}
       </>
     );

@@ -116,6 +116,7 @@ export const normalizeWashRequestForCalendar = (mine: any[]) => {
       fullCustomer: r.customer,
       fullPackage: r.package,
       dotColor: `#${randomColor()}`,
+      originalObject: r,
     });
   });
 

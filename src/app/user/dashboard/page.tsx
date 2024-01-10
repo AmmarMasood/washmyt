@@ -118,14 +118,6 @@ function Page() {
               <Button
                 type="link"
                 size="large"
-                onClick={() => router.push(`/user/wash-detail/${rowIndex.id}`)}
-              >
-                Open
-              </Button>
-              <br />
-              <Button
-                type="link"
-                size="large"
                 onClick={() => {
                   onClickWashDetail(rowIndex);
                 }}

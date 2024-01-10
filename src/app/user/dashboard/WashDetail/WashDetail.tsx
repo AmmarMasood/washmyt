@@ -101,7 +101,7 @@ function WashDetail(props: IWashDetailProps) {
               />
             )}
             <p className="font-semibold my-4">
-              {modelInfo?.name} - {washDetail.color}
+              {modelInfo?.name} - {washDetail?.color}
             </p>
 
             <Image src={modelInfo?.img} alt="washmyt" height={"150"} />

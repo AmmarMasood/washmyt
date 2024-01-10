@@ -21,9 +21,12 @@ import { message } from "antd";
 import Loading from "@/app/components/Loading";
 import { modelsData } from "@/app/utils/static-data";
 import { UserAuth } from "@/app/context/AuthContext";
+import WashDetail from "../dashboard/WashDetail/WashDetail";
 
 function Page() {
   const { superAdmin, profile } = UserAuth() as any;
+  const [showWashDetailModal, setShowWashDetailModal] = useState(false);
+  const [washDetail, setWashDetail] = useState({});
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>([]);
@@ -48,10 +51,35 @@ function Page() {
       getData();
     }
   }, [profile]);
+
+  const onClickRequest = (washDetail: any) => {
+    if (superAdmin === true) {
+      console.log(washDetail.originalObject);
+      setWashDetail(washDetail.originalObject);
+      setShowWashDetailModal(true);
+    } else {
+      router.push(`/user/wash-detail/${washDetail.key}`);
+    }
+  };
+
   return (
     <>
       <Loading show={loading} />
       <div className="min-h-screen  bg-secondary-color p-6 relative">
+        {superAdmin === true && (
+          <WashDetail
+            show={showWashDetailModal}
+            onClose={() => setShowWashDetailModal(false)}
+            onConfirm={() => {
+              getData();
+              setTimeout(() => {
+                setShowWashDetailModal(false);
+              }, 1000);
+            }}
+            washDetail={washDetail}
+            setLoading={setLoading}
+          />
+        )}
         <Layout currentOption={superAdmin === false ? 0 : 3}>
           <div
             style={{
@@ -90,7 +118,7 @@ function Page() {
               <div className="flex items-center justify-end mt-2 mb-2">
                 <Image src={LogoIcon} alt="washmyt" />
               </div>
-              <CustomCalender data={data} />
+              <CustomCalender data={data} onClickRequest={onClickRequest} />
             </Card>
           </div>
         </Layout>

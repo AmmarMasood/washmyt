@@ -126,9 +126,9 @@ function WashEdit(props: ICustomerDetailProps) {
   };
 
   useEffect(() => {
-    form.setFieldsValue(washDetail);
-    setBusinessAddress(washDetail.address);
     if (washDetail && washDetail.selectedModel && !options.length) {
+      form.setFieldsValue(washDetail);
+      setBusinessAddress(washDetail?.address);
       getWashPros();
       getPackages();
       setTime(dayjs(washDetail?.washDateAndTimeUTC).format("H:mm:ss"));
