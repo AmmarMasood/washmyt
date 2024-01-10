@@ -50,9 +50,10 @@ function Weather({ lat, lng, time }: any) {
     fetchWeather();
   }, []);
 
-  const toCelcius = (temp: number) => {
-    return Math.round(temp - 273.15);
+  const toFahrenheit = (temp: number) => {
+    return Math.round((temp - 273.15) * (9 / 5) + 32);
   };
+
   return loading === true ? (
     <span className="text-sm text-primary-gray">Loading weather...</span>
   ) : (
@@ -61,7 +62,7 @@ function Weather({ lat, lng, time }: any) {
         <Image src={icon} alt="weather" width={60} height={60} />
         <div>
           <p className="text-primary-gray text-md font-bold">
-            {toCelcius(weather?.temp)} °
+            {toFahrenheit(weather?.temp)} °F
           </p>
           <p className="text-primary-gray text-sm font-bold">
             {weather?.weather[0]?.main}

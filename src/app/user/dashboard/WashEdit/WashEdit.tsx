@@ -4,8 +4,6 @@ import {
   Button,
   DatePicker,
   Form,
-  Input,
-  InputNumber,
   Select,
   TimePicker,
   message,
@@ -23,6 +21,7 @@ import { modelsData } from "@/app/utils/static-data";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { WashStatus } from "@/app/types/interface";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -47,6 +46,7 @@ function WashEdit(props: ICustomerDetailProps) {
   const { show, onClose, onConfirm, washDetail, setLoading } = props;
 
   const [options, setOptions] = useState<any>([]);
+  const [washProps, setWashProps] = useState<any>([]);
   const [businessAddress, setBusinessAddress] = useState<any>({});
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -86,6 +86,36 @@ function WashEdit(props: ICustomerDetailProps) {
     }
   };
 
+  const getWashPros = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosApiInstance.get("/api/admin/wash-pros/all");
+      setWashProps(response.data.washpros);
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to get wash pros");
+    }
+    setLoading(false);
+  };
+
+  const addWashProToWashRequest = async (washId: string, washerId: string) => {
+    setLoading(true);
+    try {
+      await axiosApiInstance.post(`/api/admin/wash-pros/accept`, {
+        washId,
+        washerId,
+      });
+      message.success("Wash updated successfully");
+      onConfirm();
+    } catch (error) {
+      console.log(error);
+      message.error(
+        "Something went wrong. Unable to add washer to washRequst Please try again."
+      );
+    }
+    setLoading(false);
+  };
+
   const joinDateAndTime = (date: any, time: any) => {
     const d = dayjs(date.$d).format("DD-MM-YYYY");
     const t = dayjs(time.$d).format("H:mm:ss");
@@ -99,6 +129,7 @@ function WashEdit(props: ICustomerDetailProps) {
     form.setFieldsValue(washDetail);
     setBusinessAddress(washDetail.address);
     if (washDetail && washDetail.selectedModel && !options.length) {
+      getWashPros();
       getPackages();
       setTime(dayjs(washDetail?.washDateAndTimeUTC).format("H:mm:ss"));
       setDate(dayjs(washDetail?.washDateAndTimeUTC).format("DD-MM-YYYY"));
@@ -108,6 +139,11 @@ function WashEdit(props: ICustomerDetailProps) {
   const onFinishForm = async (values: any) => {
     values.address = businessAddress;
     values.washDateAndTimeUTC = joinDateAndTime(date, time);
+
+    if (values.washerId) {
+      await addWashProToWashRequest(washDetail.id, values.washerId);
+    }
+    delete values.washerId;
 
     setLoading(true);
     try {
@@ -160,6 +196,25 @@ function WashEdit(props: ICustomerDetailProps) {
                     {options.map((option: any, key: number) => (
                       <Select.Option value={option.id} key={key}>
                         {`${option.name} $ ${option.price}`}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className={rowClassName}>
+              <p className={keyClassName}>Wash Pro</p>
+              <div className={valueClassName}>
+                <Form.Item name="washerId">
+                  <Select
+                    style={{
+                      width: 350,
+                    }}
+                  >
+                    {washProps.map((option: any, key: number) => (
+                      <Select.Option value={option.userId} key={key}>
+                        {`${option.name} - ${option.email}`}
                       </Select.Option>
                     ))}
                   </Select>
@@ -222,7 +277,7 @@ function WashEdit(props: ICustomerDetailProps) {
                         };
                       }
                     }
-                    // hideDisabledOptions={true}
+                    hideDisabledOptions={true}
                     changeOnBlur={true}
                     suffixIcon={false}
                     onChange={(e: any) => setTime(e)}

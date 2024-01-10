@@ -56,6 +56,10 @@ export default function PartTen(props: IOnboardingPageProps) {
   };
 
   const onNextClick = () => {
+    if (!verifyFields()) {
+      return;
+    }
+
     onNext(
       {
         customerPhoneNumber: phone,
@@ -103,7 +107,7 @@ export default function PartTen(props: IOnboardingPageProps) {
                 </p>
                 <Button
                   disabled={phone.length === 0}
-                  onClick={onNextClick}
+                  onClick={handleReCaptchaVerify}
                   className="mt-16 !w-fit mb-14 px-4 !text-white"
                 >
                   <span className="flex items-center justify-center">

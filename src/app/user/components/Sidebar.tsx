@@ -123,7 +123,10 @@ function Sidebar({ currentOption }: { currentOption: number }) {
                     {profile.name}
                   </span>
                   {superAdmin && (
-                    <Chip text="Admin" className="ml-6 !text-[10px]" />
+                    <Chip
+                      text="Admin"
+                      className="ml-6 !text-[10px] !text-white"
+                    />
                   )}
                 </div>
               </Link>

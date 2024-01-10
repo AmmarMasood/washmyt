@@ -86,10 +86,11 @@ export default function PartFour(props: IOnboardingPageProps) {
                 <DatePicker
                   size="large"
                   suffixIcon={false}
-                  format={"DD"}
-                  value={date ? dayjs(date, "D") : null}
+                  picker="month"
+                  format={"MM"}
+                  value={date ? dayjs(date, "MM") : null}
                   onChange={handleDateChange}
-                  placeholder="DD"
+                  placeholder="MM"
                   allowClear={false}
                   className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                 />
@@ -97,11 +98,10 @@ export default function PartFour(props: IOnboardingPageProps) {
                 <DatePicker
                   size="large"
                   suffixIcon={false}
-                  picker="month"
-                  format={"MM"}
-                  value={date ? dayjs(date, "MM") : null}
+                  format={"DD"}
+                  value={date ? dayjs(date, "D") : null}
                   onChange={handleDateChange}
-                  placeholder="MM"
+                  placeholder="DD"
                   allowClear={false}
                   className="p-5 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
                 />
@@ -144,7 +144,7 @@ export default function PartFour(props: IOnboardingPageProps) {
                       };
                     }
                   }
-                  // hideDisabledOptions={true}
+                  hideDisabledOptions={true}
                   changeOnBlur={true}
                   suffixIcon={false}
                   onChange={handleTime}

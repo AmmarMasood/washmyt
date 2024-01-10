@@ -152,7 +152,10 @@ function Page() {
             <NewCustomer
               show={showNewCustomer}
               onClose={() => setShowNewCustomer(false)}
-              onConfirm={() => setShowNewCustomer(false)}
+              onConfirm={() => {
+                setShowNewCustomer(false);
+                getWashProsData();
+              }}
             />
             <CustomerDetail
               show={showCustomerDetail}

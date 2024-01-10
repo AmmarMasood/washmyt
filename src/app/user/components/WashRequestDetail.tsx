@@ -100,7 +100,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
           <button
             onClick={props.onCompleteRequest}
             disabled={props.loading}
-            className="!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0"
+            className="!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white"
           >
             Start Wash
           </button>
@@ -112,7 +112,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
           <button
             onClick={onAcceptRequest}
             disabled={props.loading}
-            className="!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0"
+            className="!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white"
           >
             Accept
           </button>
@@ -384,7 +384,6 @@ function WashRequestDetail(props: IWashRequestDetail) {
                 </p>
               </div>
             )}
-          receivedAmount?: string; receivedTip?: string;
           {props.accessType === WashDetailAccessType.USER &&
             props.washStatus === WashStatus.COMPLETED &&
             props.paymentStatus === PaymentStatus.PAID &&

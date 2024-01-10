@@ -165,3 +165,56 @@ export async function DELETE(request: any) {
     );
   }
 }
+
+export async function POST(request: any) {
+  const userId = request.headers.get("userId");
+  const { email, name, phoneNumber, stripeId } = await request.json();
+  if (!userId) {
+    return NextResponse.json(
+      { message: "User id is required" },
+      { status: 400 }
+    );
+  }
+  const user = await prisma.userProfile.findUnique({
+    where: {
+      userId,
+    },
+  });
+
+  if (!user || user.role !== Role.ADMIN) {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
+
+  try {
+    const customerExist = await prisma.customer.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    console.log(customerExist, "customer exist");
+    if (customerExist) {
+      return NextResponse.json(
+        { message: "Email already exists" },
+        { status: 400 }
+      );
+    }
+
+    const customer = await prisma.customer.create({
+      data: {
+        email,
+        name,
+        phoneNumber,
+        stripeId,
+      },
+    });
+
+    return NextResponse.json(customer);
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 400 }
+    );
+  }
+}

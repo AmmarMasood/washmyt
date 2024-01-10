@@ -129,9 +129,9 @@ function Payment() {
     <>
       <Loading show={loading} />
 
-      <main className="flex min-h-screen flex-col items-center justify-center bg-secondary-color px-12 py-12 relative max-md:p-2">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-secondary-color px-12 py-12 relative max-md:p-2 ">
         {washInfo && (
-          <Card className="py-8 px-14 rounded-3xl w-full relative max-md:p-10">
+          <Card className="py-8 px-14 rounded-3xl w-full relative max-md:p-10 max-sm:p-4 max-sm:pt-10">
             <Image
               src={LogoIcon}
               alt="washmyt"
@@ -174,7 +174,7 @@ function Payment() {
                 <p className="text-black text-xl font-bold text-center"></p>
               )}
 
-              <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between w-[550px] mt-4">
+              <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between w-[550px] mt-4  max-sm:w-full">
                 <div className="flex max-md:flex-wrap">
                   <div className="w-[300px] mb-4">
                     <div>
@@ -265,7 +265,7 @@ function Payment() {
                       ? `We are committed to delivering a high-quality service every
                     time. If you&apos;re not happy with the results, we&apos;ll
                     make it right, guaranteed.`
-                      : "Please wait for the wash pros to accept your request. We will notify you once they accept."}
+                      : "Next Step: Please wait for a wash pro to accept your wash. We will notify you once they accept."}
                   </span>
                 </div>
               </div>

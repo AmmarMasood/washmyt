@@ -145,7 +145,12 @@ function Page() {
             <NewWashPro
               show={showNewWashPro}
               onClose={() => setShowNewWashPro(false)}
-              onConfirm={() => setShowNewWashPro(false)}
+              onConfirm={() => () => {
+                getWashProsData();
+                setTimeout(() => {
+                  setShowNewWashPro(false);
+                }, 1000);
+              }}
             />
             <WashProDetail
               show={showEditWashPro}

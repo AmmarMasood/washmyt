@@ -6,6 +6,7 @@ const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 export const sendSms = (phone: string, message: string) => {
+  console.log("phone", phone, message);
   client.messages
     .create({
       body: message,
@@ -16,6 +17,7 @@ export const sendSms = (phone: string, message: string) => {
       console.log("message", message);
     })
     .catch((err) => {
+      console.log("error", phone);
       console.log("error", err);
     });
 };

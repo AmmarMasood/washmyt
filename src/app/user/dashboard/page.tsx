@@ -174,7 +174,11 @@ function Page() {
             <NewWash
               show={showNewWashModal}
               onClose={() => setShowNewWashModal(false)}
-              onConfirm={() => setShowNewWashModal(false)}
+              onConfirm={() => {
+                setShowNewWashModal(false);
+                getData();
+              }}
+              setLoading={setLoading}
             />
             <WashDetail
               show={showWashDetailModal}

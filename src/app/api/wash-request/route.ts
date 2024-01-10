@@ -90,13 +90,18 @@ export async function POST(request: any) {
       },
     });
     if (!customer) throw new Error("Customer not found");
+
     await findAndNotifyWasher(
       cords,
       location.formatted_address,
       customer?.name,
       request.id
     );
-    // await sendSms("+923327317911", "A Wash has been initiated by the you.");
+    await sendSms(
+      customer.phoneNumber,
+      "A Wash has been initiated by the you. Please click on the link to view details: https://washmyt.vercel.app/wash-request/payment?wash=" +
+        request.id
+    );
     return NextResponse.json({
       message: "Wash request created successfully",
       requestId: request.id,

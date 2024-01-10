@@ -100,7 +100,9 @@ function WashDetail(props: IWashDetailProps) {
                 time={washDetail?.washDateAndTimeUTC}
               />
             )}
-            <p className="font-semibold my-4">{modelInfo?.name}</p>
+            <p className="font-semibold my-4">
+              {modelInfo?.name} - {washDetail.color}
+            </p>
 
             <Image src={modelInfo?.img} alt="washmyt" height={"150"} />
           </div>
