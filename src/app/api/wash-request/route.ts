@@ -16,7 +16,7 @@ function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c;
+  const distance = R * c * 0.621371;
 
   return distance;
 }
@@ -58,7 +58,10 @@ const findAndNotifyWasher = async (
   cordsArray.forEach((washer) => {
     const distance = haversine(cords.lat, cords.lng, washer.lat, washer.lng);
     if (distance <= washer.serviceRadius) {
+      console.log("matched", cords, washer, distance, washer.serviceRadius);
       nearbyWashers.push(washer);
+    } else {
+      console.log("not matched", cords, washer, distance, washer.serviceRadius);
     }
   });
 
