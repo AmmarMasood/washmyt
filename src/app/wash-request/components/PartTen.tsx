@@ -40,7 +40,7 @@ export default function PartTen(props: IOnboardingPageProps) {
 
     setLoading(false);
     // Do whatever you want with the token
-  }, [executeRecaptcha]);
+  }, [executeRecaptcha, phone]);
 
   const handleOnChange = (e: any) => {
     setPhone(e.target.value);
