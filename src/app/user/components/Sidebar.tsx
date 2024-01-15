@@ -17,8 +17,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserOutlined } from "@ant-design/icons";
 import { UserAuth } from "@/app/context/AuthContext";
+import RightArrows from "../../../../public/imgs/icons8-double-right-48 (1).png";
 
-function Sidebar({ currentOption }: { currentOption: number }) {
+function Sidebar({
+  currentOption,
+  className,
+  showMobileButton,
+  mobileButtonOnClick,
+}: {
+  currentOption: number;
+  className?: string;
+  showMobileButton?: boolean;
+  mobileButtonOnClick?: () => void;
+}) {
   const { profile, logOut, superAdmin } = UserAuth() as any;
 
   const onLogout = () => {
@@ -91,7 +102,17 @@ function Sidebar({ currentOption }: { currentOption: number }) {
   };
 
   return (
-    <div className="w-[260px]">
+    <div className={`w-[260px] ${className}`}>
+      {showMobileButton && (
+        <div className="flex items-center justify-end absolute -right-10 top-0">
+          <button
+            className="p-2 bg-primary-color p-4"
+            onClick={mobileButtonOnClick}
+          >
+            <Image src={RightArrows} alt="click" height={20} />
+          </button>
+        </div>
+      )}
       <Image src={Logo} alt="washmyt" />
       {profile && (
         <div className="min-h-[600px] relative mt-8">

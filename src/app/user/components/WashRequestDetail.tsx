@@ -69,6 +69,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
   };
 
   const getUserButtons = () => {
+    if (!user) return;
     if (
       props.washStatus === WashStatus.ACCEPTED &&
       props.paymentStatus === PaymentStatus.UNPAID
@@ -146,8 +147,8 @@ function WashRequestDetail(props: IWashRequestDetail) {
   const getBottomBar = () => {
     if (props.accessType === WashDetailAccessType.USER) {
       return (
-        <div className="flex items-end justify-between">
-          <div className="flex items-center mt-6">
+        <div className="flex items-end justify-between max-md:flex-wrap">
+          <div className="flex items-center mt-6 ">
             <div className="mr-8">
               <p className="text-primary-color text-lg uppercase mb-4">
                 Customer Detail
@@ -237,6 +238,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
   };
 
   const showBeforeAndAfterContainer = () => {
+    if (!user) return;
     if (props.accessType === WashDetailAccessType.USER) {
       if (
         props.washStatus === WashStatus.ACCEPTED &&
@@ -299,7 +301,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
             </div>
           )}
       </div>
-      <div className="flex items-start mt-4">
+      <div className="flex items-start mt-4 max-md:flex-wrap">
         <div className="w-full mr-8">
           <div>
             <Weather
@@ -411,7 +413,6 @@ function WashRequestDetail(props: IWashRequestDetail) {
           {showBeforeAndAfterContainer()}
         </div>
       </div>
-
       <div className="mt-8">{getBottomBar()}</div>
     </Card>
   );

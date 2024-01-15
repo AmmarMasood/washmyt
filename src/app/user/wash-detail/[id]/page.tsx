@@ -146,7 +146,7 @@ function Page() {
   return (
     <>
       <Loading show={loading} />
-      <div className="min-h-screen  bg-secondary-color p-6 relative">
+      <div className="min-h-screen  bg-secondary-color p-6 relative max-md:p-0">
         <Layout currentOption={0}>
           {data && (
             <WashRequestDetail
