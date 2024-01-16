@@ -61,10 +61,14 @@ function Page() {
         `/api/user/wash-request/accept?id=${params.id}`
       );
       message.success("Request accepted successfully");
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      message.error("Unable to accept request");
+      message.info(
+        "You have accepted the request. We have notified the customer. Please wait for the customer to confirm the request."
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error: any) {
+      message.error(error?.response?.message || "Unable to accept request");
     }
     setLoading(false);
   };

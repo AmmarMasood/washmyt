@@ -302,7 +302,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
           )}
       </div>
       <div className="flex items-start mt-4 max-md:flex-wrap">
-        <div className="w-full mr-8">
+        <div className="w-full mr-8 max-md:mr-0">
           <div>
             <Weather
               lat={props.addressDetail.geometry.location.lat}

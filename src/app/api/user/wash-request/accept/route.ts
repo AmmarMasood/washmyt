@@ -1,4 +1,5 @@
 import { sendSms } from "@/app/lib/twilio";
+import { PaymentStatus } from "@/app/types/interface";
 import { PrismaClient, WashStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -10,10 +11,43 @@ export async function GET(request: any) {
   const id = url.searchParams.get("id");
 
   try {
+    // if wasj request is already accepted
+    const washRequest = await prisma.washRequest.findUnique({
+      where: {
+        id: id as string,
+      },
+    });
+
+    if (washRequest?.washStatus === WashStatus.ACCEPTED) {
+      return NextResponse.json(
+        { message: "Wash request is already accepted" },
+        { status: 400 }
+      );
+    }
+
+    // if wash request is already completed
+
+    if (washRequest?.washStatus === WashStatus.COMPLETED) {
+      return NextResponse.json(
+        { message: "Wash request is already completed" },
+        { status: 400 }
+      );
+    }
+
+    // if wash request is already cancelled
+
+    if (washRequest?.washStatus === WashStatus.CANCELLED) {
+      return NextResponse.json(
+        { message: "Wash request is already cancelled" },
+        { status: 400 }
+      );
+    }
+
     const r = await prisma.washRequest.update({
       where: {
         id: id as string,
         washStatus: WashStatus.CREATED,
+        paymentStatus: PaymentStatus.UNPAID,
       },
       data: {
         washStatus: WashStatus.ACCEPTED,
