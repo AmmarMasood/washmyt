@@ -149,4 +149,4 @@ function WashRequest() {
   );
 }
 
-export default withoutAuth(WashRequest);
+export default WashRequest;

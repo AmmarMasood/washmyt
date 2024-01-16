@@ -277,7 +277,7 @@ function Payment() {
   );
 }
 
-export default withoutAuth(Payment);
+export default Payment;
 
 // {washInfo.paymentCompleted ? (
 //   <p className="text-black text-xl font-bold text-center">

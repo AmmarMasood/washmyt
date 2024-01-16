@@ -102,8 +102,7 @@ export async function POST(request: any) {
     );
     await sendSms(
       customer.phoneNumber,
-      "A Wash has been initiated by the you. Please click on the link to view details: https://washmyt.vercel.app/wash-request/payment?wash=" +
-        request.id
+      `A Wash has been initiated by the you. Please click on the link to view details: \n\nhttps://washmyt.vercel.app/wash-request/payment?wash=${request.id}`
     );
     return NextResponse.json({
       message: "Wash request created successfully",
