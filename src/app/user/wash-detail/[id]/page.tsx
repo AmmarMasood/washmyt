@@ -66,7 +66,7 @@ function Page() {
       );
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 5000);
     } catch (error: any) {
       message.error(error?.response?.message || "Unable to accept request");
     }
