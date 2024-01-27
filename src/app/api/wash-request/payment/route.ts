@@ -13,6 +13,11 @@ export async function POST(request: any) {
       expand: ["latest_charge"],
     });
 
+    //  const invoice = await stripe.invoices.create({
+
+    //   });
+
+    //   console.log("confirmPaymentIntent", confirmPaymentIntent);
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
     });

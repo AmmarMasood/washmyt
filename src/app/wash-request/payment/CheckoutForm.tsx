@@ -12,6 +12,7 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { message } from "antd";
+import { useRouter } from "next/navigation";
 
 import React, { useEffect, useRef, useState } from "react";
 
@@ -22,6 +23,7 @@ function CheckoutForm({
   couponApplied,
   couponInformation,
 }: any) {
+  const router = useRouter();
   const [isProcessing, setProcessing] = useState(false);
   const [showPaymentElement, setShowPaymentElement] = useState(true);
   const [couponCode, setCouponCode] = useState<any>("");
@@ -41,7 +43,7 @@ function CheckoutForm({
       return;
     }
     setProcessing(true);
-    const { error, paymentIntent } = await stripe.confirmPayment({
+    const { error, paymentIntent, ...t } = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
     });
@@ -51,6 +53,7 @@ function CheckoutForm({
       message.error("Unable to process payment");
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       // const invoie = await stripe.upda
+      // console.log("",paymentIntent, t);
       setSuccess(true);
       setShowPaymentElement(false);
       await onPaymentConfirmation(paymentIntent.id, paymentIntent.amount);
@@ -73,7 +76,9 @@ function CheckoutForm({
         `/api/wash-request/payment/complete?id=${id}`,
         b
       );
+
       message.success("Payment successful");
+      router.push(`/wash-request/detail/${id}`);
     } catch (error) {
       console.log(error);
       message.error("Unable to update wash request");

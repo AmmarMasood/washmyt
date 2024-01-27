@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/wash-request/reschedule/notify?secretKey=6489690879",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

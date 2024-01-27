@@ -18,6 +18,7 @@ import { storage } from "@/app/lib/firebase";
 import { WashDetailAccessType } from "@/app/types/interface";
 import { WashStatus } from "@prisma/client";
 import { convertFromCent } from "@/app/utils/helpers";
+import RescheduleModal from "../../components/RescheduleModal";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -27,6 +28,7 @@ const model = modelsData;
 function Page() {
   const { profile } = UserAuth() as any;
   const [loading, setLoading] = useState(false);
+  const [rescheduleModal, setRescheduleModal] = useState(false);
   const [data, setData] = useState<any>(null);
   const router = useRouter();
   const params = useParams();
@@ -62,7 +64,7 @@ function Page() {
       );
       message.success("Request accepted successfully");
       message.info(
-        "You have accepted the request. We have notified the customer. Please wait for the customer to confirm the request."
+        "We have notified the customer. Please wait for the customer to confirm the request."
       );
       setTimeout(() => {
         window.location.reload();
@@ -79,11 +81,26 @@ function Page() {
       await axiosApiInstance.get(
         `/api/user/wash-request/complete?id=${params.id}`
       );
+      message.success("Completed successfully");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      message.error("Unable to complete request");
+    }
+    setLoading(false);
+  };
+
+  const onStartRequest = async () => {
+    setLoading(true);
+    try {
+      await axiosApiInstance.get(
+        `/api/user/wash-request/start?id=${params.id}`
+      );
       message.success("Started successfully");
       window.location.reload();
     } catch (error) {
       console.log(error);
-      message.error("Unable to accept request");
+      message.error("Unable to start request");
     }
     setLoading(false);
   };
@@ -141,6 +158,26 @@ function Page() {
     setLoading(false);
   };
 
+  const onCreateRescheduleRequest = async (date: any) => {
+    setLoading(true);
+    try {
+      await axiosApiInstance.post(
+        `/api/user/wash-request/reschedule/create?id=${params.id}`,
+        {
+          rescheduleDateAndTimeUTC: date,
+        }
+      );
+      message.success("Reschedule request created successfully");
+      setRescheduleModal(false);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+      message.error(
+        error.response.data.message || "Unable to create reschedule request"
+      );
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (params.id) {
       getData();
@@ -150,6 +187,13 @@ function Page() {
   return (
     <>
       <Loading show={loading} />
+      <RescheduleModal
+        open={rescheduleModal}
+        onClose={() => setRescheduleModal(false)}
+        onSubmit={(value: any) => {
+          onCreateRescheduleRequest(value);
+        }}
+      />
       <div className="min-h-screen  bg-secondary-color p-6 relative max-md:p-0">
         <Layout currentOption={0}>
           {data && (
@@ -168,6 +212,8 @@ function Page() {
               customerDetail={data.customer}
               onAcceptRequest={onAcceptRequest}
               onCompleteRequest={onCompleteRequest}
+              onStartRequest={onStartRequest}
+              openRescheduleModal={() => setRescheduleModal(true)}
               washerDetail={data.washer}
               washId={params.id as string}
               onUploadBeforeImage={uploadBeforeImage}

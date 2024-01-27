@@ -1,6 +1,10 @@
 import { sendSms } from "@/app/lib/twilio";
 import { PaymentStatus } from "@/app/types/interface";
-import { PrismaClient, WashStatus } from "@prisma/client";
+import {
+  PrismaClient,
+  RescheduleRequestStatus,
+  WashStatus,
+} from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -52,6 +56,16 @@ export async function GET(request: any) {
       data: {
         washStatus: WashStatus.ACCEPTED,
         washerId: userId,
+      },
+    });
+
+    await prisma.rescheduleRequest.updateMany({
+      where: {
+        washRequestId: r.id as string,
+        status: RescheduleRequestStatus.PENDING,
+      },
+      data: {
+        status: RescheduleRequestStatus.DISCARDED,
       },
     });
 

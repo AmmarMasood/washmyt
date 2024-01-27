@@ -69,6 +69,12 @@ function Page() {
   useEffect(() => {
     if (profile && superAdmin === true) {
       getData();
+    } else {
+      if (superAdmin === false) {
+        localStorage.removeItem("auth");
+
+        router.replace("/login");
+      }
     }
   }, [profile, timeFilter]);
   const onHide = () => {

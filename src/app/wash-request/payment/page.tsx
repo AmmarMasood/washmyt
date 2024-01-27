@@ -45,6 +45,7 @@ function Payment() {
       amount: parseFloat((price * 100).toFixed(2)), // in cents because of stripe
       customer: customer.stripeId,
     });
+    console.log("stripe secret", res.data);
     setStripeSecret(res.data.clientSecret);
   };
 

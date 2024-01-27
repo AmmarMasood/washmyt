@@ -41,6 +41,7 @@ model UserProfile {
   createdAt DateTime @default(now())
   primarySoapBrand String?
   washRequests WashRequest[]
+  resheduleRequests RescheduleRequest[]
 }
 
 
@@ -71,9 +72,23 @@ model Customer{
     stripeId String
 }
 
+
+model RescheduleRequest{
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    washRequestId String @db.ObjectId
+    washRequest WashRequest @relation(fields: [washRequestId], references: [id])
+    generatedBy String 
+    generatedByUser UserProfile @relation(fields: [generatedBy], references: [userId])
+    rescheduleDateAndTimeUTC DateTime
+    status RescheduleRequestStatus @default(PENDING)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @default(now())
+}
+
 enum WashStatus {
     ACCEPTED
     COMPLETED
+    STARTED
     CANCELLED
     CREATED
 }
@@ -82,6 +97,15 @@ enum PaymentStatus {
     PAID
     UNPAID
 }
+
+enum RescheduleRequestStatus {
+    ACCEPTED
+    PENDING
+    NOTIFIED
+    REJECTED
+    DISCARDED
+}
+
 model WashRequest{
       id String @id @default(auto()) @map("_id") @db.ObjectId
       packageId String @db.ObjectId
@@ -90,6 +114,7 @@ model WashRequest{
       selectedModel String
       washDateAndTimeUTC DateTime
       washCompletedTime DateTime?
+      washStartedTime DateTime?
       paymentStatus PaymentStatus @default(UNPAID)
       snowPackage Boolean @default(false)
       chargedAmount Float?
@@ -112,4 +137,5 @@ model WashRequest{
       customer Customer @relation(fields: [customerId], references: [id])
       washerId String?
       washer UserProfile? @relation(fields: [washerId], references: [userId])
+      resheduleRequests RescheduleRequest[]
 }

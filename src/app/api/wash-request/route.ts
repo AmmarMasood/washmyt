@@ -122,6 +122,11 @@ export async function GET(request: any) {
   const id = url.searchParams.get("id");
 
   try {
+    const p = await prisma.washRequest.findMany({
+      where: {
+        id: id as string,
+      },
+    });
     const r = await prisma.washRequest.findUnique({
       where: {
         id: id as string,
@@ -134,6 +139,7 @@ export async function GET(request: any) {
       },
     });
 
+    console.log(p);
     return NextResponse.json({
       ...r,
       couponInfo: r?.coupon,

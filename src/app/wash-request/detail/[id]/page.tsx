@@ -127,35 +127,35 @@ function Page() {
         customer={data?.customer}
       />
       <div className="min-h-screen  bg-secondary-color p-6 relative">
-        {data &&
-          data.washStatus === WashStatus.COMPLETED &&
-          data.paymentStatus === PaymentStatus.PAID && (
-            <WashRequestDetail
-              accessType={WashDetailAccessType.CUSTOMER}
-              modelDetail={model.filter((m) => m.id === data.selectedModel)[0]}
-              packageDetail={data.package}
-              snowPackage={data.snowPackage}
-              date={data.date}
-              time={data.time}
-              addressDetail={data.address}
-              electricalAvailable={data.electricalHookupAvailable}
-              waterAvailable={data.waterHookupAvailable}
-              payoutDetail={data.package.price}
-              customerDetail={data.customer}
-              washStatus={data.washStatus}
-              paymentStatus={data.paymentStatus}
-              tipPaid={data.tipPaid}
-              tipStripeId={data.tipStripeId}
-              tipAmount={data.tipAmount}
-              rating={data.rating}
-              washerDetail={data.washer}
-              washId={params.id as string}
-              beforePhoto={data.beforePhoto}
-              afterPhoto={data.afterPhoto}
-              onClickViewReceipt={onClickViewReceipt}
-              openRateAndTipModal={openRateAndTipModal}
-            />
-          )}
+        {data && (
+          // data.washStatus === WashStatus.COMPLETED &&
+          // data.paymentStatus === PaymentStatus.PAID &&
+          <WashRequestDetail
+            accessType={WashDetailAccessType.CUSTOMER}
+            modelDetail={model.filter((m) => m.id === data.selectedModel)[0]}
+            packageDetail={data.package}
+            snowPackage={data.snowPackage}
+            date={data.date}
+            time={data.time}
+            addressDetail={data.address}
+            electricalAvailable={data.electricalHookupAvailable}
+            waterAvailable={data.waterHookupAvailable}
+            payoutDetail={data.package.price}
+            customerDetail={data.customer}
+            washStatus={data.washStatus}
+            paymentStatus={data.paymentStatus}
+            tipPaid={data.tipPaid}
+            tipStripeId={data.tipStripeId}
+            tipAmount={data.tipAmount}
+            rating={data.rating}
+            washerDetail={data.washer}
+            washId={params.id as string}
+            beforePhoto={data.beforePhoto}
+            afterPhoto={data.afterPhoto}
+            onClickViewReceipt={onClickViewReceipt}
+            openRateAndTipModal={openRateAndTipModal}
+          />
+        )}
       </div>
     </>
   );

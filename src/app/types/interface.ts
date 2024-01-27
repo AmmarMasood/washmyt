@@ -14,6 +14,15 @@ export enum WashStatus {
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",
   CREATED = "CREATED",
+  STARTED = "STARTED",
+}
+
+export enum RescheduleRequestStatus {
+  ACCEPTED = "ACCEPTED",
+  PENDING = "PENDING",
+  NOTIFIED = "NOTIFIED",
+  REJECTED = "REJECTED",
+  DISCARDED = "DISCARDED",
 }
 
 export enum PaymentStatus {

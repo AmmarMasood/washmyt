@@ -54,9 +54,10 @@ export async function PUT(request: any) {
       `Hi ${customer.name}, great news! \n\nWe have received payment for your request.\n\nThanks for the confirmation!\n\nOnce the was is complete you can rate your wash experience here:\nhttps://washmyt.vercel.app/wash-request/detail/${r.id} \n\n- WashMyT Team`
     );
 
+    console.log("ammar", washer.phoneNumber);
     await sendSms(
-      washer.phoneNumber as string, //set customer number here later, rightnow hardcoding mine
-      `Hi ${washer.name}, great news! \n\nCustomer have completed the payment, please upload before and after images once wash is completed.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
+      washer.phoneNumber || "", //set customer number here later, rightnow hardcoding mine
+      `Hi ${washer.name}, great news! \n\nCustomer have completed the payment, please start the wash by clicking here.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
     );
 
     return NextResponse.json({ ...r });

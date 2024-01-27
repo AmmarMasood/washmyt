@@ -33,8 +33,11 @@ interface IWashRequestDetail {
   weatherDetail?: any;
   washerDetail?: any;
   loading?: boolean;
+  openRescheduleModal?: () => void;
   onAcceptRequest?: () => void;
+  onRescheduleRequest?: () => void;
   onCompleteRequest?: () => void;
+  onStartRequest?: () => void;
   onUploadBeforeImage?: (file: any) => void;
   onUploadAfterImage?: (file: any) => void;
   onClickViewReceipt?: () => void;
@@ -52,6 +55,7 @@ interface IWashRequestDetail {
   receivedAmount?: any;
   receivedTip?: any;
   snowPackage?: boolean;
+  rescheduleData?: any;
 }
 const rowStyle = "flex flex-row justify-between items-center mt-4";
 const labelStyle = "text-primary-gray text-base";
@@ -94,16 +98,34 @@ function WashRequestDetail(props: IWashRequestDetail) {
     } else if (
       props.washStatus === WashStatus.ACCEPTED &&
       props.paymentStatus === PaymentStatus.PAID &&
+      props.washerDetail.userId === user.uid &&
       props.isNotWashTime === false
     ) {
       return (
         <div className="mt-4">
           <button
-            onClick={props.onCompleteRequest}
-            disabled={props.loading}
-            className="!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white"
+            onClick={props.onStartRequest}
+            disabled={props.loading || props.beforePhoto === null}
+            className={`!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white `}
           >
             Start Wash
+          </button>
+        </div>
+      );
+    } else if (
+      props.washStatus === WashStatus.STARTED &&
+      props.paymentStatus === PaymentStatus.PAID &&
+      props.isNotWashTime === false &&
+      props.washerDetail.userId === user.uid
+    ) {
+      return (
+        <div className="mt-4">
+          <button
+            onClick={props.onCompleteRequest}
+            disabled={props.loading || props.afterPhoto === null}
+            className={`!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white `}
+          >
+            Complete Wash
           </button>
         </div>
       );
@@ -117,31 +139,47 @@ function WashRequestDetail(props: IWashRequestDetail) {
           >
             Accept
           </button>
+
+          <button
+            onClick={props.openRescheduleModal}
+            disabled={props.loading}
+            className="!bg-yellow-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white ml-2"
+          >
+            Reschedule
+          </button>
         </div>
       );
     }
   };
 
   const getCustomerButtons = () => {
-    if (
-      props.washStatus === WashStatus.COMPLETED &&
-      props.paymentStatus === PaymentStatus.PAID
-    ) {
-      return (
-        <div className="mt-4 flex items-center">
-          {props.rating && props.rating >= 0 ? (
-            ""
-          ) : (
-            <p
-              className="text-primary-color mr-10 text-md underline cursor-pointer"
-              onClick={props.openRateAndTipModal}
-            >
-              Rate & tip
-            </p>
+    return (
+      <div className="mt-4 flex items-center">
+        {props.washStatus === WashStatus.COMPLETED &&
+          props.paymentStatus === PaymentStatus.PAID && (
+            <>
+              {props.rating && props.rating >= 0 ? (
+                ""
+              ) : (
+                <p
+                  className="text-primary-color mr-10 text-md underline cursor-pointer"
+                  onClick={props.openRateAndTipModal}
+                >
+                  Rate & tip
+                </p>
+              )}
+            </>
           )}
-        </div>
-      );
-    }
+        {props.paymentStatus === PaymentStatus.PAID && (
+          <button
+            className="!bg-primary-color pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white"
+            onClick={props.onClickViewReceipt}
+          >
+            View Receipt
+          </button>
+        )}
+      </div>
+    );
   };
 
   const getBottomBar = () => {
@@ -241,7 +279,9 @@ function WashRequestDetail(props: IWashRequestDetail) {
     if (!user) return;
     if (props.accessType === WashDetailAccessType.USER) {
       if (
-        props.washStatus === WashStatus.ACCEPTED &&
+        (props.washStatus === WashStatus.ACCEPTED ||
+          props.washStatus === WashStatus.COMPLETED ||
+          props.washStatus === WashStatus.STARTED) &&
         props.paymentStatus === PaymentStatus.PAID &&
         props.washerDetail.userId === user.uid &&
         props.isNotWashTime === false
@@ -254,17 +294,22 @@ function WashRequestDetail(props: IWashRequestDetail) {
                 {props.beforePhoto && (
                   <Image src={props.beforePhoto} alt="before" fill />
                 )}
-                {props.onUploadBeforeImage && (
-                  <UploadImage label="" onUpload={props.onUploadBeforeImage} />
-                )}
+                {props.onUploadBeforeImage &&
+                  props.washStatus === WashStatus.ACCEPTED && (
+                    <UploadImage
+                      label=""
+                      onUpload={props.onUploadBeforeImage}
+                    />
+                  )}
               </div>
               <div className="bg-[#f5f5f5] p-3 rounded-sm h-52 w-full relative">
                 {props.afterPhoto && (
                   <Image src={props.afterPhoto} alt="before" fill />
                 )}
-                {props.onUploadAfterImage && (
-                  <UploadImage label="" onUpload={props.onUploadAfterImage} />
-                )}
+                {props.onUploadAfterImage &&
+                  props.washStatus === WashStatus.STARTED && (
+                    <UploadImage label="" onUpload={props.onUploadAfterImage} />
+                  )}
               </div>
             </div>
           </div>
@@ -301,6 +346,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
             </div>
           )}
       </div>
+
       <div className="flex items-start mt-4 max-md:flex-wrap">
         <div className="w-full mr-8 max-md:mr-0">
           <div>
@@ -411,8 +457,38 @@ function WashRequestDetail(props: IWashRequestDetail) {
               </div>
             )}
           {showBeforeAndAfterContainer()}
+          {props.rescheduleData && (
+            <div className="mt-8">
+              <h1 className="font-semibold text-xl text-black">
+                Reschedule Request Information
+              </h1>
+              <div className="w-full">
+                <div className={rowStyle}>
+                  <p className={labelStyle}>Created By</p>
+                  <p className={valueStyle}>
+                    {props.rescheduleData?.generatedBy?.businessName}
+                  </p>
+                </div>
+                <div className={rowStyle}>
+                  <p className={labelStyle}>Proposed Date</p>
+                  <p className={valueStyle}>{props.rescheduleData?.date}</p>
+                </div>
+                <div className={rowStyle}>
+                  <p className={labelStyle}>Proposed Time</p>
+                  <p className={valueStyle}>{props.rescheduleData?.time}</p>
+                </div>
+              </div>
+              <button
+                onClick={props.onRescheduleRequest}
+                className="!bg-primary-color pointer text-lg p-2 rounded-xl w-[180px] border-0 !text-white mt-8 float-right"
+              >
+                Accept Request
+              </button>
+            </div>
+          )}{" "}
         </div>
       </div>
+
       <div className="mt-8">{getBottomBar()}</div>
     </Card>
   );

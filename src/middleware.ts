@@ -34,6 +34,8 @@ export const config = {
     "/api/user/wash-request",
     "/api/user/wash-request/accept",
     "/api/user/wash-request/complete",
+    "/api/user/wash-request/start",
+    "/api/user/wash-request/reschedule/create",
     "/api/user/wash-request/upload-images",
     "/api/admin",
     "/api/admin/dashboard",
