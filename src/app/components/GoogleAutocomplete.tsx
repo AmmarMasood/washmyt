@@ -5,6 +5,7 @@ interface IGoogleAutocomplete {
   label: string;
   placeholder?: string;
   className?: string;
+  containerClassName?: string;
   style?: any;
 }
 
@@ -13,10 +14,11 @@ const GoogleAutocomplete = ({
   label,
   placeholder = "Business Address",
   className,
+  containerClassName,
   style,
 }: IGoogleAutocomplete) => {
   return (
-    <div className="mt-8">
+    <div className={`mt-8 ${containerClassName}`}>
       <label
         className={`block text-primary-black text-base font-semibold mb-1`}
       >

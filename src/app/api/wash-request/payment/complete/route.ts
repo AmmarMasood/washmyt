@@ -57,7 +57,7 @@ export async function PUT(request: any) {
     console.log("ammar", washer.phoneNumber);
     await sendSms(
       washer.phoneNumber || "", //set customer number here later, rightnow hardcoding mine
-      `Hi ${washer.name}, great news! \n\nCustomer have completed the payment, please start the wash by clicking here.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
+      `Hi ${washer.name}, great news! \n\ ${customer.name} has completed the payment, please use the following link to document the wash when you are ready to begin:\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`
     );
 
     return NextResponse.json({ ...r });

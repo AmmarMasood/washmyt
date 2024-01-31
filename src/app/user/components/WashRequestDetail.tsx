@@ -75,6 +75,19 @@ function WashRequestDetail(props: IWashRequestDetail) {
   const getUserButtons = () => {
     if (!user) return;
     if (
+      props?.washerDetail?.userId &&
+      props?.washerDetail?.userId !== user.uid
+    ) {
+      return (
+        <div className="mt-4">
+          <p className="text-primary-gray">
+            This request has been accepted by one of the washpro.{" "}
+          </p>
+        </div>
+      );
+    }
+
+    if (
       props.washStatus === WashStatus.ACCEPTED &&
       props.paymentStatus === PaymentStatus.UNPAID
     ) {
@@ -98,8 +111,9 @@ function WashRequestDetail(props: IWashRequestDetail) {
     } else if (
       props.washStatus === WashStatus.ACCEPTED &&
       props.paymentStatus === PaymentStatus.PAID &&
-      props.washerDetail.userId === user.uid &&
-      props.isNotWashTime === false
+      props.washerDetail.userId === user.uid
+      // &&
+      // props.isNotWashTime === false
     ) {
       return (
         <div className="mt-4">
@@ -115,7 +129,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
     } else if (
       props.washStatus === WashStatus.STARTED &&
       props.paymentStatus === PaymentStatus.PAID &&
-      props.isNotWashTime === false &&
+      // props.isNotWashTime === false &&
       props.washerDetail.userId === user.uid
     ) {
       return (
@@ -283,8 +297,9 @@ function WashRequestDetail(props: IWashRequestDetail) {
           props.washStatus === WashStatus.COMPLETED ||
           props.washStatus === WashStatus.STARTED) &&
         props.paymentStatus === PaymentStatus.PAID &&
-        props.washerDetail.userId === user.uid &&
-        props.isNotWashTime === false
+        props.washerDetail.userId === user.uid
+        // &&
+        // props.isNotWashTime === false
       ) {
         return (
           <div className="mt-6">
@@ -347,7 +362,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
           )}
       </div>
 
-      <div className="flex items-start mt-4 max-md:flex-wrap">
+      <div className="flex items-start mt-4 max-md:flex-wrap max-md:items-center max-md:justify-center max-md:w-full">
         <div className="w-full mr-8 max-md:mr-0">
           <div>
             <Weather
@@ -358,8 +373,9 @@ function WashRequestDetail(props: IWashRequestDetail) {
           <Image
             alt="Tesla"
             src={props.modelDetail.img}
-            width={350}
-            height={350}
+            width={300}
+            height={300}
+            className="mb-6 max-md:w-full"
           />
           <Map
             multipleCoordinates={[]}

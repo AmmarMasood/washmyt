@@ -20,7 +20,7 @@ import GreenCheckmark from "../../../../public/imgs/icons8-checkmark-30.png";
 
 const label = `text-md text-primary-gray mr-4`;
 const value = `text-md text-primary-black text-right`;
-const row = `flex items-center justify-between mb-4`;
+const row = `flex items-center justify-between mb-4 max-md:flex-col max-md:items-start max-md:justify-start max-md:mb-6`;
 const heading = `text-lg text-primary-color uppercase mb-4`;
 
 function Page() {
@@ -94,7 +94,7 @@ function Page() {
               Wash Pro Settings
             </h1>
             {profile && (
-              <div className="grid-cols-2 grid gap-14">
+              <div className="grid-cols-2 grid gap-14 max-md:grid-cols-1 max-md:grid-row-2">
                 {/*  */}
                 <div>
                   <div className="mb-14 flex items-center">
@@ -130,7 +130,8 @@ function Page() {
                         onSelect={(place) => {
                           setBusinessAddress(JSON.stringify(place || {}));
                         }}
-                        className="!w-[350px] -mt-8"
+                        className="!w-[350px] -mt-8 max-md:!w-[300px]"
+                        containerClassName="max-md:!mt-4"
                       />
                       {businessAddress &&
                         typeof businessAddress === "string" && (
@@ -158,7 +159,7 @@ function Page() {
                         placeholder="0 miles"
                         onChange={(e) => setRadius(e.target.value)}
                         value={radius}
-                        className="!w-[350px]"
+                        className="!w-[350px] max-md:!w-[300px]"
                       />
                     </p>
                   </div>
