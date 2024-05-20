@@ -42,6 +42,10 @@ model UserProfile {
   primarySoapBrand String?
   washRequests WashRequest[]
   resheduleRequests RescheduleRequest[]
+  stripeAccountId String? @unique
+  chargesEnabled Boolean @default(false)
+  transfersEnabled Boolean  @default(false)
+  stripeDetailsSubmitted Boolean @default(false)
 }
 
 

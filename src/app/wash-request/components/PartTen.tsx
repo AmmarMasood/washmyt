@@ -12,6 +12,8 @@ import { IOnboardingPageProps } from "./PartOne";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import Loading from "@/app/components/Loading";
 import axiosApiInstance from "@/app/utils/axiosClient";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 
 export default function PartTen(props: IOnboardingPageProps) {
   const { onNext, onBack, values } = props;
@@ -59,6 +61,9 @@ export default function PartTen(props: IOnboardingPageProps) {
     if (!verifyFields()) {
       return;
     }
+    posthog.capture(washRequestEvents.WASH_REQUEST_PHONE_ENTERED, {
+      customerPhoneNumber: phone,
+    });
 
     onNext(
       {
@@ -107,7 +112,8 @@ export default function PartTen(props: IOnboardingPageProps) {
                 </p>
                 <Button
                   disabled={phone.length === 0}
-                  onClick={handleReCaptchaVerify}
+                  // onClick={handleReCaptchaVerify}
+                  onClick={onNextClick}
                   className="mt-16 !w-fit mb-14 px-4 !text-white"
                 >
                   <span className="flex items-center justify-center">

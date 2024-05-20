@@ -12,6 +12,8 @@ import { IOnboardingPageProps } from "./PartOne";
 import { message } from "antd";
 import { modelsData } from "@/app/utils/static-data";
 import { useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 //
 const options = [
   {
@@ -66,6 +68,9 @@ export default function PartTwo(props: IOnboardingPageProps) {
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(washRequestEvents.WASH_REQUEST_COLOR_SELECTED, {
+        colorSelected: color,
+      });
       onNext({
         color,
       });

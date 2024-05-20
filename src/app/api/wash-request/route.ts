@@ -1,6 +1,8 @@
 import { sendSms } from "@/app/lib/twilio";
+import { washRequestInterations } from "@/app/providers/posthog_events";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import posthog from "posthog-js";
 
 const prisma = new PrismaClient();
 
@@ -66,6 +68,10 @@ const findAndNotifyWasher = async (
   });
 
   nearbyWashers.forEach(async (washer: any) => {
+    posthog.capture(washRequestInterations.WASH_PRO_SELECTED, {
+      requestId,
+      washer: washer.phoneNumber,
+    });
     await sendSms(
       washer.phoneNumber, //set washer number here later, rightnow hardcoding mine
       `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://washmyt.vercel.app/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`

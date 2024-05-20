@@ -19,6 +19,12 @@ import { WashDetailAccessType } from "@/app/types/interface";
 import { WashStatus } from "@prisma/client";
 import { convertFromCent } from "@/app/utils/helpers";
 import RescheduleModal from "../../components/RescheduleModal";
+import posthog from "posthog-js";
+import {
+  washRequestEvents,
+  washRequestInterations,
+} from "@/app/providers/posthog_events";
+import WasherChat from "@/app/components/WasherChat/WasherChat";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -26,7 +32,7 @@ dayjs.extend(customParseFormat);
 const model = modelsData;
 
 function Page() {
-  const { profile } = UserAuth() as any;
+  const { profile, user } = UserAuth() as any;
   const [loading, setLoading] = useState(false);
   const [rescheduleModal, setRescheduleModal] = useState(false);
   const [data, setData] = useState<any>(null);
@@ -62,6 +68,10 @@ function Page() {
       await axiosApiInstance.get(
         `/api/user/wash-request/accept?id=${params.id}`
       );
+      posthog.capture(washRequestInterations.WASH_ACCEPTED, {
+        acceptedBy: profile.userId,
+        requestId: params.id,
+      });
       message.success("Request accepted successfully");
       message.info(
         "We have notified the customer. Please wait for the customer to confirm the request."
@@ -81,6 +91,10 @@ function Page() {
       await axiosApiInstance.get(
         `/api/user/wash-request/complete?id=${params.id}`
       );
+      posthog.capture(washRequestInterations.WASH_COMPLETED, {
+        completedBy: profile.userId,
+        requestId: params.id,
+      });
       message.success("Completed successfully");
       window.location.reload();
     } catch (error) {
@@ -96,6 +110,10 @@ function Page() {
       await axiosApiInstance.get(
         `/api/user/wash-request/start?id=${params.id}`
       );
+      posthog.capture(washRequestInterations.WASH_STARTED, {
+        startedBy: profile.userId,
+        requestId: params.id,
+      });
       message.success("Started successfully");
       window.location.reload();
     } catch (error) {
@@ -167,6 +185,10 @@ function Page() {
           rescheduleDateAndTimeUTC: date,
         }
       );
+      posthog.capture(washRequestInterations.WASH_RESCHEDULE_INITIATED, {
+        initiatedBy: profile.userId,
+        requestId: params.id,
+      });
       message.success("Reschedule request created successfully");
       setRescheduleModal(false);
     } catch (error: any) {
@@ -183,6 +205,18 @@ function Page() {
       getData();
     }
   }, []);
+
+  // const initConversation = async () => {
+  //   await client.createConversation({
+  //     attributes: {},
+  //     friendlyName: "new conversation",
+  //     uniqueName: "new conversation",
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   initConversation();
+  // }, []);
 
   return (
     <>
@@ -227,6 +261,15 @@ function Page() {
               snowPackage={data.snowPackage}
             />
           )}
+
+          {data?.washStatus === WashStatus.ACCEPTED &&
+            data?.washer?.userId === user?.uid && (
+              <WasherChat
+                washId={params.id as string}
+                userEmail={data?.washer?.email}
+                customerName={data?.customer?.name}
+              />
+            )}
         </Layout>
       </div>
     </>

@@ -11,6 +11,8 @@ import { message } from "antd";
 import GoogleAutocomplete from "@/app/components/GoogleAutocomplete";
 import { IOnboardingPageProps } from "./PartOne";
 import GreenCheckmark from "../../../../public/imgs/icons8-checkmark-30.png";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 
 export default function PartFive(props: IOnboardingPageProps) {
   const { onNext, onBack, values } = props;
@@ -25,11 +27,15 @@ export default function PartFive(props: IOnboardingPageProps) {
       message.error("Please enter address.");
       return false;
     }
+
     return true;
   };
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(washRequestEvents.WASH_ADDRESS_ADDED, {
+        address,
+      });
       onNext({
         address,
       });

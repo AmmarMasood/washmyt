@@ -78,6 +78,7 @@ function Page() {
             }}
             washDetail={washDetail}
             setLoading={setLoading}
+            profile={profile}
           />
         )}
         <Layout currentOption={superAdmin === false ? 0 : 3}>

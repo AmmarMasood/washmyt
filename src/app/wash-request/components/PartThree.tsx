@@ -14,6 +14,8 @@ import { IOnboardingPageProps } from "./PartOne";
 import { useSearchParams } from "next/navigation";
 import { modelsData } from "@/app/utils/static-data";
 import Checkbox from "@/app/components/Checkbox";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 
 export default function PartThree(props: IOnboardingPageProps) {
   const { onNext, onBack, values } = props;
@@ -75,6 +77,10 @@ export default function PartThree(props: IOnboardingPageProps) {
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(washRequestEvents.WASH_REQUEST_PACKAGE_SELECTED, {
+        packageSelected: packageType,
+        snowPackage: snow,
+      });
       onNext({
         packageId: packageType,
         snowPackage: snow,

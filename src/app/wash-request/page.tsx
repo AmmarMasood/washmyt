@@ -18,6 +18,8 @@ import Loading from "../components/Loading";
 import { useRouter } from "next/navigation";
 import stripe from "../lib/stripe";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import posthog from "posthog-js";
+import { washRequestEvents } from "../providers/posthog_events";
 
 function WashRequest() {
   const [content, setContent] = useState(0);
@@ -88,6 +90,9 @@ function WashRequest() {
       delete d.customerEmail;
       delete d.customerPhoneNumber;
       const res = await axiosApiInstance.post("/api/wash-request", d);
+      posthog.capture(washRequestEvents.WASH_REQUEST_SUBMITTED, {
+        requestId: res.data.requestId,
+      });
       router.push(`/wash-request/payment?wash=${res.data.requestId}`);
     } catch (error) {
       console.log(error);

@@ -16,6 +16,8 @@ import utc from "dayjs/plugin/utc";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { IOnboardingPageProps } from "./PartOne";
 import Weather from "@/app/components/Weather";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -52,6 +54,10 @@ export default function PartFour(props: IOnboardingPageProps) {
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(washRequestEvents.WASH_REQUEST_DATE_AND_TIME_SELECTED, {
+        washDate: date,
+        washTime: time,
+      });
       onNext({
         washDateAndTimeUTC: joinDateAndTime(date, time),
         washD: date,

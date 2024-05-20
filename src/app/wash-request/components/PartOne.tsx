@@ -10,6 +10,8 @@ import Tick from "../../../../public/imgs/tick.svg";
 import { message } from "antd";
 import { modelsData } from "@/app/utils/static-data";
 import { useSearchParams, useRouter } from "next/navigation";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 export interface IOnboardingPageProps {
   onNext: (values: any, force?: any) => void;
   onBack?: () => void;
@@ -44,6 +46,9 @@ export default function PartOne(props: IOnboardingPageProps) {
     if (!verifyFields()) {
       return;
     }
+    posthog.capture(washRequestEvents.WASH_REQUEST_CAR_SELECTED, {
+      selectedModel,
+    });
     onNext({
       selectedModel,
     });
