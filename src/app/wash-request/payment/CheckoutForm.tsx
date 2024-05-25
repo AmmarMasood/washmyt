@@ -3,6 +3,7 @@
 import Button from "@/app/components/Button";
 import FormField from "@/app/components/FormField";
 import Loading from "@/app/components/Loading";
+import { washRequestInterations } from "@/app/providers/posthog_events";
 import { PaymentStatus } from "@/app/types/interface";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { message } from "antd";
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 
 import React, { useEffect, useRef, useState } from "react";
 
@@ -76,6 +78,10 @@ function CheckoutForm({
         `/api/wash-request/payment/complete?id=${id}`,
         b
       );
+      posthog.capture(washRequestInterations.PAYMENT_COMPLETED, {
+        requestId: id,
+        stripeId: paymentId,
+      });
 
       message.success("Payment successful");
       router.push(`/wash-request/detail/${id}`);

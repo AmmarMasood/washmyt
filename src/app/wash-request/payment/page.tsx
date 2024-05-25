@@ -20,6 +20,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { modelsData } from "@/app/utils/static-data";
 import { withoutAuth } from "@/app/hoc/withoutAuth";
 import { PaymentStatus, WashStatus } from "@/app/types/interface";
+import Chat from "@/app/components/Chat/Chat";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -272,6 +273,13 @@ function Payment() {
               </div>
             </div>
           </Card>
+        )}
+        {washInfo?.washStatus === WashStatus.ACCEPTED && (
+          <Chat
+            washId={id as string}
+            washerEmail={washInfo?.washer?.email}
+            washerName={washInfo?.washer?.name}
+          />
         )}
       </main>
     </>

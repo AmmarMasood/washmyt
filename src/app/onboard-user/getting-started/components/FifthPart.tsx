@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "../../../components/Button";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useRef, useState } from "react";
 import Card from "../../../components/Card";
 import StepperBar from "@/app/components/StepperBar";
 import Select from "@/app/components/Select";
@@ -12,10 +12,17 @@ import { UserAuth } from "@/app/context/AuthContext";
 import axiosApiInstance from "@/app/utils/axiosClient";
 import { useRouter } from "next/navigation";
 import { message } from "antd";
+import posthog from "posthog-js";
+import { onboardingEvents } from "@/app/providers/posthog_events";
+import StripeImage from "../../../../../public/imgs/pngegg.png";
+import Image from "next/image";
+import stripe from "../../../lib/stripe";
 
 export default function FifthPart() {
   const { profile, user, setLoading, getUser } = UserAuth() as any;
   const router = useRouter();
+  const profileRef = useRef(profile);
+  profileRef.current = profile;
 
   const [inputValues, setInputValues] = useState({
     businessInsurance: profile.ownInsurance === false ? "no" : "yes",
@@ -54,6 +61,57 @@ export default function FifthPart() {
     return true;
   };
 
+  const handleStripeRedirect = useCallback(async () => {
+    // first make an api call to stripe to create a connected account of type express
+    const stripeAccount = await stripe.accounts.create(
+      {
+        type: "express",
+        email: profile.email,
+        capabilities: {
+          card_payments: { requested: true },
+          transfers: { requested: true },
+        },
+        business_type: "individual",
+        individual: {
+          email: profile.email,
+        },
+        business_profile: {
+          mcc: "7299",
+          name: profile.businessName,
+          url: profile.website,
+          support_email: profile.email,
+          support_phone: `+1${profile.phoneNumber}`,
+        },
+        default_currency: "usd",
+      },
+      {
+        apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
+      }
+    );
+
+    // create a link using stripe id, to redirect the user to stripe onboarding
+    const accountLink = await stripe.accountLinks.create(
+      {
+        account: stripeAccount.id,
+        refresh_url: `http://localhost:3000/user/profile`,
+        return_url: `http://localhost:3000/user/profile`,
+        type: "account_onboarding",
+        collect: "eventually_due",
+      },
+      {
+        apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
+      }
+    );
+
+    // save the stripe id in the user profile
+    await axiosApiInstance.post("/api/onboard/complete-profile", {
+      stripeAccountId: stripeAccount.id,
+    });
+
+    // redirect the user to stripe onboarding
+    window.open(accountLink.url, "_blank")?.focus();
+  }, []);
+
   const onClickNext = async () => {
     if (!verifyFields()) {
       message.error("Please fill all the required fields.");
@@ -67,11 +125,15 @@ export default function FifthPart() {
       await axiosApiInstance.post("/api/onboard/complete-profile", {
         ownInsurance: inputValues.businessInsurance === "yes" ? true : false,
         insuranceImage: inputValues.businessInsurance === "yes" ? link : "",
-        onboardingCompleted: true,
+        // onboardingCompleted: true,
+      });
+      posthog.capture(onboardingEvents.ONBOARDING_COMPLETED, {
+        email: profile?.email,
       });
       await getUser(true);
 
-      router.push("/user/profile");
+      handleStripeRedirect();
+      // router.push("/user/profile");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong. Please try again.");
@@ -111,12 +173,22 @@ export default function FifthPart() {
               className="mt-8"
             />
 
+            <div className="flex text-black bg-primary-color/10 p-3 rounded-lg mt-6">
+              <p className="text-primary-gray text-md">
+                We use Stripe to make sure you get paid on time and to keep your
+                personal bank and details secure. Click Save and continue to set
+                up your payments on Stripe.
+              </p>
+
+              <Image src={StripeImage} alt="Stripe" />
+            </div>
+
             <Button
               disabled={false}
               onClick={onClickNext}
               className="mt-10 !text-white"
             >
-              Complete Registration
+              Save and Continue
             </Button>
           </div>
         </>

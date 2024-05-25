@@ -3,14 +3,11 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const auth = request.headers.get("authorization");
-  const responseAPI = await fetch(
-    "https://washmyt.vercel.app/api/authenticate",
-    {
-      headers: {
-        authorization: auth as any,
-      },
-    }
-  );
+  const responseAPI = await fetch("http://localhost:3000/api/authenticate", {
+    headers: {
+      authorization: auth as any,
+    },
+  });
   const responseAPIJson = await responseAPI.json();
 
   //Return to /login if token is not authorized
@@ -48,5 +45,6 @@ export const config = {
     "/api/admin/calendar",
     "/api/admin/ledger",
     "/api/admin/wash-request",
+    "/api/chat/washer",
   ],
 };

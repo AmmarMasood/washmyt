@@ -9,6 +9,8 @@ import StepperBar from "@/app/components/StepperBar";
 import Tick from "../../../../public/imgs/tick.svg";
 import { Input, message } from "antd";
 import { IOnboardingPageProps } from "./PartOne";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 
 export default function PartEight(props: IOnboardingPageProps) {
   const { onNext, onBack, values } = props;
@@ -28,6 +30,9 @@ export default function PartEight(props: IOnboardingPageProps) {
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(washRequestEvents.WASH_REQUEST_FIRST_NAME_ENTERED, {
+        customerName: name,
+      });
       onNext({
         customerName: name,
       });

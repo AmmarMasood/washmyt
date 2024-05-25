@@ -12,6 +12,8 @@ import dayjs from "dayjs";
 import { Button, Divider } from "antd";
 import { set } from "firebase/database";
 import WashEdit from "../WashEdit/WashEdit";
+import WasherChat from "@/app/components/WasherChat/WasherChat";
+import AdminChat from "@/app/components/WasherChat/AdminChat";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -22,6 +24,7 @@ interface IWashDetailProps {
   onConfirm: () => void;
   washDetail: any;
   setLoading: (loading: boolean) => void;
+  profile: any;
 }
 
 const rowClassName = `
@@ -33,7 +36,7 @@ const valueClassName = `text-primary-black font-semibold w-2/3 flex items-start 
 const editIconClassName = `cursor-pointer ml-4 mt-1`;
 
 function WashDetail(props: IWashDetailProps) {
-  const { show, onClose, onConfirm, washDetail, setLoading } = props;
+  const { show, onClose, onConfirm, washDetail, setLoading, profile } = props;
   const [customerDetail, setCustomerDetail] = React.useState<any>({});
   const [modelInfo, setModelInfo] = React.useState<any>({});
   const [address, setAddress] = React.useState<any>(null);
@@ -221,7 +224,7 @@ function WashDetail(props: IWashDetailProps) {
           CONVERSATIONS
         </p>
         <Divider />
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div className="mt-2">
             <h2 className="text-xl my-2">Customer</h2>
             <Button
@@ -258,7 +261,15 @@ function WashDetail(props: IWashDetailProps) {
               </Button>
             </div>
           )}
-        </div>
+        </div> */}
+        {washDetail && profile && (
+          <AdminChat
+            washId={washDetail.id as string}
+            userEmail={profile.email}
+            customerName={washDetail.customer?.name}
+            washerName={washDetail.washer?.name}
+          />
+        )}
       </div>
     </Modal>
   );

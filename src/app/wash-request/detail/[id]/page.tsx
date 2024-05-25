@@ -22,6 +22,8 @@ import {
   WashDetailAccessType,
   WashStatus,
 } from "@/app/types/interface";
+import posthog from "posthog-js";
+import { washRequestInterations } from "@/app/providers/posthog_events";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -76,6 +78,11 @@ function Page() {
           ...data,
         }
       );
+      posthog.capture(washRequestInterations.WASH_RATED_AND_TIPPED, {
+        rating: data.rating,
+        tipStripeId: data.tipId,
+        tipAmount: data.tipAmount,
+      });
       message.success("Feedback Received. Thank you.");
       setShowModal(false);
       window.location.reload();

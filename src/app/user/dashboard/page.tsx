@@ -189,6 +189,7 @@ function Page() {
               }}
               washDetail={washDetail}
               setLoading={setLoading}
+              profile={profile}
             />
 
             <Card className="h-full p-4 bg-white">

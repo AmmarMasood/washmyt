@@ -8,6 +8,8 @@ import LogoIcon from "../../../../public/imgs/logo-icon.svg";
 import StepperBar from "@/app/components/StepperBar";
 import Tick from "../../../../public/imgs/tick.svg";
 import { IOnboardingPageProps } from "./PartOne";
+import posthog from "posthog-js";
+import { washRequestEvents } from "@/app/providers/posthog_events";
 //
 const options = [
   {
@@ -35,6 +37,12 @@ export default function PartSeven(props: IOnboardingPageProps) {
 
   const onNextClick = () => {
     if (verifyFields()) {
+      posthog.capture(
+        washRequestEvents.WASH_REQUEST_ELECTRICAL_OUTLET_AVAILABILITY_SELECTED,
+        {
+          electricalHookupAvailable: outlet === "yes" ? true : false,
+        }
+      );
       onNext({
         electricalHookupAvailable: outlet === "yes" ? true : false,
       });

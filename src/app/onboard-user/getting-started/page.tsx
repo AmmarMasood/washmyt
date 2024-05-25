@@ -14,6 +14,8 @@ import { Avatar, message } from "antd";
 import { UserAuth } from "@/app/context/AuthContext";
 import Loading from "@/app/components/Loading";
 import { UserOutlined } from "@ant-design/icons";
+import posthog from "posthog-js";
+import { onboardingEvents } from "@/app/providers/posthog_events";
 
 function OnboardUser() {
   const [content, setContent] = useState(0);
@@ -69,7 +71,16 @@ function OnboardUser() {
             }
           </div>
         )}
-        {content === 0 && <StartOnboarding onNext={onNext} />}
+        {content === 0 && (
+          <StartOnboarding
+            onNext={() => {
+              posthog.capture(onboardingEvents.ONBOARDING_STARTED, {
+                email: profile?.email,
+              });
+              onNext();
+            }}
+          />
+        )}
         {content === 1 && <FirstPart onNext={onNext} />}
         {content === 2 && <SecondPart onNext={onNext} />}
         {content === 3 && <ThirdPart onNext={onNext} />}
