@@ -85,9 +85,11 @@ export default function FifthPart() {
         default_currency: "usd",
       },
       {
-        apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
+        apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
       }
     );
+
+    console.log("stripeAccount", stripeAccount);
 
     // create a link using stripe id, to redirect the user to stripe onboarding
     const accountLink = await stripe.accountLinks.create(
@@ -99,10 +101,11 @@ export default function FifthPart() {
         collect: "eventually_due",
       },
       {
-        apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
+        apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
       }
     );
 
+    console.log("accountLink", accountLink);
     // save the stripe id in the user profile
     await axiosApiInstance.post("/api/onboard/complete-profile", {
       stripeAccountId: stripeAccount.id,
