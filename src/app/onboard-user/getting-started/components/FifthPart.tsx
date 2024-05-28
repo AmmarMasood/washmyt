@@ -61,40 +61,48 @@ export default function FifthPart() {
     return true;
   };
 
+  const createUserStripeAccount = async () => {
+    if (!profile.stripeAccountId) {
+      const stripeAccount = await stripe.accounts.create(
+        {
+          type: "express",
+          email: profile.email,
+          capabilities: {
+            card_payments: { requested: true },
+            transfers: { requested: true },
+          },
+          business_type: "individual",
+          individual: {
+            email: profile.email,
+          },
+          business_profile: {
+            mcc: "7299",
+            name: profile.businessName,
+            url: profile.website,
+            support_email: profile.email,
+            support_phone: `+1${profile.phoneNumber}`,
+          },
+          default_currency: "usd",
+        },
+        {
+          apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
+        }
+      );
+
+      return stripeAccount.id;
+    } else {
+      return profile.stripeAccountId;
+    }
+  };
+
   const handleStripeRedirect = useCallback(async () => {
     // first make an api call to stripe to create a connected account of type express
-    const stripeAccount = await stripe.accounts.create(
-      {
-        type: "express",
-        email: profile.email,
-        capabilities: {
-          card_payments: { requested: true },
-          transfers: { requested: true },
-        },
-        business_type: "individual",
-        individual: {
-          email: profile.email,
-        },
-        business_profile: {
-          mcc: "7299",
-          name: profile.businessName,
-          url: profile.website,
-          support_email: profile.email,
-          support_phone: `+1${profile.phoneNumber}`,
-        },
-        default_currency: "usd",
-      },
-      {
-        apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
-      }
-    );
-
-    console.log("stripeAccount", stripeAccount);
+    const stripeAccountId = await createUserStripeAccount();
 
     // create a link using stripe id, to redirect the user to stripe onboarding
     const accountLink = await stripe.accountLinks.create(
       {
-        account: stripeAccount.id,
+        account: stripeAccountId,
         refresh_url: `https://washmyt.vercel.app/user/profile`,
         return_url: `https://washmyt.vercel.app/user/profile`,
         type: "account_onboarding",
@@ -104,15 +112,14 @@ export default function FifthPart() {
         apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
       }
     );
-
-    console.log("accountLink", accountLink);
     // save the stripe id in the user profile
     await axiosApiInstance.post("/api/onboard/complete-profile", {
-      stripeAccountId: stripeAccount.id,
+      stripeAccountId: stripeAccountId,
+      onboardingCompleted: true,
     });
 
-    // redirect the user to stripe onboarding
-    window.open(accountLink.url, "_blank")?.focus();
+    // open stripe onboarding link on current tab
+    window.open(accountLink.url, "_self");
   }, []);
 
   const onClickNext = async () => {
@@ -128,7 +135,6 @@ export default function FifthPart() {
       await axiosApiInstance.post("/api/onboard/complete-profile", {
         ownInsurance: inputValues.businessInsurance === "yes" ? true : false,
         insuranceImage: inputValues.businessInsurance === "yes" ? link : "",
-        // onboardingCompleted: true,
       });
       posthog.capture(onboardingEvents.ONBOARDING_COMPLETED, {
         email: profile?.email,
