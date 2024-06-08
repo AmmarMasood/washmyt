@@ -1,7 +1,13 @@
 import { PrismaClient, Role, WashStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 
 export async function GET(request: any) {
   const userId = request.headers.get("userId");

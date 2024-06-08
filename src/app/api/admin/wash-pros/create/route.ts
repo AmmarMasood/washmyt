@@ -2,7 +2,13 @@ import { PrismaClient, Role, WashStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { auth } from "firebase-admin";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 
 export async function POST(request: any) {
   try {

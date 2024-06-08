@@ -4,7 +4,13 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import posthog from "posthog-js";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 
 function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
   const R = 6371; // Earth radius in kilometers

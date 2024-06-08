@@ -3,7 +3,13 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 
 const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET as string;
 
