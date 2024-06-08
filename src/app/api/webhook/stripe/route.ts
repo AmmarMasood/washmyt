@@ -5,8 +5,7 @@ import Stripe from "stripe";
 
 const prisma = new PrismaClient();
 
-const webhookSecret =
-  "whsec_b211a9541fb3819cfb120624bea9c5051f4a1d4f70f21ede7b2c1263b80313dc";
+const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
 
 const handleAccountUpdated = async (event: Stripe.Event) => {
   const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
