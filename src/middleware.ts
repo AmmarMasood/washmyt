@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const auth = request.headers.get("authorization");
-  const responseAPI = await fetch("http://localhost:3000/api/authenticate", {
+  const responseAPI = await fetch("https://app.washmyt.com/api/authenticate", {
     headers: {
       authorization: auth as any,
     },
