@@ -42,7 +42,7 @@ model UserProfile {
   primarySoapBrand String?
   washRequests WashRequest[]
   resheduleRequests RescheduleRequest[]
-  stripeAccountId String? @unique
+  stripeAccountId String? 
   chargesEnabled Boolean @default(false)
   transfersEnabled Boolean  @default(false)
   stripeDetailsSubmitted Boolean @default(false)
@@ -142,4 +142,20 @@ model WashRequest{
       washerId String?
       washer UserProfile? @relation(fields: [washerId], references: [userId])
       resheduleRequests RescheduleRequest[]
+      ledger WashRequestLedger?
+}
+
+
+model WashRequestLedger{
+      id String @id @default(auto()) @map("_id") @db.ObjectId
+      washRequestId String @db.ObjectId @unique
+      washRequest WashRequest @relation(fields: [washRequestId], references: [id])
+      chargedAmount Float
+      stripeCharges Float
+      washerCharges Float?
+      receivedAmount Float
+      tipAmount Float?
+      tipStripeCharges Float?
+      tipWasherCharges Float?
+      tipReceivedAmount Float?
 }

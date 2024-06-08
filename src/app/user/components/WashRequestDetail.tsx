@@ -16,6 +16,8 @@ import {
   WashStatus,
 } from "@/app/types/interface";
 import { Rate } from "antd";
+import CameraIcon from "../../../../public/imgs/icons8-camera-100.png";
+import { washerCut } from "@/contants";
 
 dayjs.extend(relativeTime);
 
@@ -56,6 +58,7 @@ interface IWashRequestDetail {
   receivedTip?: any;
   snowPackage?: boolean;
   rescheduleData?: any;
+  ledger?: any;
 }
 const rowStyle = "flex flex-row justify-between items-center mt-4";
 const labelStyle = "text-primary-gray text-base";
@@ -244,7 +247,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
       );
     } else if (props.accessType === WashDetailAccessType.CUSTOMER) {
       return (
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between max-sm:flex-col">
           <div className="flex items-center mt-6">
             <div className="mr-8">
               <p className="text-primary-color text-lg uppercase mb-4">
@@ -317,7 +320,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
                     />
                   )}
               </div>
-              <div className="bg-[#f5f5f5] p-3 rounded-sm h-52 w-full relative">
+              <div className="bg-[#f5f5f5] p-3 rounded-sm h-52 w-full relative max-sm:mt-4">
                 {props.afterPhoto && (
                   <Image src={props.afterPhoto} alt="before" fill />
                 )}
@@ -444,7 +447,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
               >
                 <p className={labelStyle}>Payout to you</p>
                 <p className={`${valueStyle} font-md`}>
-                  ${props.payoutDetail} + Tip
+                  ${(props.payoutDetail * washerCut).toFixed(2)} + Tip
                 </p>
               </div>
             )}
@@ -456,9 +459,14 @@ function WashRequestDetail(props: IWashRequestDetail) {
                 className={`${rowStyle} bg-primary-gray/[0.1] rounded-md pt-24 px-2 pb-2`}
               >
                 <p className={labelStyle}>Payout to you</p>
+
                 <p className={`${valueStyle} font-md`}>
-                  ${props.receivedAmount} +{" "}
-                  {props.receivedTip ? `$${props.receivedTip} (tip)` : ""}
+                  ${(props.ledger.washerCharges / 100).toFixed(2)}
+                  {props.ledger.tipAmount
+                    ? `$+ ${(props.ledger.tipWasherCharges / 100).toFixed(
+                        2
+                      )} (tip)`
+                    : ""}
                 </p>
               </div>
             )}

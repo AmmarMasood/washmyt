@@ -259,16 +259,19 @@ function Page() {
               rating={data.rating}
               isNotWashTime={data.isNotWashTime}
               snowPackage={data.snowPackage}
+              ledger={data.ledger}
             />
           )}
 
           {data?.washStatus === WashStatus.ACCEPTED &&
             data?.washer?.userId === user?.uid && (
-              <WasherChat
-                washId={params.id as string}
-                userEmail={data?.washer?.email}
-                customerName={data?.customer?.name}
-              />
+              <div>
+                <WasherChat
+                  washId={params.id as string}
+                  userEmail={data?.washer?.email}
+                  customerName={data?.customer?.name}
+                />
+              </div>
             )}
         </Layout>
       </div>

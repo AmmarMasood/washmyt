@@ -17,6 +17,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/app/lib/firebase";
 import Image from "next/image";
 import GreenCheckmark from "../../../../public/imgs/icons8-checkmark-30.png";
+import stripe from "@/app/lib/stripe";
 
 const label = `text-md text-primary-gray mr-4`;
 const value = `text-md text-primary-black text-right`;
@@ -45,6 +46,16 @@ function Page() {
       return false;
     }
     return true;
+  };
+
+  const onOpenMyStripeDashboard = async () => {
+    if (profile.stripeAccountId) {
+      const accountLink = await stripe.accounts.createLoginLink(
+        profile.stripeAccountId
+      );
+
+      window.open(accountLink.url, "_blank");
+    }
   };
 
   const uploadData = async () => {
@@ -163,6 +174,14 @@ function Page() {
                       />
                     </p>
                   </div>
+
+                  <p
+                    className="text-base mt-10 text-primary-color cursor-pointer"
+                    onClick={onOpenMyStripeDashboard}
+                  >
+                    Go to my stripe dashboard
+                  </p>
+
                   <Button
                     disabled={loading}
                     onClick={updateData}

@@ -46,6 +46,7 @@ export async function GET(request: any) {
       package: true, // Include the related package data
       customer: true, // Include the related customer data
       washer: true, // Include the related washer data
+      ledger: true, // Include the related ledger data
     },
   });
 
@@ -56,13 +57,28 @@ export async function GET(request: any) {
         wash.paymentStatus === PaymentStatus.PAID &&
         wash.washStatus === WashStatus.COMPLETED
       ) {
-        const tipAmount = wash.tipAmount || 0;
-        return customerAccumulator + wash.chargedAmount + tipAmount;
+        const tipAmount = wash.ledger?.tipReceivedAmount || 0;
+        return customerAccumulator + wash.ledger?.receivedAmount + tipAmount;
       }
       return customerAccumulator;
     },
     0
   );
+
+  const totalPayoutsPushed = washRequests.reduce(
+    (washerAccumulator: any, wash: any) => {
+      if (
+        wash.paymentStatus === PaymentStatus.PAID &&
+        wash.washStatus === WashStatus.COMPLETED
+      ) {
+        const tipAmount = wash.ledger?.tipWasherCharges || 0;
+        return washerAccumulator + wash.ledger?.washerCharges + tipAmount;
+      }
+      return washerAccumulator;
+    },
+    0
+  );
+
   const customerCounts: any = {};
 
   washRequests.forEach((request) => {
@@ -86,6 +102,7 @@ export async function GET(request: any) {
       (w) => w.washStatus === WashStatus.COMPLETED
     ).length,
     totalPaymentsReceived: totalPaymentsReceived / 100,
+    totalPayoutsPushed: totalPayoutsPushed / 100,
     percentageRecurrentCustomers: percentageRecurrentCustomers.toFixed(2),
     percentageOneTimeCustomers: percentageOneTimeCustomers.toFixed(2),
     washRequests,

@@ -192,7 +192,7 @@ export async function POST(request: any) {
       },
     });
 
-    console.log(customerExist, "customer exist");
+    // console.log(customerExist, "customer exist");
     if (customerExist) {
       return NextResponse.json(
         { message: "Email already exists" },

@@ -22,6 +22,28 @@ export async function GET(request: any) {
       },
     });
 
+    const washer = await prisma.userProfile.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!washer?.stripeAccountId) {
+      return NextResponse.json(
+        { message: "Please complete your stripe account" },
+        { status: 400 }
+      );
+    }
+
+    if (!washer.chargesEnabled || !washer.transfersEnabled) {
+      return NextResponse.json(
+        {
+          message: "Please enable charges and transfers in your stripe account",
+        },
+        { status: 400 }
+      );
+    }
+
     if (washRequest?.washStatus === WashStatus.ACCEPTED) {
       return NextResponse.json(
         { message: "Wash request is already accepted" },

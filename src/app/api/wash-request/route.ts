@@ -60,7 +60,7 @@ const findAndNotifyWasher = async (
   cordsArray.forEach((washer) => {
     const distance = haversine(cords.lat, cords.lng, washer.lat, washer.lng);
     if (distance <= washer.serviceRadius) {
-      console.log("matched", cords, washer, distance, washer.serviceRadius);
+      // console.log("matched", cords, washer, distance, washer.serviceRadius);
       nearbyWashers.push(washer);
     } else {
       console.log("not matched", cords, washer, distance, washer.serviceRadius);
@@ -142,6 +142,7 @@ export async function GET(request: any) {
         coupon: true,
         customer: true,
         washer: true,
+        ledger: true,
       },
     });
 

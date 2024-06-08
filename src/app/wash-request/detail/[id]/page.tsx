@@ -24,6 +24,7 @@ import {
 } from "@/app/types/interface";
 import posthog from "posthog-js";
 import { washRequestInterations } from "@/app/providers/posthog_events";
+import Chat from "@/app/components/Chat/Chat";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -161,6 +162,14 @@ function Page() {
             afterPhoto={data.afterPhoto}
             onClickViewReceipt={onClickViewReceipt}
             openRateAndTipModal={openRateAndTipModal}
+            ledger={data.ledger}
+          />
+        )}
+        {data?.washStatus === WashStatus.ACCEPTED && (
+          <Chat
+            washId={params.id as string}
+            washerEmail={data?.washer?.email}
+            washerName={data?.washer?.name}
           />
         )}
       </div>

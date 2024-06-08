@@ -64,11 +64,43 @@ export const columns: ColumnsType<any> = [
     render: (text) => <p>{dayjs(text).format("DD-MM-YYYY H:mm")}</p>,
   },
   {
-    title: "Amount",
-    key: "amount",
+    title: "Total Amount",
+    key: "ledger",
     render: (text) => (
-      <p>{`$${text.chargedAmount ? text.chargedAmount / 100 : 0} ${
-        text.tipAmount ? `+ $${text.tipAmount / 100}` : ""
+      <p>{`$${
+        text.ledger?.chargedAmount ? text.ledger?.chargedAmount / 100 : 0
+      } ${
+        text.ledger?.tipAmount ? `+ $${text.ledger?.tipAmount / 100}` : ""
+      }`}</p>
+    ),
+  },
+  {
+    title: "Amount Received",
+    key: "ledger",
+    render: (text) => (
+      <p>{`$${
+        text.ledger?.receivedAmount
+          ? (text.ledger?.receivedAmount / 100).toFixed(2)
+          : 0
+      } ${
+        text.ledger?.tipReceivedAmount
+          ? `+ $${(text.ledger?.tipReceivedAmount / 100).toFixed(2)}`
+          : ""
+      }`}</p>
+    ),
+  },
+  {
+    title: "Washer Received",
+    key: "ledger",
+    render: (text) => (
+      <p>{`$${
+        text.ledger?.washerCharges
+          ? (text.ledger?.washerCharges / 100).toFixed(2)
+          : 0
+      } ${
+        text.ledger?.tipWasherCharges
+          ? `+ $${(text.ledger?.tipWasherCharges / 100).toFixed(2)}`
+          : ""
       }`}</p>
     ),
   },

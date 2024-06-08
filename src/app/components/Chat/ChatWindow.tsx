@@ -32,6 +32,7 @@ interface ChatWindowProps {
   washerEmail?: string;
   userEmail?: string;
   otherParticipantName?: string;
+  extraStyles?: string;
 }
 
 function ChatWindow({
@@ -44,6 +45,7 @@ function ChatWindow({
   washerEmail,
   userEmail,
   otherParticipantName,
+  extraStyles,
 }: ChatWindowProps) {
   const [allMessages, setAllMessages] = React.useState<any[]>([]);
   const [ogConversation, setOgConversation] = React.useState<any>(null);
@@ -239,7 +241,9 @@ function ChatWindow({
   };
   return (
     showChat && (
-      <div className="h-[500px] w-96 bg-white absolute right-10 bottom-10 z-10 shadow-2xl rounded-xl overflow-hidden">
+      <div
+        className={`h-[500px] w-96  bg-white absolute right-10 bottom-10 z-10 shadow-2xl rounded-xl overflow-hidden ${extraStyles}`}
+      >
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <p className="text-black text-lg">Loading...</p>

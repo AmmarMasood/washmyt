@@ -135,6 +135,7 @@ function Page() {
               onClickViewReceipt={onClickViewReceipt}
               rescheduleData={rescheduleData}
               onRescheduleRequest={onRescheduleRequest}
+              ledger={data.ledger}
             />
           )}
       </div>

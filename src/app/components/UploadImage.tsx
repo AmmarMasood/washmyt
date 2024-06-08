@@ -1,6 +1,8 @@
 "use client";
 import { useDropzone } from "react-dropzone";
 import React, { useCallback, useState } from "react";
+import Image from "next/image";
+import CameraIcon from "../../../public/imgs/icons8-camera-100.png";
 
 interface IUploadImage {
   label: string;
@@ -41,9 +43,9 @@ function UploadImage(props: IUploadImage) {
             Drop the files here ...
           </p>
         ) : (
-          <p className="text-primary-gray text-base	font-medium">
-            Drag and drop some files here, or click to select files
-          </p>
+          <div className="text-primary-gray text-base	font-medium opacity-50">
+            <Image src={CameraIcon} width={100} height={100} alt="Upload" />
+          </div>
         )}
       </div>
       <div>

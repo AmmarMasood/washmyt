@@ -36,6 +36,7 @@ function Page() {
     totalPaymentsReceived: "",
     percentageRecurrentCustomers: "",
     percentageOneTimeCustomers: "",
+    totalPayoutsPushed: "",
   });
   const [filteredR, setFilteredR] = React.useState([]);
 
@@ -102,6 +103,11 @@ function Page() {
                   img={MatchIcon}
                   title={`$${data.totalPaymentsReceived}`}
                   description="Payment Received"
+                />
+                <InfoCard
+                  img={MatchIcon}
+                  title={`$${data.totalPayoutsPushed}`}
+                  description="Payouts Pushed"
                 />
                 <InfoCard
                   img={WashCompletedIcon}

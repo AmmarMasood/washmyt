@@ -1,4 +1,5 @@
 import { sendSms } from "@/app/lib/twilio";
+import { stripeCharges } from "@/contants";
 import { PaymentStatus, PrismaClient, WashStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 
@@ -41,6 +42,19 @@ export async function PUT(request: any) {
       },
     });
 
+    const chargedAmount = res.chargedAmount;
+    const stripeCharge = Math.round(res.chargedAmount * stripeCharges);
+    const receivedAmount = chargedAmount - stripeCharge;
+    // add amount to ledger
+    await prisma.washRequestLedger.create({
+      data: {
+        chargedAmount: res.chargedAmount,
+        washRequestId: r.id,
+        stripeCharges: stripeCharge,
+        receivedAmount: receivedAmount,
+      },
+    });
+
     if (!customer) {
       throw new Error("Customer not found");
     }
@@ -54,7 +68,6 @@ export async function PUT(request: any) {
       `Hi ${customer.name}, great news! \n\nWe have received payment for your request.\n\nThanks for the confirmation!\n\nOnce the was is complete you can rate your wash experience here:\nhttps://washmyt.vercel.app/wash-request/detail/${r.id} \n\n- WashMyT Team`
     );
 
-    console.log("ammar", washer.phoneNumber);
     await sendSms(
       washer.phoneNumber || "", //set customer number here later, rightnow hardcoding mine
       `Hi ${washer.name}, great news! \n\ ${customer.name} has completed the payment, please use the following link to document the wash when you are ready to begin:\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${r.id} \n\n- WashMyT Team`

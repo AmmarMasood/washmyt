@@ -47,7 +47,7 @@ function WasherChat(props: WasherChatProps) {
 
   return (
     token && (
-      <div className="absolute right-30 bottom-20 flex items-center">
+      <div className="absolute right-30 bottom-20 flex items-center ">
         <div className="mr-4">
           <Theme.Provider theme="twilio">
             <Box style={styles.app}>
@@ -72,7 +72,7 @@ function WasherChat(props: WasherChatProps) {
             <p className="text-black">Customer</p>
           </div>
         </div>
-        <div>
+        <div className="max-sm:mt-4">
           <Theme.Provider theme="twilio">
             <Box style={styles.app}>
               <ChatWindow

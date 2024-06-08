@@ -63,6 +63,7 @@ export default function FifthPart() {
 
   const createUserStripeAccount = async () => {
     if (!profile.stripeAccountId) {
+      console.log("stripe account didnt exist");
       const stripeAccount = await stripe.accounts.create(
         {
           type: "express",
@@ -80,17 +81,17 @@ export default function FifthPart() {
             name: profile.businessName,
             url: profile.website,
             support_email: profile.email,
-            support_phone: `+1${profile.phoneNumber}`,
           },
           default_currency: "usd",
         },
         {
-          apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
+          apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
         }
       );
 
       return stripeAccount.id;
     } else {
+      console.log("stripe account does exist");
       return profile.stripeAccountId;
     }
   };
@@ -109,7 +110,7 @@ export default function FifthPart() {
         collect: "eventually_due",
       },
       {
-        apiKey: process.env.NEXT_PUBLIC_STRIPE_PROD_SECRET,
+        apiKey: process.env.NEXT_PUBLIC_STRIPE_SECRET,
       }
     );
     // save the stripe id in the user profile

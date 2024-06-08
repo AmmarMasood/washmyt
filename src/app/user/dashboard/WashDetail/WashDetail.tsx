@@ -220,11 +220,13 @@ function WashDetail(props: IWashDetailProps) {
           </div>
           {/*  */}
         </div>
-        <p className="font-medium text-lg text-primary-gray mt-12 -mb-4">
-          CONVERSATIONS
-        </p>
-        <Divider />
-        {/* <div className="flex items-center justify-between">
+        {step === 2 && (
+          <>
+            <p className="font-medium text-lg text-primary-gray mt-12 -mb-4">
+              CONVERSATIONS
+            </p>
+            <Divider />
+            {/* <div className="flex items-center justify-between">
           <div className="mt-2">
             <h2 className="text-xl my-2">Customer</h2>
             <Button
@@ -262,13 +264,15 @@ function WashDetail(props: IWashDetailProps) {
             </div>
           )}
         </div> */}
-        {washDetail && profile && (
-          <AdminChat
-            washId={washDetail.id as string}
-            userEmail={profile.email}
-            customerName={washDetail.customer?.name}
-            washerName={washDetail.washer?.name}
-          />
+            {washDetail && profile && (
+              <AdminChat
+                washId={washDetail.id as string}
+                userEmail={profile.email}
+                customerName={washDetail.customer?.name}
+                washerName={washDetail.washer?.name}
+              />
+            )}
+          </>
         )}
       </div>
     </Modal>
