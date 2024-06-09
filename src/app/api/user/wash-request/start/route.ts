@@ -34,7 +34,7 @@ export async function GET(request: any) {
 
     await sendSms(
       customer.phoneNumber, //set customer number here right now im using min only
-      `Hi ${customer.name}, your wash request have been started, you can check the status here:\nhttps://washmyt.vercel.app/wash-request/detail/${r.id}.\n\n- WashMyT Team`
+      `Hi ${customer.name}, your wash request have been started, you can check the status here:\nhttps://app.washmyt.com/wash-request/detail/${r.id}.\n\n- WashMyT Team`
     );
 
     return NextResponse.json({ ...r });

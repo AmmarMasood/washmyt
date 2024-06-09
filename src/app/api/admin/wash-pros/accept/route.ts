@@ -47,7 +47,7 @@ export async function POST(request: any) {
 
     await sendSms(
       customer.phoneNumber, //set customer number here right now im using min only
-      `Hi ${customer.name}, good news! We've matched your wash request with a pro from our network.\n\nTo confirm and schedule your wash, please make a payment within the next 24 hours via this link:\nhttps://washmyt.vercel.app/wash-request/payment?wash=${r.id}.\n\n- WashMyT Team`
+      `Hi ${customer.name}, good news! We've matched your wash request with a pro from our network.\n\nTo confirm and schedule your wash, please make a payment within the next 24 hours via this link:\nhttps://app.washmyt.com/wash-request/payment?wash=${r.id}.\n\n- WashMyT Team`
     );
 
     return NextResponse.json({ ...r });

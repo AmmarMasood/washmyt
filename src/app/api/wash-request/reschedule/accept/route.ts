@@ -116,12 +116,12 @@ export async function GET(request: any) {
 
     await sendSms(
       customer.phoneNumber, //set customer number here right now im using min only
-      `Hi ${customer.name}, you've succesfully confirmed the reschedule request!.\n\nTo confirm and schedule your wash, please make a payment within the next 24 hours via this link:\nhttps://washmyt.vercel.app/wash-request/payment?wash=${r.id}.\n\n- WashMyT Team`
+      `Hi ${customer.name}, you've succesfully confirmed the reschedule request!.\n\nTo confirm and schedule your wash, please make a payment within the next 24 hours via this link:\nhttps://app.washmyt.com/wash-request/payment?wash=${r.id}.\n\n- WashMyT Team`
     );
 
     await sendSms(
       rRequest?.generatedByUser?.phoneNumber || "", //set customer number here right now im using min only
-      `Hi ${rRequest?.generatedByUser?.name}, your reschedule request have been accepted, you can check the status here:\nhttps://washmyt.vercel.app/user/wash-detail/${r.id}.\n\n- WashMyT Team`
+      `Hi ${rRequest?.generatedByUser?.name}, your reschedule request have been accepted, you can check the status here:\nhttps://app.washmyt.com/user/wash-detail/${r.id}.\n\n- WashMyT Team`
     );
 
     return NextResponse.json({ ...r });

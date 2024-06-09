@@ -74,7 +74,7 @@ const findAndNotifyWasher = async (
     });
     await sendSms(
       washer.phoneNumber, //set washer number here later, rightnow hardcoding mine
-      `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://washmyt.vercel.app/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`
+      `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://app.washmyt.com/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`
     );
   });
 
@@ -108,7 +108,7 @@ export async function POST(request: any) {
     );
     await sendSms(
       customer.phoneNumber,
-      `A Wash has been initiated by the you. Please click on the link to view details: \n\nhttps://washmyt.vercel.app/wash-request/payment?wash=${request.id}`
+      `A Wash has been initiated by the you. Please click on the link to view details: \n\nhttps://app.washmyt.com/wash-request/payment?wash=${request.id}`
     );
     return NextResponse.json({
       message: "Wash request created successfully",

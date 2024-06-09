@@ -104,8 +104,8 @@ export default function FifthPart() {
     const accountLink = await stripe.accountLinks.create(
       {
         account: stripeAccountId,
-        refresh_url: `https://washmyt.vercel.app/user/profile`,
-        return_url: `https://washmyt.vercel.app/user/profile`,
+        refresh_url: `https://app.washmyt.com/user/profile`,
+        return_url: `https://app.washmyt.com/user/profile`,
         type: "account_onboarding",
         collect: "eventually_due",
       },

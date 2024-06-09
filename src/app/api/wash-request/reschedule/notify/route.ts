@@ -51,7 +51,7 @@ export async function GET(request: any) {
     for (let i = 0; i < requestsToBeNotified.length; i++) {
       sendSms(
         requestsToBeNotified[i].washRequest.customer.phoneNumber,
-        `Hey ${requestsToBeNotified[i].washRequest.customer.name}, unfortunately we didn't have a wash pro at the time you requested. We did find available wash pros for you - if you'd like to secure that time slot, please accept the reschedule request on this link:\nhttps://washmyt.vercel.app/wash-request/reschedule/${requestsToBeNotified[i].id}.\n\n- WashMyT Team`
+        `Hey ${requestsToBeNotified[i].washRequest.customer.name}, unfortunately we didn't have a wash pro at the time you requested. We did find available wash pros for you - if you'd like to secure that time slot, please accept the reschedule request on this link:\nhttps://app.washmyt.com/wash-request/reschedule/${requestsToBeNotified[i].id}.\n\n- WashMyT Team`
       );
     }
 

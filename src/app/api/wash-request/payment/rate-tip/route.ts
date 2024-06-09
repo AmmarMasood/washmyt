@@ -122,7 +122,7 @@ export async function PUT(request: any) {
         washerCu / 100
       } has been added by the customer.
       \n\n\n
-      https://washmyt.vercel.app/user/wash-detail/${washRequest.id}
+      https://app.washmyt.com/user/wash-detail/${washRequest.id}
       \n\n- WashMyT Team`
       );
     } else {
@@ -137,7 +137,7 @@ export async function PUT(request: any) {
 
       await sendSms(
         washer.phoneNumber as string, //set customer number here later, rightnow hardcoding mine
-        `Hi ${washer.name}, \n\nWash request have been reviewed by the customer.\n\n\nhttps://washmyt.vercel.app/user/wash-detail/${washRequest.id} \n\n- WashMyT Team`
+        `Hi ${washer.name}, \n\nWash request have been reviewed by the customer.\n\n\nhttps://app.washmyt.com/user/wash-detail/${washRequest.id} \n\n- WashMyT Team`
       );
     }
     // user rated and tipped
