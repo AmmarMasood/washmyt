@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(request: any) {
   try {
-    console.log("DATABASE", process.env.DATABASE_URL);
+    console.log("DATABASE", process.env.NEXT_PUBLIC_DATABASE_URL);
     const options = await prisma.package.findMany();
     return NextResponse.json({ options: options });
   } catch (err) {
