@@ -2,13 +2,7 @@ import { sendSms } from "@/app/lib/twilio";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-});
+const prisma = new PrismaClient();
 
 export async function GET(request: any) {
   const url = new URL(request.url);

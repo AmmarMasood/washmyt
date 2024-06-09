@@ -3,13 +3,7 @@ import { NextResponse } from "next/server";
 import { Twilio } from "twilio";
 import AccessToken from "twilio/lib/jwt/AccessToken";
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-});
+const prisma = new PrismaClient();
 
 export async function GET(request: any) {
   const userId = request.headers.get("userId");
