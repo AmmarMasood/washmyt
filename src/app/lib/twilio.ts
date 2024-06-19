@@ -3,10 +3,10 @@ import twilio from "twilio";
 const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
 const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
 
-const client = twilio(accountSid, authToken);
+const client = twilio(accountSid, authToken, authToken);
 
 export const sendSms = (phone: string, message: string) => {
-  console.log("phone", phone, message);
+  console.log("phone", phone, message, accountSid);
   client.messages
     .create({
       body: message,
