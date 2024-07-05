@@ -37,6 +37,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
 
 export async function POST(request: any) {
   try {
+    console.log("request receivedddd, webhookSecret", webhookSecret);
     const body = await request.text();
     const sig = request.headers.get("stripe-signature") as string;
     let event: Stripe.Event;
