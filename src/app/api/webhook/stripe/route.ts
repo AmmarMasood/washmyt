@@ -21,6 +21,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
         stripeAccountId: accountID,
       } as any,
     });
+    console.log("user 0", user);
 
     if (!user) {
       console.log("User not found");
@@ -48,15 +49,12 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
 
 export async function POST(request: any) {
   try {
-    console.log("request receivedddd, webhookSecret", webhookSecret);
+    console.log("request receivedddd, webhookSecret");
     const body = await request.text();
-    console.log("body", body);
     const sig = request.headers.get("stripe-signature") as string;
-    console.log("sig", sig);
     let event: Stripe.Event;
     try {
       event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-      console.log("constructEvent", event);
     } catch (err: any) {
       console.log("webhook secret", webhookSecret);
       console.log(`⚠️ Webhook signature verification failed.`, err.message);
@@ -64,8 +62,6 @@ export async function POST(request: any) {
         status: 400,
       });
     }
-
-    console.log("before switch case", event.type);
     // Handle the event
     switch (event.type) {
       case "account.updated":
