@@ -16,11 +16,18 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
     const accountID = eventAccountUpdated.account as string;
     console.log("accountID", accountID);
     // get the account data from db
-    const user = await prisma.userProfile.findUnique({
-      where: {
-        stripeAccountId: accountID,
-      } as any,
-    });
+    let user;
+    try {
+      user = await prisma.userProfile.findUnique({
+        where: {
+          stripeAccountId: accountID,
+        } as any,
+      });
+      console.log("user 0", user);
+    } catch (dbError) {
+      console.log("Database query failed", dbError);
+      return;
+    }
     console.log("user 0", user);
 
     if (!user) {
