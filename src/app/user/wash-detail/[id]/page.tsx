@@ -80,7 +80,7 @@ function Page() {
         window.location.reload();
       }, 5000);
     } catch (error: any) {
-      console.log;
+      console.log(error?.response?.data?.message, "checking", error?.response);
       message.error(
         error?.response?.data?.message || "Unable to accept request"
       );

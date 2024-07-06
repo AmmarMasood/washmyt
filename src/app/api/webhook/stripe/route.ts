@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET as string;
 
 const handleAccountUpdated = async (event: Stripe.Event) => {
+  console.log("Account Updated event received");
   const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
   // get the account ID from the event
   const accountID = eventAccountUpdated.account as string;
@@ -17,10 +18,13 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
       stripeAccountId: accountID,
     } as any,
   });
+
   if (!user) {
     console.log("User not found");
     return;
   }
+  console.log("user", user);
+  console.log("eventAccountUpdated", eventAccountUpdated);
   // update the account data
   await prisma.userProfile.update({
     where: {
@@ -43,6 +47,7 @@ export async function POST(request: any) {
     let event: Stripe.Event;
     try {
       event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+      console.log("constructEvent", event);
     } catch (err: any) {
       console.log("webhook secret", webhookSecret);
       console.log(`⚠️ Webhook signature verification failed.`, err.message);
@@ -51,6 +56,7 @@ export async function POST(request: any) {
       });
     }
 
+    console.log("before switch case", event.type);
     // Handle the event
     switch (event.type) {
       case "account.updated":
