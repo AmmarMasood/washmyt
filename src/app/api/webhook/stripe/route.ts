@@ -11,8 +11,10 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
   try {
     console.log("Account Updated event received");
     const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
+    console.log("eventAccountUpdated", eventAccountUpdated);
     // get the account ID from the event
     const accountID = eventAccountUpdated.account as string;
+    console.log("accountID", accountID);
     // get the account data from db
     const user = await prisma.userProfile.findUnique({
       where: {
@@ -48,7 +50,9 @@ export async function POST(request: any) {
   try {
     console.log("request receivedddd, webhookSecret", webhookSecret);
     const body = await request.text();
+    console.log("body", body);
     const sig = request.headers.get("stripe-signature") as string;
+    console.log("sig", sig);
     let event: Stripe.Event;
     try {
       event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
