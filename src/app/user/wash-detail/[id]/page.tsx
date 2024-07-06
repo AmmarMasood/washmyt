@@ -80,7 +80,10 @@ function Page() {
         window.location.reload();
       }, 5000);
     } catch (error: any) {
-      message.error(error?.response?.message || "Unable to accept request");
+      console.log;
+      message.error(
+        error?.response?.data?.message || "Unable to accept request"
+      );
     }
     setLoading(false);
   };
