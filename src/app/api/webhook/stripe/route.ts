@@ -8,35 +8,40 @@ const prisma = new PrismaClient();
 const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET as string;
 
 const handleAccountUpdated = async (event: Stripe.Event) => {
-  console.log("Account Updated event received");
-  const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
-  // get the account ID from the event
-  const accountID = eventAccountUpdated.account as string;
-  // get the account data from db
-  const user = await prisma.userProfile.findUnique({
-    where: {
-      stripeAccountId: accountID,
-    } as any,
-  });
+  try {
+    console.log("Account Updated event received");
+    const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
+    // get the account ID from the event
+    const accountID = eventAccountUpdated.account as string;
+    // get the account data from db
+    const user = await prisma.userProfile.findUnique({
+      where: {
+        stripeAccountId: accountID,
+      } as any,
+    });
 
-  if (!user) {
-    console.log("User not found");
-    return;
+    if (!user) {
+      console.log("User not found");
+      return;
+    }
+    console.log("user", user);
+    console.log("eventAccountUpdated", eventAccountUpdated);
+    // update the account data
+    await prisma.userProfile.update({
+      where: {
+        stripeAccountId: accountID,
+      } as any,
+      data: {
+        chargesEnabled: eventAccountUpdated.data.object.charges_enabled,
+        transfersEnabled: eventAccountUpdated.data.object.charges_enabled,
+        stripeDetailsSubmitted:
+          eventAccountUpdated.data.object.details_submitted,
+      },
+    });
+    console.log("Account Updated was successful!", eventAccountUpdated);
+  } catch (err) {
+    console.log("error", err);
   }
-  console.log("user", user);
-  console.log("eventAccountUpdated", eventAccountUpdated);
-  // update the account data
-  await prisma.userProfile.update({
-    where: {
-      stripeAccountId: accountID,
-    } as any,
-    data: {
-      chargesEnabled: eventAccountUpdated.data.object.charges_enabled,
-      transfersEnabled: eventAccountUpdated.data.object.charges_enabled,
-      stripeDetailsSubmitted: eventAccountUpdated.data.object.details_submitted,
-    },
-  });
-  console.log("Account Updated was successful!", eventAccountUpdated);
 };
 
 export async function POST(request: any) {
