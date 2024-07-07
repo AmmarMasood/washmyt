@@ -29,7 +29,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
     } catch (dbError) {
       console.error("Database query failed", dbError);
       console.log("Database query failed", dbError);
-      return;
+      throw dbError;
     }
     console.log("user 0", user);
 
@@ -54,6 +54,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
     console.log("Account Updated was successful!", eventAccountUpdated);
   } catch (err) {
     console.log("error", err);
+    throw err;
   }
 };
 
@@ -85,7 +86,7 @@ export async function POST(request: any) {
     return NextResponse.json({ received: true });
   } catch (err) {
     return NextResponse.json(
-      { message: "Something went wrong", err: err },
+      { message: "Something went wrong", err: JSON.stringify(err) },
       { status: 400 }
     );
   }
