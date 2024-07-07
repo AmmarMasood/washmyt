@@ -10,6 +10,7 @@ const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET as string;
 const handleAccountUpdated = async (event: Stripe.Event) => {
   try {
     console.log("Account Updated event received");
+    console.log("prisma", prisma);
     const eventAccountUpdated = event as Stripe.AccountUpdatedEvent;
     console.log("eventAccountUpdated", eventAccountUpdated);
     // get the account ID from the event
@@ -26,6 +27,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
       });
       console.log("user 0", user);
     } catch (dbError) {
+      console.error("Database query failed", dbError);
       console.log("Database query failed", dbError);
       return;
     }
