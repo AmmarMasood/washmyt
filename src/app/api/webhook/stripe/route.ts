@@ -18,7 +18,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
     // get the account data from db
     let user;
     try {
-      console.log("user -1", user);
+      console.log("user -1", user, prisma);
       user = await prisma.userProfile.findUnique({
         where: {
           stripeAccountId: accountID,
@@ -38,7 +38,7 @@ const handleAccountUpdated = async (event: Stripe.Event) => {
     console.log("user", user);
     console.log("eventAccountUpdated", eventAccountUpdated);
     // update the account data
-    await prisma.userProfile.update({
+    const t = await prisma.userProfile.update({
       where: {
         stripeAccountId: accountID,
       } as any,
