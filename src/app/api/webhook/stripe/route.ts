@@ -8,12 +8,41 @@ const prisma = new PrismaClient();
 const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET as string;
 
 const handleAccountUpdated = async (event: Stripe.Event) => {
-  console.log(event.type, event.account);
+  const account = event.data.object as Stripe.Account;
+
+  if (!account.id) {
+    console.error("No account ID found in the event data");
+    return;
+  }
+
+  try {
+    const user = await prisma.userProfile.findFirst({
+      where: {
+        stripeAccountId: account.id,
+      },
+    });
+    if (!user) throw new Error("User not found");
+    console.log("user found", user.id);
+    const updatedUser = await prisma.userProfile.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        chargesEnabled: account.charges_enabled || false,
+        transfersEnabled: account.payouts_enabled || false, // Stripe uses 'payouts_enabled' for transfers
+        stripeDetailsSubmitted: account.details_submitted || false,
+      },
+    });
+
+    console.log(`User updated: ${updatedUser.id}`);
+  } catch (error) {
+    console.error("Error updating user:", error);
+  }
 };
 
 export async function POST(request: any) {
   try {
-    console.log("request receivedddd, webhookSecret");
+    console.log("request received, webhookSecret");
     const body = await request.text();
     const sig = request.headers.get("stripe-signature") as string;
     let event: Stripe.Event;
