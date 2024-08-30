@@ -66,6 +66,22 @@ export default function PartFour(props: IOnboardingPageProps) {
     }
   };
 
+  const suggestOptimalTime = () => {
+    const suggestedDate = dayjs().add(2, "day").startOf("day").add(11, "hour");
+    setDate(suggestedDate);
+    setTime(suggestedDate);
+  };
+
+  const setQuickTime = (hours: number, minutes: number = 0) => {
+    const suggestedDate = dayjs()
+      .add(2, "day")
+      .startOf("day")
+      .add(hours, "hour")
+      .add(minutes, "minute");
+    setDate(suggestedDate);
+    setTime(suggestedDate);
+  };
+
   return (
     <div className="max-md:w-full max-md:mt-10 ">
       <StepperBar current={4} total={10} />
@@ -80,7 +96,7 @@ export default function PartFour(props: IOnboardingPageProps) {
             />
             <Image src={LogoIcon} alt="washmyt" />
           </div>
-          <div className="p-4 mt-4 flex flex-col items-center justfiy-center  max-md:p-0 ">
+          <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0">
             <h1 className="text-black text-2xl text-center mb-2">
               Select a date & TIme
             </h1>
@@ -157,12 +173,6 @@ export default function PartFour(props: IOnboardingPageProps) {
                   value={time ? dayjs(time, "h") : null}
                   format={"H"}
                 />
-                {/* <Input
-                  name="hh"
-                  placeholder="HH"
-                  onChange={handleOnChange}
-                  className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg mr-3"
-                /> */}
                 <span className="mb-7 text-black">:</span>
                 <TimePicker
                   allowClear={false}
@@ -193,12 +203,39 @@ export default function PartFour(props: IOnboardingPageProps) {
                   value={time ? dayjs(time, "m") : null}
                   format={"m"}
                 />
-                {/* <Input
-                  name="min"
-                  placeholder="MM"
-                  onChange={handleOnChange}
-                  className="p-4 mb-6 !w-[90px] rounded-xl border-1 border-black text-black text-lg ml-3"
-                /> */}
+              </div>
+              <p className="text-black text-center mt-3 mb-5">
+                Book appointment in 2 days at:
+              </p>
+              <div className="flex justify-center space-x-4 mb-4">
+                <Button
+                  disabled={false}
+                  onClick={() => suggestOptimalTime()}
+                  className="!text-white text-md whitespace-nowrap w-32"
+                >
+                  11 AM
+                </Button>
+                <Button
+                  disabled={false}
+                  onClick={() => setQuickTime(9, 0)}
+                  className="!text-white text-md whitespace-nowrap w-32"
+                >
+                  9:00 AM
+                </Button>
+                <Button
+                  disabled={false}
+                  onClick={() => setQuickTime(12, 0)}
+                  className="!text-white text-md whitespace-nowrap w-32"
+                >
+                  12:00 PM
+                </Button>
+                <Button
+                  disabled={false}
+                  onClick={() => setQuickTime(15, 0)}
+                  className="!text-white text-md whitespace-nowrap w-32"
+                >
+                  3:00 PM
+                </Button>
               </div>
             </div>
             <div className="flex items-center pt-12 mb-14">

@@ -51,7 +51,9 @@ export default function PartFive(props: IOnboardingPageProps) {
             <Image src={LogoIcon} alt="washmyt" />
           </div>
           <div className="p-4 mt-4 flex flex-col items-center justfiy-center max-md:p-0 ">
-            <h1 className="text-black text-2xl text-center mb-2">Address</h1>
+            <h1 className="text-black text-2xl text-center mb-2">
+              Wash Address
+            </h1>
             <h3 className=" mb-2 text-primary-gray text-xl text-center">
               Please provide the address including street, city, state, zip
             </h3>

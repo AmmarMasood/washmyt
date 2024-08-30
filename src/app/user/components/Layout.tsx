@@ -5,6 +5,7 @@ import React from "react";
 import { UserAuth } from "@/app/context/AuthContext";
 import Sidebar from "./Sidebar";
 import Loading from "@/app/components/Loading";
+import { lgScreenSize } from "@/contants";
 
 interface ILayout {
   currentOption: number;
@@ -15,13 +16,14 @@ function Layout(props: ILayout) {
   const [open, setOpen] = React.useState(false);
   const [isMobileMode, setIsMobileMode] = React.useState(false);
   const { currentOption, children } = props;
+  const size = lgScreenSize.size;
 
   React.useEffect(() => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < size) {
       setIsMobileMode(true);
     }
     window.addEventListener("resize", () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < size) {
         setIsMobileMode(true);
       } else {
         setIsMobileMode(false);

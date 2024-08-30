@@ -203,7 +203,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
     if (props.accessType === WashDetailAccessType.USER) {
       return (
         <div className="flex items-end justify-between max-md:flex-wrap">
-          <div className="flex items-center mt-6 ">
+          <div className="flex items-center mt-6 max-sm:flex-wrap">
             <div className="mr-8">
               <p className="text-primary-color text-lg uppercase mb-4">
                 Customer Detail
@@ -229,7 +229,7 @@ function WashRequestDetail(props: IWashRequestDetail) {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="max-sm:mt-8">
               <p className="text-primary-gray text-lg uppercase mb-4">Help</p>
               <div className="flex items-center">
                 <Image alt="faq" src={FaqIcon} height={30} width={30} />

@@ -209,3 +209,13 @@ body {
 .ant-switch {
   background-color: #1e1e1e99;
 }
+
+.ant-upload-wrapper.ant-upload-picture-card-wrapper
+  .ant-upload.ant-upload-select {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

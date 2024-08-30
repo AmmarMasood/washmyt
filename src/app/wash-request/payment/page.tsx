@@ -177,6 +177,16 @@ function Payment() {
               )}
 
               <div className="bg-[#1E1E1E]/[0.05] rounded-3xl p-5 flex flex-col justify-between w-[550px] mt-4  max-sm:w-full">
+                {washInfo.paymentCompleted ? (
+                  <p className="text-black text-xl font-bold text-center"></p>
+                ) : washInfo.washStatus === WashStatus.ACCEPTED &&
+                  washInfo.paymentStatus === PaymentStatus.UNPAID ? (
+                  <p></p>
+                ) : (
+                  <p className="text-white text-sm font-bold text-center bg-primary-color p-2 rounded-md w-fit mb-4">
+                    Pending Confirmation
+                  </p>
+                )}
                 <div className="flex max-md:flex-wrap">
                   <div className="w-[300px] mb-4">
                     <div>

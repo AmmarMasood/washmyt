@@ -82,14 +82,8 @@ function Page() {
           />
         )}
         <Layout currentOption={superAdmin === false ? 0 : 3}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "395px 1fr",
-              gridGap: "20px",
-            }}
-          >
-            <div>
+          <div className="flex max-md:flex-wrap">
+            <div className="w-[495px] mr-[20px]">
               <h1 className="font-semibold text-2xl text-black">Upcoming</h1>
               <div className="mt-6">
                 <h3 className="text-primary-gray text-base font-semibold mb-5">
@@ -115,7 +109,7 @@ function Page() {
                 )}
               </div>
             </div>
-            <Card className="h-full p-4 bg-white">
+            <Card className="h-full p-4 bg-white w-full">
               <div className="flex items-center justify-end mt-2 mb-2">
                 <Image src={LogoIcon} alt="washmyt" />
               </div>

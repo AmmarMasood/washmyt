@@ -1,5 +1,6 @@
 import { sendSms } from "@/app/lib/twilio";
 import { washRequestInterations } from "@/app/providers/posthog_events";
+import { stripeCharges, washerCut } from "@/contants";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import posthog from "posthog-js";
@@ -27,7 +28,8 @@ const findAndNotifyWasher = async (
   userCords: any,
   location: any,
   customerName: any,
-  requestId: any
+  requestId: any,
+  messageDetails: any
 ) => {
   const cords = {
     lat: userCords.lat,
@@ -72,9 +74,13 @@ const findAndNotifyWasher = async (
       requestId,
       washer: washer.phoneNumber,
     });
+
     await sendSms(
       washer.phoneNumber, //set washer number here later, rightnow hardcoding mine
-      `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://app.washmyt.com/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`
+      `Hi ${washer.name}, great news! \n\nYou've been matched with a new wash request from ${customerName} at ${location}. 
+        \n\nThe wash has be scheduled for ${messageDetails.time} and customer has selected ${messageDetails.package}.
+        \n\nYou will receive an amount of ${messageDetails.amount} + tip.
+        \n\nPlease confirm your availability within 24 hours by accepting the request on this link:\nhttps://app.washmyt.com/user/wash-detail/${requestId} Thank you! \n\n- WashMyT Team`
     );
   });
 
@@ -93,6 +99,12 @@ export async function POST(request: any) {
       },
     });
 
+    const pack = await prisma.package.findFirst({
+      where: {
+        id: request.packageId,
+      },
+    });
+
     const customer = await prisma.customer.findUnique({
       where: {
         id: request.customerId,
@@ -100,11 +112,25 @@ export async function POST(request: any) {
     });
     if (!customer) throw new Error("Customer not found");
 
+    let chargedAmount = pack?.price;
+    let receivedAmount = 0;
+    if (chargedAmount) {
+      const stripeCharge = Math.round(chargedAmount * stripeCharges);
+      const receivedAmountT = chargedAmount - stripeCharge;
+      receivedAmount = Math.round(receivedAmountT * washerCut);
+    }
+
+    console.log("damn", request.washDateAndTimeUTC, pack, receivedAmount);
     await findAndNotifyWasher(
       cords,
       location.formatted_address,
       customer?.name,
-      request.id
+      request.id,
+      {
+        time: request.washDateAndTimeUTC,
+        package: pack?.name,
+        amount: receivedAmount,
+      }
     );
     await sendSms(
       customer.phoneNumber,

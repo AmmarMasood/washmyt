@@ -1,8 +1,8 @@
 "use client";
-import { useDropzone } from "react-dropzone";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import CameraIcon from "../../../public/imgs/icons8-camera-100.png";
+import { Upload, message } from "antd";
 
 interface IUploadImage {
   label: string;
@@ -10,55 +10,85 @@ interface IUploadImage {
   className?: string;
   file?: any;
 }
+
+const beforeUploadWithoutErrors = (file: any) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  const isLt2M = file.size / 1024 / 1024 < 5;
+  return isJpgOrPng && isLt2M;
+};
+
+const beforeUpload = (file: any) => {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 5;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+
+  return false;
+};
+
 function UploadImage(props: IUploadImage) {
   const { label, onUpload, className, file } = props;
-  const onDrop = useCallback((acceptedFiles: any) => {
-    // Do something with the files
-    onUpload(acceptedFiles);
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    maxFiles: 1,
-    multiple: false,
-    maxSize: 3000000,
-    accept: {
-      "image/png": [".png", ".jpg", ".jpeg"],
-    },
-  });
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof file === "string") {
+      setImageUrl(file);
+    }
+  }, [file]);
+
+  const handleChange = (acceptedFiles: any) => {
+    console.log("reached bere 1", acceptedFiles);
+    const file = acceptedFiles.file;
+    if (beforeUploadWithoutErrors(file)) {
+      // Convert file to Base64
+      console.log("reached bere");
+      //
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        console.log("base64", base64String);
+        setImageUrl(base64String); // Set the Base64 string to state
+        onUpload([file]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
 
   return (
     <div className={className}>
-      <label
-        className={`block text-primary-black text-base font-semibold mb-1`}
-      >
+      <div className={`block text-primary-black text-base font-semibold mb-1`}>
         {label}
-      </label>
-      <div
-        {...getRootProps()}
-        className="bg-[#f5f5f5] h-32 rounded-xl border-dotted border-black flex items-center justify-center cursor-pointer"
+      </div>
+      <Upload
+        name="avatar"
+        listType="picture-card"
+        className="avatar-uploader !w-full"
+        showUploadList={false}
+        beforeUpload={beforeUpload}
+        onChange={handleChange}
       >
-        <input {...getInputProps()} className="p-3 w-full" type="" />
-        {isDragActive ? (
-          <p className="text-primary-gray text-base	font-medium">
-            Drop the files here ...
-          </p>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="avatar"
+            style={{
+              width: "100%",
+            }}
+          />
         ) : (
-          <div className="text-primary-gray text-base	font-medium opacity-50">
-            <Image src={CameraIcon} width={100} height={100} alt="Upload" />
-          </div>
+          uploadButton
         )}
-      </div>
-      <div>
-        <p className="text-primary-gray text-xs font-medium mt-2 text-center">
-          File must be in PNG format and no larger than 3MB
-        </p>
-
-        {file && (
-          <p className="text-primary-gray text-md font-medium mt-2 overflow-hidden">
-            {typeof file === "string" ? file : file.name}
-          </p>
-        )}
-      </div>
+      </Upload>
     </div>
   );
 }

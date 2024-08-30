@@ -41,6 +41,7 @@ function WashDetail(props: IWashDetailProps) {
   const [modelInfo, setModelInfo] = React.useState<any>({});
   const [address, setAddress] = React.useState<any>(null);
   const [editModal, setEditModal] = React.useState(false);
+  const [washAssignModal, setWasherAssignModal] = React.useState(false);
   const [step, setStep] = React.useState(1);
 
   useEffect(() => {
@@ -215,6 +216,27 @@ function WashDetail(props: IWashDetailProps) {
                   className={editIconClassName}
                   onClick={() => setEditModal(true)}
                 />
+              </div>
+            </div>
+            {/*  */}
+            <div className={rowClassName}>
+              <p className={keyClassName}>Wash Pro Assigned</p>
+              <div className={valueClassName}>
+                {washDetail?.washer ? (
+                  <span className="text-primary-color">
+                    {washDetail?.washer?.name}
+                  </span>
+                ) : (
+                  <>
+                    <span>No Washer Assigned</span>
+                    <Image
+                      src={EditIcon}
+                      alt="washmyt"
+                      className={editIconClassName}
+                      onClick={() => setEditModal(true)}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>

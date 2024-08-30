@@ -118,33 +118,40 @@ function Page() {
       dataIndex: "action",
 
       render: (record: any, rowIndex: any) => (
-        <Popover
-          content={
-            <>
-              <Button
-                type="link"
-                size="large"
-                onClick={() => {
-                  onClickWashDetail(rowIndex);
-                }}
-              >
-                Details
-              </Button>
-
-              <br />
-              <Button
-                type="link"
-                size="large"
-                onClick={() => showConfirm(rowIndex.id)}
-              >
-                Delete
-              </Button>
-            </>
-          }
-          trigger="click"
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log("damnn");
+          }}
         >
-          <MoreOutlined className="text-xl cursor-pointer" />
-        </Popover>
+          <Popover
+            content={
+              <>
+                <Button
+                  type="link"
+                  size="large"
+                  onClick={() => {
+                    onClickWashDetail(rowIndex);
+                  }}
+                >
+                  Details
+                </Button>
+
+                <br />
+                <Button
+                  type="link"
+                  size="large"
+                  onClick={() => showConfirm(rowIndex.id)}
+                >
+                  Delete
+                </Button>
+              </>
+            }
+            trigger="click"
+          >
+            <MoreOutlined className="text-xl cursor-pointer" />
+          </Popover>
+        </div>
       ),
     },
   ];
@@ -250,11 +257,15 @@ function Page() {
                     )
                   }
                   columns={myCoulmns}
+                  onRowClick={(e) => {
+                    onClickWashDetail(e);
+                  }}
                   data={filteredR}
                   showSearch={true}
                   showButton={true}
                   onAdd={onCreateNewWash}
                   heading="WASH QUEUE"
+                  y={1060}
                 />
               </div>
             </Card>

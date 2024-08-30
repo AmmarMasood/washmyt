@@ -104,7 +104,7 @@ function Sidebar({
   return (
     <div className={`w-[260px] ${className}`}>
       {showMobileButton && (
-        <div className="flex items-center justify-end absolute -right-10 top-0">
+        <div className="flex items-center justify-end absolute -right-[3rem] top-0">
           <button
             className="p-2 bg-primary-color p-4"
             onClick={mobileButtonOnClick}
