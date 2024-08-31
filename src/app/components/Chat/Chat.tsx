@@ -39,53 +39,57 @@ function Chat(props: ChatProps) {
 
   return (
     washId && (
-      <div className="absolute left-20 bottom-20 flex items-center">
-        <div className="mr-4">
-          <Theme.Provider theme="twilio">
-            <Box style={styles.app}>
-              <ChatWindow
-                showChat={showChat}
-                setShowChat={setShowChat}
-                loading={loading}
-                setLoading={setLoading}
-                token={token}
-                setToken={setToken}
-                washId={washId}
-                washerEmail={washerEmail}
-                otherParticipantName={washerName}
-              />
-            </Box>
-          </Theme.Provider>
-          <div
-            className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
-            onClick={(prev) => setShowChat(!showChat)}
-          >
-            <Image src={ChatIcon} alt="Chat" height={60} width={60} />
-            <p className="text-black">Washpro</p>
+      <div className="fixed bottom-0 w-full">
+        <div className="flex w-full items-end justify-center mb-16 max-md:justify-end max-sm:flex-col max-sm:mb-4">
+          <div className="mr-4 relative">
+            <Theme.Provider theme="twilio">
+              <Box style={styles.app}>
+                <ChatWindow
+                  showChat={showChat}
+                  setShowChat={setShowChat}
+                  loading={loading}
+                  setLoading={setLoading}
+                  token={token}
+                  setToken={setToken}
+                  washId={washId}
+                  washerEmail={washerEmail}
+                  otherParticipantName={washerName}
+                  windowType="customer"
+                />
+              </Box>
+            </Theme.Provider>
+            <div
+              className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
+              onClick={(prev) => setShowChat(!showChat)}
+            >
+              <Image src={ChatIcon} alt="Chat" height={60} width={60} />
+              <p className="text-black">Washpro</p>
+            </div>
           </div>
-        </div>
-        <div>
-          <Theme.Provider theme="twilio">
-            <Box style={styles.app}>
-              <ChatWindow
-                showChat={showAdminChat}
-                setShowChat={setShowAdminChat}
-                loading={loading}
-                setLoading={setLoading}
-                token={token}
-                setToken={setToken}
-                washId={`${washId}${withAdminKey}`}
-                washerEmail={adminEmail}
-                otherParticipantName={adminName}
-              />
-            </Box>
-          </Theme.Provider>
-          <div
-            className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
-            onClick={(prev) => setShowAdminChat(!showAdminChat)}
-          >
-            <Image src={ChatIcon} alt="Chat" height={60} width={60} />
-            <p className="text-black">Customer support</p>
+          <div className="relative">
+            <Theme.Provider theme="twilio">
+              <Box style={styles.app}>
+                <ChatWindow
+                  showChat={showAdminChat}
+                  setShowChat={setShowAdminChat}
+                  loading={loading}
+                  setLoading={setLoading}
+                  token={token}
+                  setToken={setToken}
+                  washId={`${washId}${withAdminKey}`}
+                  washerEmail={adminEmail}
+                  otherParticipantName={adminName}
+                  windowType="customer"
+                />
+              </Box>
+            </Theme.Provider>
+            <div
+              className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
+              onClick={(prev) => setShowAdminChat(!showAdminChat)}
+            >
+              <Image src={ChatIcon} alt="Chat" height={60} width={60} />
+              <p className="text-black">Customer support</p>
+            </div>
           </div>
         </div>
       </div>

@@ -20,6 +20,7 @@ import {
   handleMessagePayload,
   handleParticipantPayload,
 } from "./handlers";
+import { washerWithAdminKey } from "./contants";
 
 interface ChatWindowProps {
   showChat: boolean;
@@ -33,6 +34,7 @@ interface ChatWindowProps {
   userEmail?: string;
   otherParticipantName?: string;
   extraStyles?: string;
+  windowType: "washer" | "admin" | "customer";
 }
 
 function ChatWindow({
@@ -46,6 +48,7 @@ function ChatWindow({
   userEmail,
   otherParticipantName,
   extraStyles,
+  windowType,
 }: ChatWindowProps) {
   const [allMessages, setAllMessages] = React.useState<any[]>([]);
   const [ogConversation, setOgConversation] = React.useState<any>(null);
@@ -59,6 +62,7 @@ function ChatWindow({
   const [filesInputKey, setFilesInputKey] = useState<string>("input-key");
   const messagesContainerRef = useRef(null);
   const conversationRef = useRef(conversation);
+  const [windowMessage, setWindowMessage] = useState("");
   conversationRef.current = conversation;
 
   useEffect(() => {
@@ -91,6 +95,27 @@ function ChatWindow({
         ? conversation.items.find((conv) => conv.friendlyName === name)
         : null;
 
+      console.log("cuurent conv", currentConversation);
+      if (
+        !currentConversation &&
+        windowType === "washer" &&
+        !washId.includes(washerWithAdminKey)
+      ) {
+        setWindowMessage("Waiting for the customer to start the chat");
+        setLoading(false);
+        return;
+      }
+
+      if (!currentConversation && windowType === "admin") {
+        setWindowMessage(
+          washId.includes(washerWithAdminKey)
+            ? "Waiting for the washer to start the chat"
+            : "Waiting for the customer to start the chat"
+        );
+        setLoading(false);
+        return;
+      }
+
       if (currentConversation) {
         const conv = handleChatPayload(currentConversation);
         setOgConversation(currentConversation);
@@ -102,7 +127,9 @@ function ChatWindow({
     } catch (err: any) {
       if (err.message === "Not Found") {
         createNewConversation(name);
+        console.log("user is not part of any conversations");
       }
+      console.log("damning");
     }
     setLoading(false);
   };
@@ -242,90 +269,96 @@ function ChatWindow({
   return (
     showChat && (
       <div
-        className={`h-[500px] w-96  bg-white absolute right-10 bottom-10 z-10 shadow-2xl rounded-xl overflow-hidden ${extraStyles}`}
+        className={`h-[500px] w-96 max-sm:w-72  bg-white absolute right-10 bottom-10 z-10 shadow-2xl rounded-xl overflow-hidden ${extraStyles}`}
       >
         {loading ? (
           <div className="flex justify-center items-center h-full">
             <p className="text-black text-lg">Loading...</p>
           </div>
         ) : token ? (
-          <div className="h-full">
-            <h1 className="text-center p-2 text-lg font-bold text-black-600 bg-gray-100 mb-2">
-              {otherParticipantName}
-            </h1>
-            <div
-              className="mb-2 h-[360px]  overflow-y-auto px-2"
-              ref={messagesContainerRef}
-            >
-              {messages.map((message: any) =>
-                message.media ? (
-                  <div
-                    key={message.sid}
-                    className={`flex ${
-                      washerEmail
-                        ? message.author === washerEmail
-                          ? "justify-start"
-                          : "justify-end"
-                        : message.author === userEmail
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`w-42 p-2 m-1 rounded-xl  ${
-                        washerEmail
-                          ? message.author === washerEmail
-                            ? "bg-gray-300"
-                            : "bg-primary-color"
-                          : message.author === userEmail
-                          ? "bg-primary-color"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <img src={message?.media} alt="media" />
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    key={message.sid}
-                    className={`flex ${
-                      washerEmail
-                        ? message.author === washerEmail
-                          ? "justify-start"
-                          : "justify-end"
-                        : message.author === userEmail
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
-                    <p
-                      className={`w-42 p-2 m-1 rounded-xl  ${
-                        washerEmail
-                          ? message.author === washerEmail
-                            ? "bg-gray-300"
-                            : "text-white bg-primary-color"
-                          : message.author === userEmail
-                          ? "text-white bg-primary-color"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      {message.body}
-                    </p>
-                  </div>
-                )
-              )}
+          windowMessage ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-black">{windowMessage}</p>
             </div>
+          ) : (
+            <div className="h-full">
+              <h1 className="text-center p-2 text-lg font-bold text-black-600 bg-gray-100 mb-2">
+                {otherParticipantName}
+              </h1>
+              <div
+                className="mb-2 h-[360px]  overflow-y-auto px-2"
+                ref={messagesContainerRef}
+              >
+                {messages.map((message: any) =>
+                  message.media ? (
+                    <div
+                      key={message.sid}
+                      className={`flex ${
+                        washerEmail
+                          ? message.author === washerEmail
+                            ? "justify-start"
+                            : "justify-end"
+                          : message.author === userEmail
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      <div
+                        className={`w-42 p-2 m-1 rounded-xl  ${
+                          washerEmail
+                            ? message.author === washerEmail
+                              ? "bg-gray-300"
+                              : "bg-primary-color"
+                            : message.author === userEmail
+                            ? "bg-primary-color"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        <img src={message?.media} alt="media" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      key={message.sid}
+                      className={`flex ${
+                        washerEmail
+                          ? message.author === washerEmail
+                            ? "justify-start"
+                            : "justify-end"
+                          : message.author === userEmail
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      <p
+                        className={`w-42 p-2 m-1 rounded-xl  ${
+                          washerEmail
+                            ? message.author === washerEmail
+                              ? "bg-gray-300"
+                              : "text-white bg-primary-color"
+                            : message.author === userEmail
+                            ? "text-white bg-primary-color"
+                            : "bg-gray-300"
+                        }`}
+                      >
+                        {message.body}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
 
-            <MessageInput
-              assets={files}
-              onEnterKeyPress={onEnterKeyPress}
-              message={message}
-              onChange={onChange}
-              onSend={onSend}
-              onFilesChange={onFilesChanged}
-              onFileRemove={onFileRemove}
-            />
-          </div>
+              <MessageInput
+                assets={files}
+                onEnterKeyPress={onEnterKeyPress}
+                message={message}
+                onChange={onChange}
+                onSend={onSend}
+                onFilesChange={onFilesChanged}
+                onFileRemove={onFileRemove}
+              />
+            </div>
+          )
         ) : (
           <div className="flex justify-center items-center h-full">
             <p className="text-black">Unable to connect with chat...</p>

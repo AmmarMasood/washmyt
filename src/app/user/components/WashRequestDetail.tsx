@@ -123,7 +123,11 @@ function WashRequestDetail(props: IWashRequestDetail) {
           <button
             onClick={props.onStartRequest}
             disabled={props.loading || props.beforePhoto === null}
-            className={`!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white `}
+            className={`!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white`}
+            style={{
+              position: "relative",
+              zIndex: "1000000",
+            }}
           >
             Start Wash
           </button>
@@ -141,6 +145,10 @@ function WashRequestDetail(props: IWashRequestDetail) {
             onClick={props.onCompleteRequest}
             disabled={props.loading || props.afterPhoto === null}
             className={`!bg-green-500 pointer text-lg p-2 rounded-xl w-[150px] border-0 !text-white `}
+            style={{
+              position: "relative",
+              zIndex: "1000000",
+            }}
           >
             Complete Wash
           </button>

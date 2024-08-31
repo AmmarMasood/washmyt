@@ -266,12 +266,14 @@ function Page() {
             />
           )}
 
-          {data?.washStatus === WashStatus.ACCEPTED &&
+          {(data?.washStatus === WashStatus.ACCEPTED ||
+            data?.washStatus === WashStatus.STARTED) &&
             data?.washer?.userId === user?.uid && (
               <div>
                 <WasherChat
                   washId={params.id as string}
                   userEmail={data?.washer?.email}
+                  customerEmail={data?.customer?.email}
                   customerName={data?.customer?.name}
                 />
               </div>

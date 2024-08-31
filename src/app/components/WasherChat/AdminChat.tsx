@@ -48,9 +48,9 @@ function AdminChat(props: AdminChatProps) {
 
   return (
     token && (
-      <div className="relative h-[70px]">
-        <div className="absolute right-30 bottom-0 flex items-center justify-between">
-          <div className="mr-4">
+      <div className="w-full">
+        <div className="h-[70px] flex w-full items-end justify-end mb-16 max-md:justify-end max-sm:flex-col">
+          <div className="mr-4 relative">
             <Theme.Provider theme="twilio">
               <Box style={styles.app}>
                 <ChatWindow
@@ -64,6 +64,7 @@ function AdminChat(props: AdminChatProps) {
                   washId={`${washId}${washerWithAdminKey}`}
                   // washerEmail={adminEmail}
                   otherParticipantName={washerName}
+                  windowType="admin"
                 />
               </Box>
             </Theme.Provider>
@@ -75,7 +76,7 @@ function AdminChat(props: AdminChatProps) {
               <p className="text-black">Washer</p>
             </div>
           </div>
-          <div>
+          <div className="relative mr-8">
             <Theme.Provider theme="twilio">
               <Box style={styles.app}>
                 <ChatWindow
@@ -89,6 +90,7 @@ function AdminChat(props: AdminChatProps) {
                   washId={`${washId}${withAdminKey}`}
                   // washerEmail={adminEmail}
                   otherParticipantName={customerName}
+                  windowType="admin"
                 />
               </Box>
             </Theme.Provider>

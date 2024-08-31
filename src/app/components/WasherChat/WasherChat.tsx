@@ -19,10 +19,11 @@ interface WasherChatProps {
   washId: string;
   userEmail: string;
   customerName: string;
+  customerEmail: string;
 }
 
 function WasherChat(props: WasherChatProps) {
-  const { washId, userEmail, customerName } = props;
+  const { washId, userEmail, customerEmail, customerName } = props;
   const [open, setOpen] = useState(false);
   const [openAdminChat, setOpenAdminChat] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,53 +48,57 @@ function WasherChat(props: WasherChatProps) {
 
   return (
     token && (
-      <div className="absolute right-30 bottom-20 flex items-center ">
-        <div className="mr-4">
-          <Theme.Provider theme="twilio">
-            <Box style={styles.app}>
-              <ChatWindow
-                showChat={open}
-                setShowChat={setOpen}
-                userEmail={userEmail}
-                loading={loading}
-                setLoading={setLoading}
-                token={token}
-                setToken={setToken}
-                washId={washId}
-                otherParticipantName={customerName}
-              />
-            </Box>
-          </Theme.Provider>
-          <div
-            className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
-            onClick={(prev) => setOpen(!open)}
-          >
-            <Image src={ChatIcon} alt="Chat" height={60} width={60} />
-            <p className="text-black">Customer</p>
+      <div className="fixed bottom-0 w-full">
+        <div className="flex w-full items-end justify-start mb-16 max-md:justify-end max-sm:flex-col max-sm:mb-4">
+          <div className="mr-4 relative">
+            <Theme.Provider theme="twilio">
+              <Box style={styles.app}>
+                <ChatWindow
+                  showChat={open}
+                  setShowChat={setOpen}
+                  userEmail={userEmail}
+                  loading={loading}
+                  setLoading={setLoading}
+                  token={token}
+                  setToken={setToken}
+                  washId={washId}
+                  otherParticipantName={customerName}
+                  windowType="washer"
+                />
+              </Box>
+            </Theme.Provider>
+            <div
+              className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
+              onClick={(prev) => setOpen(!open)}
+            >
+              <Image src={ChatIcon} alt="Chat" height={60} width={60} />
+              <p className="text-black">Customer</p>
+            </div>
           </div>
-        </div>
-        <div className="max-sm:mt-4">
-          <Theme.Provider theme="twilio">
-            <Box style={styles.app}>
-              <ChatWindow
-                showChat={openAdminChat}
-                setShowChat={setOpenAdminChat}
-                loading={loading}
-                setLoading={setLoading}
-                token={token}
-                setToken={setToken}
-                washId={`${washId}${washerWithAdminKey}`}
-                washerEmail={adminEmail}
-                otherParticipantName={adminName}
-              />
-            </Box>
-          </Theme.Provider>
-          <div
-            className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
-            onClick={(prev) => setOpenAdminChat(!openAdminChat)}
-          >
-            <Image src={ChatIcon} alt="Chat" height={60} width={60} />
-            <p className="text-black">Customer Service</p>
+          <div className="max-sm:mt-4 max-md:mr-8 relative">
+            <Theme.Provider theme="twilio">
+              <Box style={styles.app}>
+                <ChatWindow
+                  showChat={openAdminChat}
+                  setShowChat={setOpenAdminChat}
+                  loading={loading}
+                  setLoading={setLoading}
+                  token={token}
+                  setToken={setToken}
+                  washId={`${washId}${washerWithAdminKey}`}
+                  washerEmail={adminEmail}
+                  otherParticipantName={adminName}
+                  windowType="washer"
+                />
+              </Box>
+            </Theme.Provider>
+            <div
+              className="bg-white w-fit rounded-full p-3 shadow-lg cursor-pointer relative flex items-center"
+              onClick={(prev) => setOpenAdminChat(!openAdminChat)}
+            >
+              <Image src={ChatIcon} alt="Chat" height={60} width={60} />
+              <p className="text-black">Customer Service</p>
+            </div>
           </div>
         </div>
       </div>
