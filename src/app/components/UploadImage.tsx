@@ -59,7 +59,17 @@ function UploadImage(props: IUploadImage) {
   };
 
   const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
+    <button
+      style={{
+        background: "none",
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+      }}
+      type="button"
+    >
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
@@ -72,7 +82,7 @@ function UploadImage(props: IUploadImage) {
       <Upload
         name="avatar"
         listType="picture-card"
-        className="avatar-uploader !w-full"
+        className="avatar-uploader !w-full relative"
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleChange}
